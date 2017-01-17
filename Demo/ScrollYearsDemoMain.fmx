@@ -11,17 +11,87 @@ object Form5: TForm5
   DesignerMasterStyle = 0
   object Layout16: TLayout
     Align = Left
+    Position.X = 81.000000000000000000
+    Size.Width = 120.000000000000000000
+    Size.Height = 480.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+    object Layout3: TLayout
+      Align = Top
+      Size.Width = 120.000000000000000000
+      Size.Height = 162.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      object Line1: TLine
+        Align = Top
+        LineType = Bottom
+        Margins.Left = 13.000000000000000000
+        Margins.Right = 13.000000000000000000
+        Position.X = 13.000000000000000000
+        Size.Width = 94.000000000000000000
+        Size.Height = 52.000000000000000000
+        Size.PlatformDefault = False
+        Stroke.Color = xFF1EB9C1
+      end
+      object Line4: TLine
+        Align = Top
+        LineType = Bottom
+        Margins.Left = 13.000000000000000000
+        Margins.Right = 13.000000000000000000
+        Position.X = 13.000000000000000000
+        Position.Y = 52.000000000000000000
+        Size.Width = 94.000000000000000000
+        Size.Height = 58.000000000000000000
+        Size.PlatformDefault = False
+        Stroke.Color = xFF1EB9C1
+      end
+      object FMXScrollYears2: TFMXScrollYears
+        Align = Contents
+        ClipChildren = True
+        HitTest = True
+        Margins.Top = 3.000000000000000000
+        Margins.Bottom = 3.000000000000000000
+        Size.Width = 120.000000000000000000
+        Size.Height = 147.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 2
+        SelectedColor = claNull
+        ItemHeight = 49.000000000000000000
+        SelectedItemHeight = 59.000000000000000000
+        Items.Strings = (
+          'Monday '
+          'Tuesday '
+          'Wednesday '
+          'Thursday '
+          'Friday '
+          'Saturday '
+          'Sunday')
+        ItemIndex = 2
+        OnChange = FMXScrollYears2Change
+      end
+    end
+  end
+  object Label1: TLabel
+    Position.X = 216.000000000000000000
+    Position.Y = 24.000000000000000000
+    Size.Width = 81.000000000000000000
+    Size.Height = 41.000000000000000000
+    Size.PlatformDefault = False
+    Text = 'Label1'
+  end
+  object Layout1: TLayout
+    Align = Left
     Size.Width = 81.000000000000000000
     Size.Height = 480.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 0
-    object Layout3: TLayout
+    object Layout2: TLayout
       Align = Top
       Size.Width = 81.000000000000000000
       Size.Height = 162.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 0
-      object Line1: TLine
+      object Line2: TLine
         Align = Top
         LineType = Bottom
         Margins.Left = 13.000000000000000000
@@ -32,7 +102,7 @@ object Form5: TForm5
         Size.PlatformDefault = False
         Stroke.Color = xFF1EB9C1
       end
-      object Line4: TLine
+      object Line3: TLine
         Align = Top
         LineType = Bottom
         Margins.Left = 13.000000000000000000
@@ -68,11 +138,11 @@ object Form5: TForm5
       end
     end
   end
-  object Label1: TLabel
-    Position.X = 104.000000000000000000
-    Position.Y = 136.000000000000000000
-    Size.Width = 145.000000000000000000
-    Size.Height = 73.000000000000000000
+  object Label2: TLabel
+    Position.X = 216.000000000000000000
+    Position.Y = 88.000000000000000000
+    Size.Width = 81.000000000000000000
+    Size.Height = 41.000000000000000000
     Size.PlatformDefault = False
     Text = 'Label1'
   end

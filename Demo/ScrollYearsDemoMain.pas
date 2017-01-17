@@ -14,8 +14,15 @@ type
     Layout3: TLayout;
     Line1: TLine;
     Line4: TLine;
-    FMXScrollYears1: TFMXScrollYears;
+    FMXScrollYears2: TFMXScrollYears;
     Label1: TLabel;
+    Layout1: TLayout;
+    Layout2: TLayout;
+    Line2: TLine;
+    Line3: TLine;
+    FMXScrollYears1: TFMXScrollYears;
+    Label2: TLabel;
+    procedure FMXScrollYears2Change(Sender: TObject);
     procedure FMXScrollYears1Change(Sender: TObject);
   private
     { Private declarations }
@@ -32,7 +39,12 @@ implementation
 
 procedure TForm5.FMXScrollYears1Change(Sender: TObject);
 begin
-  self.Label1.Text := FMXScrollYears1.GetSelected;
+  Label1.Text := FMXScrollYears1.GetSelected;
+end;
+
+procedure TForm5.FMXScrollYears2Change(Sender: TObject);
+begin
+  Label2.Text := FMXScrollYears2.GetSelected;
 end;
 
 end.
