@@ -4,7 +4,7 @@ uses
   System.StartUpCopy,
   FMX.Forms,
   ScrollYearsDemoMain in 'ScrollYearsDemoMain.pas' {Form5},
-  FMX.ScrollYears in '..\ComponentsSource\FMX.ScrollYears.pas';
+  FMX.ScrollableList in '..\ComponentsSource\FMX.ScrollableList.pas';
 
 {$R *.res}
 

@@ -21,7 +21,7 @@
 // limitations under the License.
 //
 // *************************************************************************** }
-unit FMX.ScrollYears;
+unit FMX.ScrollableList;
 
 interface
 
@@ -46,7 +46,7 @@ const
 type
 
   [ComponentPlatformsAttribute(THHPlatforms)]
-  TFMXScrollYears = class(TLayout)
+  TFMXScrollableList = class(TLayout)
   private
     FContainer: TLayout;
     FItemIndex: Integer;
@@ -97,12 +97,12 @@ implementation
 
 procedure register;
 begin
-  RegisterComponents('HealthHut', [TFMXScrollYears]);
+  RegisterComponents('FMXComponents', [TFMXScrollableList]);
 end;
 
 { TFMXScrollYears }
 
-procedure TFMXScrollYears.AdjustTexts;
+procedure TFMXScrollableList.AdjustTexts;
 var
   I: Integer;
 begin
@@ -123,7 +123,7 @@ begin
   end;
 end;
 
-constructor TFMXScrollYears.Create(AOwner: TComponent);
+constructor TFMXScrollableList.Create(AOwner: TComponent);
 begin
   inherited;
   FItemHeight := 52;
@@ -152,7 +152,7 @@ begin
   CreateTexts;
 end;
 
-procedure TFMXScrollYears.CreateTexts;
+procedure TFMXScrollableList.CreateTexts;
 var
   I: Integer;
   t: TText;
@@ -188,18 +188,18 @@ begin
   AdjustTexts;
 end;
 
-destructor TFMXScrollYears.Destroy;
+destructor TFMXScrollableList.Destroy;
 begin
   FItems.Free;
   inherited;
 end;
 
-function TFMXScrollYears.GetSelected: string;
+function TFMXScrollableList.GetSelected: string;
 begin
   Result := FItems[ItemIndex];
 end;
 
-procedure TFMXScrollYears.MouseDown(Button: TMouseButton; Shift: TShiftState; X,
+procedure TFMXScrollableList.MouseDown(Button: TMouseButton; Shift: TShiftState; X,
   Y: Single);
 begin
   inherited;
@@ -209,7 +209,7 @@ begin
   FDownItem := ItemIndex;
 end;
 
-procedure TFMXScrollYears.MouseMove(Shift: TShiftState; X, Y: Single);
+procedure TFMXScrollableList.MouseMove(Shift: TShiftState; X, Y: Single);
 var
   Delta, NewY: Single;
 begin
@@ -225,7 +225,7 @@ begin
   end;
 end;
 
-procedure TFMXScrollYears.MouseUp(Button: TMouseButton; Shift: TShiftState; X,
+procedure TFMXScrollableList.MouseUp(Button: TMouseButton; Shift: TShiftState; X,
   Y: Single);
 var
   AdjustY: Single;
@@ -249,7 +249,7 @@ begin
   end;
 end;
 
-procedure TFMXScrollYears.Resize;
+procedure TFMXScrollableList.Resize;
 var
   I: Integer;
 begin
@@ -263,7 +263,7 @@ begin
   end;
 end;
 
-procedure TFMXScrollYears.SetItemHeight(const Value: Single);
+procedure TFMXScrollableList.SetItemHeight(const Value: Single);
 begin
   if FItemHeight <> Value then
   begin
@@ -272,7 +272,7 @@ begin
   end;
 end;
 
-procedure TFMXScrollYears.SetItemIndex(const Value: Integer);
+procedure TFMXScrollableList.SetItemIndex(const Value: Integer);
 begin
   if FItemIndex <> Value then
   begin
@@ -283,19 +283,19 @@ begin
   end;
 end;
 
-procedure TFMXScrollYears.SetItems(const Value: TStrings);
+procedure TFMXScrollableList.SetItems(const Value: TStrings);
 begin
   FItems.Assign(Value);
   FItemIndex := -1;
   CreateTexts;
 end;
 
-procedure TFMXScrollYears.SetOnChange(const Value: TNotifyEvent);
+procedure TFMXScrollableList.SetOnChange(const Value: TNotifyEvent);
 begin
   FOnChange := Value;
 end;
 
-procedure TFMXScrollYears.SetSelectedColor(const Value: TAlphaColor);
+procedure TFMXScrollableList.SetSelectedColor(const Value: TAlphaColor);
 begin
   if FSelectedColor <> Value then
   begin
@@ -304,12 +304,12 @@ begin
   end;
 end;
 
-procedure TFMXScrollYears.SetSelectedItemHeight(const Value: Single);
+procedure TFMXScrollableList.SetSelectedItemHeight(const Value: Single);
 begin
   FSelectedItemHeight := Value;
 end;
 
-procedure TFMXScrollYears.SetData(const AList: TArray<string>);
+procedure TFMXScrollableList.SetData(const AList: TArray<string>);
 begin
   FItems.Clear;
   FItems.AddStrings(AList);

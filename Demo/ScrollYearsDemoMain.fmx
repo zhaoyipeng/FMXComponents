@@ -45,7 +45,7 @@ object Form5: TForm5
         Size.PlatformDefault = False
         Stroke.Color = xFF1EB9C1
       end
-      object FMXScrollYears2: TFMXScrollYears
+      object FMXScrollableList2: TFMXScrollableList
         Align = Contents
         ClipChildren = True
         HitTest = True
@@ -67,7 +67,7 @@ object Form5: TForm5
           'Saturday '
           'Sunday')
         ItemIndex = 2
-        OnChange = FMXScrollYears2Change
+        OnChange = FMXScrollableList2Change
       end
     end
   end
@@ -114,7 +114,7 @@ object Form5: TForm5
         Size.PlatformDefault = False
         Stroke.Color = xFF1EB9C1
       end
-      object FMXScrollYears1: TFMXScrollYears
+      object FMXScrollableList1: TFMXScrollableList
         Align = Contents
         ClipChildren = True
         HitTest = True
@@ -134,7 +134,7 @@ object Form5: TForm5
           '2017'
           '2018')
         ItemIndex = 2
-        OnChange = FMXScrollYears1Change
+        OnChange = FMXScrollableList1Change
       end
     end
   end

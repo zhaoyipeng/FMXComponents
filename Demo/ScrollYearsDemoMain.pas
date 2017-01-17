@@ -5,8 +5,8 @@ interface
 uses
   System.SysUtils, System.Types, System.UITypes, System.Classes,
   System.Variants,FMX.Types, FMX.Controls, FMX.Forms,
-  FMX.Objects, FMX.Layouts,FMX.ScrollYears,
-  FMX.StdCtrls, FMX.Controls.Presentation;
+  FMX.Objects, FMX.Layouts,
+  FMX.StdCtrls, FMX.Controls.Presentation, FMX.ScrollableList;
 
 type
   TForm5 = class(TForm)
@@ -14,16 +14,16 @@ type
     Layout3: TLayout;
     Line1: TLine;
     Line4: TLine;
-    FMXScrollYears2: TFMXScrollYears;
+    FMXScrollableList2: TFMXScrollableList;
     Label1: TLabel;
     Layout1: TLayout;
     Layout2: TLayout;
     Line2: TLine;
     Line3: TLine;
-    FMXScrollYears1: TFMXScrollYears;
+    FMXScrollableList1: TFMXScrollableList;
     Label2: TLabel;
-    procedure FMXScrollYears2Change(Sender: TObject);
-    procedure FMXScrollYears1Change(Sender: TObject);
+    procedure FMXScrollableList2Change(Sender: TObject);
+    procedure FMXScrollableList1Change(Sender: TObject);
   private
     { Private declarations }
   public
@@ -37,14 +37,14 @@ implementation
 {$R *.fmx}
 
 
-procedure TForm5.FMXScrollYears1Change(Sender: TObject);
+procedure TForm5.FMXScrollableList1Change(Sender: TObject);
 begin
-  Label1.Text := FMXScrollYears1.GetSelected;
+  Label1.Text := FMXScrollableList1.GetSelected;
 end;
 
-procedure TForm5.FMXScrollYears2Change(Sender: TObject);
+procedure TForm5.FMXScrollableList2Change(Sender: TObject);
 begin
-  Label2.Text := FMXScrollYears2.GetSelected;
+  Label2.Text := FMXScrollableList2.GetSelected;
 end;
 
 end.

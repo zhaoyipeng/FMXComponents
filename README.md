@@ -4,7 +4,7 @@ I will open some components created in my projects
 
 我将开放一些项目中开发的控件
  
-## 1.TFMXScrollYears
+## 1.TFMXScrollableList
 
 ![TFMXScrollYears](SnapShots/FMXScrollYears.png)
 

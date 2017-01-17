@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{78B8492E-97DC-4DC9-90F3-CB93823FB4CB}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="ComponentsSource\FMXComponents.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Demo\ScrollYearsDemo.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="FMXComponents">
+        <MSBuild Projects="ComponentsSource\FMXComponents.dproj"/>
+    </Target>
+    <Target Name="FMXComponents:Clean">
+        <MSBuild Projects="ComponentsSource\FMXComponents.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="FMXComponents:Make">
+        <MSBuild Projects="ComponentsSource\FMXComponents.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="ScrollYearsDemo">
+        <MSBuild Projects="Demo\ScrollYearsDemo.dproj"/>
+    </Target>
+    <Target Name="ScrollYearsDemo:Clean">
+        <MSBuild Projects="Demo\ScrollYearsDemo.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="ScrollYearsDemo:Make">
+        <MSBuild Projects="Demo\ScrollYearsDemo.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="FMXComponents;ScrollYearsDemo"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="FMXComponents:Clean;ScrollYearsDemo:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="FMXComponents:Make;ScrollYearsDemo:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>
