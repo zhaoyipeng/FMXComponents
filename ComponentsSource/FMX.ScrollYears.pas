@@ -1,0 +1,320 @@
+// ***************************************************************************
+//
+// A Simple Firemonkey Scrolleable List Component
+//
+// Copyright (c) 2017 Ð»¶Ù (zhaoyipeng@hotmail.com)
+//
+// https://github.com/danieleteti/delphimvcframework
+//
+// ***************************************************************************
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+// *************************************************************************** }
+unit FMX.ScrollYears;
+
+interface
+
+uses
+  System.Classes,
+  System.SysUtils,
+  System.Math,
+  System.Math.Vectors,
+  System.Types,
+  System.UITypes,
+  FMX.Types,
+  FMX.Layouts,
+  FMX.Graphics,
+  FMX.Controls,
+  FMX.Objects,
+  FMX.Ani;
+
+const
+  THHPlatforms = pidWin32 or pidWin64 or pidOSX32 or pidiOSSimulator or
+    pidiOSDevice32 or pidiOSDevice64 or pidAndroid;
+
+type
+
+  [ComponentPlatformsAttribute(THHPlatforms)]
+  TFMXScrollYears = class(TLayout)
+  private
+    FContainer: TLayout;
+    FItemIndex: Integer;
+    FTextList: TArray<TText>;
+    FDownPos: Single;
+    FIsDown: Boolean;
+    FDownIndex: Integer;
+    FAnimation: TFloatAnimation;
+    FItems: TStrings;
+    FItemHeight: Single;
+    FOnChange: TNotifyEvent;
+    FSelectedColor: TAlphaColor;
+    FSelectedItemHeight: Single;
+    FDownItem: Integer;
+    procedure AdjustTexts;
+    procedure SetItemIndex(const Value: Integer);
+    procedure CreateTexts;
+    procedure SetItems(const Value: TStrings);
+    procedure SetItemHeight(const Value: Single);
+    procedure SetOnChange(const Value: TNotifyEvent);
+    procedure SetSelectedColor(const Value: TAlphaColor);
+    procedure SetSelectedItemHeight(const Value: Single);
+  protected
+    procedure Resize; override;
+    procedure MouseDown(Button: TMouseButton; Shift: TShiftState;
+      X, Y: Single); override;
+    procedure MouseMove(Shift: TShiftState; X, Y: Single); override;
+    procedure MouseUp(Button: TMouseButton; Shift: TShiftState;
+      X, Y: Single); override;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure SetData(const AList: TArray<string>);
+    function GetSelected: string;
+  published
+    property SelectedColor: TAlphaColor read FSelectedColor
+      write SetSelectedColor default $FF1EB9C1 ;
+    property ItemHeight: Single read FItemHeight write SetItemHeight;
+    property SelectedItemHeight: Single read FSelectedItemHeight write SetSelectedItemHeight;
+    property Items: TStrings read FItems write SetItems;
+    property ItemIndex: Integer read FItemIndex write SetItemIndex;
+    property OnChange: TNotifyEvent read FOnChange write SetOnChange;
+  end;
+
+procedure register;
+
+implementation
+
+procedure register;
+begin
+  RegisterComponents('HealthHut', [TFMXScrollYears]);
+end;
+
+{ TFMXScrollYears }
+
+procedure TFMXScrollYears.AdjustTexts;
+var
+  I: Integer;
+begin
+  for I := 0 to High(FTextList) do
+  begin
+    if I = FItemIndex then
+    begin
+      FTextList[I].Height := SelectedItemHeight;
+      FTextList[I].TextSettings.Font.Size := 18;
+      FTextList[I].TextSettings.FontColor := $FF1EB9C1;
+    end
+    else
+    begin
+      FTextList[I].Height := ItemHeight;
+      FTextList[I].TextSettings.Font.Size := 18;
+      FTextList[I].TextSettings.FontColor := TAlphaColors.Black;
+    end;
+  end;
+end;
+
+constructor TFMXScrollYears.Create(AOwner: TComponent);
+begin
+  inherited;
+  FItemHeight := 52;
+  FSelectedItemHeight := 59;
+  Width := 64;
+  Height := FItemHeight * 3;
+  FItems := TStringList.Create;
+  FItems.AddStrings(['2000', '2003', '2005', '2008', '2010', '2014', '2016']);
+  FIsDown := False;
+  FItemIndex := 0;
+  HitTest := True;
+  ClipChildren := True;
+  AutoCapture := True;
+
+  FContainer := TLayout.Create(Self);
+  FContainer.Position.X := 0;
+  FContainer.Position.Y := ItemHeight;
+  FContainer.Width := Width;
+  FContainer.Height := FItemHeight * FItems.Count;
+  FContainer.Stored := False;
+  FContainer.Parent := Self;
+  FAnimation := TFloatAnimation.Create(Self);
+  FAnimation.PropertyName := 'Position.Y';
+  FAnimation.Parent := FContainer;
+  FAnimation.Duration := 0.1;
+  CreateTexts;
+end;
+
+procedure TFMXScrollYears.CreateTexts;
+var
+  I: Integer;
+  t: TText;
+  Y: Single;
+begin
+
+  for I := High(FTextList) downto 0 do
+  begin
+    FTextList[I].DisposeOf;
+  end;
+
+  FContainer.Height := (FItemHeight * FItems.Count-1) + FSelectedItemHeight;
+
+  SetLength(FTextList, FItems.Count);
+  Y := 0;
+  for I := 0 to FItems.Count - 1 do
+  begin
+    t := TText.Create(Self);
+    t.Stored := False;
+    t.Text := FItems[I];
+    t.Position.X := 0;
+    t.Position.Y := Y;
+    if I = ItemIndex then
+      t.Height := SelectedItemHeight
+    else
+      t.Height := ItemHeight;
+    t.Width := Width;
+    t.HitTest := False;
+    t.Parent := FContainer;
+    FTextList[I] := t;
+    Y := Y + t.Height;
+  end;
+  AdjustTexts;
+end;
+
+destructor TFMXScrollYears.Destroy;
+begin
+  FItems.Free;
+  inherited;
+end;
+
+function TFMXScrollYears.GetSelected: string;
+begin
+  Result := FItems[ItemIndex];
+end;
+
+procedure TFMXScrollYears.MouseDown(Button: TMouseButton; Shift: TShiftState; X,
+  Y: Single);
+begin
+  inherited;
+  FDownPos := Y;
+  FDownIndex := FItemIndex;
+  FIsDown := True;
+  FDownItem := ItemIndex;
+end;
+
+procedure TFMXScrollYears.MouseMove(Shift: TShiftState; X, Y: Single);
+var
+  Delta, NewY: Single;
+begin
+  inherited;
+  if FIsDown then
+  begin
+    Delta := Y - FDownPos;
+    NewY := (1 - FDownIndex) * FItemHeight + Delta;
+    NewY := Max(Min(FItemHeight, NewY), (2 - FItems.Count) * FItemHeight);
+
+    ItemIndex := Round(-NewY / FItemHeight) + 1;
+    FContainer.Position.Y := NewY;
+  end;
+end;
+
+procedure TFMXScrollYears.MouseUp(Button: TMouseButton; Shift: TShiftState; X,
+  Y: Single);
+var
+  AdjustY: Single;
+begin
+  inherited;
+  if FIsDown then
+  begin
+    FIsDown := False;
+    AdjustY := (1 - ItemIndex) * FItemHeight;
+    FAnimation.StartValue := FContainer.Position.Y;
+    FAnimation.StopValue := AdjustY;
+    FAnimation.Start;
+
+    if ItemIndex <> FDownItem then
+    begin
+      if Assigned(FOnChange) then
+      begin
+        FOnChange(Self);
+      end;
+    end;
+  end;
+end;
+
+procedure TFMXScrollYears.Resize;
+var
+  I: Integer;
+begin
+  inherited;
+  Height := FItemHeight * 3;
+  if Assigned(FContainer) then
+    FContainer.Width := Width;
+  for I := 0 to High(FTextList) do
+  begin
+    FTextList[I].Width := Width;
+  end;
+end;
+
+procedure TFMXScrollYears.SetItemHeight(const Value: Single);
+begin
+  if FItemHeight <> Value then
+  begin
+    FItemHeight := Value;
+    Height := 3 * FItemHeight;
+  end;
+end;
+
+procedure TFMXScrollYears.SetItemIndex(const Value: Integer);
+begin
+  if FItemIndex <> Value then
+  begin
+    FItemIndex := Value;
+    CreateTexts;
+    AdjustTexts;
+    FContainer.Position.Y := -(FItemIndex-1) * ItemHeight;
+  end;
+end;
+
+procedure TFMXScrollYears.SetItems(const Value: TStrings);
+begin
+  FItems.Assign(Value);
+  FItemIndex := -1;
+  CreateTexts;
+end;
+
+procedure TFMXScrollYears.SetOnChange(const Value: TNotifyEvent);
+begin
+  FOnChange := Value;
+end;
+
+procedure TFMXScrollYears.SetSelectedColor(const Value: TAlphaColor);
+begin
+  if FSelectedColor <> Value then
+  begin
+    FSelectedColor := Value;
+    AdjustTexts;
+  end;
+end;
+
+procedure TFMXScrollYears.SetSelectedItemHeight(const Value: Single);
+begin
+  FSelectedItemHeight := Value;
+end;
+
+procedure TFMXScrollYears.SetData(const AList: TArray<string>);
+begin
+  FItems.Clear;
+  FItems.AddStrings(AList);
+  FItemIndex := -1;
+  CreateTexts;
+end;
+
+end.

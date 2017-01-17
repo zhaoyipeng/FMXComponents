@@ -1,0 +1,79 @@
+object Form5: TForm5
+  Left = 0
+  Top = 0
+  Caption = 'Form5'
+  ClientHeight = 480
+  ClientWidth = 311
+  Fill.Kind = Solid
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  DesignerMasterStyle = 0
+  object Layout16: TLayout
+    Align = Left
+    Size.Width = 81.000000000000000000
+    Size.Height = 480.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    object Layout3: TLayout
+      Align = Top
+      Size.Width = 81.000000000000000000
+      Size.Height = 162.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      object Line1: TLine
+        Align = Top
+        LineType = Bottom
+        Margins.Left = 13.000000000000000000
+        Margins.Right = 13.000000000000000000
+        Position.X = 13.000000000000000000
+        Size.Width = 55.000000000000000000
+        Size.Height = 52.000000000000000000
+        Size.PlatformDefault = False
+        Stroke.Color = xFF1EB9C1
+      end
+      object Line4: TLine
+        Align = Top
+        LineType = Bottom
+        Margins.Left = 13.000000000000000000
+        Margins.Right = 13.000000000000000000
+        Position.X = 13.000000000000000000
+        Position.Y = 52.000000000000000000
+        Size.Width = 55.000000000000000000
+        Size.Height = 58.000000000000000000
+        Size.PlatformDefault = False
+        Stroke.Color = xFF1EB9C1
+      end
+      object FMXScrollYears1: TFMXScrollYears
+        Align = Contents
+        ClipChildren = True
+        HitTest = True
+        Margins.Top = 3.000000000000000000
+        Margins.Bottom = 3.000000000000000000
+        Size.Width = 81.000000000000000000
+        Size.Height = 147.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 2
+        SelectedColor = claNull
+        ItemHeight = 49.000000000000000000
+        SelectedItemHeight = 59.000000000000000000
+        Items.Strings = (
+          '2014'
+          '2015'
+          '2016'
+          '2017'
+          '2018')
+        ItemIndex = 2
+        OnChange = FMXScrollYears1Change
+      end
+    end
+  end
+  object Label1: TLabel
+    Position.X = 104.000000000000000000
+    Position.Y = 136.000000000000000000
+    Size.Width = 145.000000000000000000
+    Size.Height = 73.000000000000000000
+    Size.PlatformDefault = False
+    Text = 'Label1'
+  end
+end
