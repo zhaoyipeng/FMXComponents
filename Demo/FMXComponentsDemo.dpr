@@ -3,7 +3,7 @@ program FMXComponentsDemo;
 uses
   System.StartUpCopy,
   FMX.Forms,
-  ScrollYearsDemoMain in 'ScrollYearsDemoMain.pas' {FMXComponentsDemoForm},
+  FMXComponentsDemoMain in 'FMXComponentsDemoMain.pas' {FMXComponentsDemoForm},
   FMX.ScrollableList in '..\ComponentsSource\FMX.ScrollableList.pas',
   FMX.RatingBar in '..\ComponentsSource\FMX.RatingBar.pas';
 

@@ -119,7 +119,7 @@
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
-        <DCCReference Include="ScrollYearsDemoMain.pas">
+        <DCCReference Include="FMXComponentsDemoMain.pas">
             <Form>FMXComponentsDemoForm</Form>
             <FormType>fmx</FormType>
         </DCCReference>
