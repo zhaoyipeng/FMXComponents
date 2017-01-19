@@ -9,3 +9,6 @@
 /FMXComponentsGroup_prjgroup.tvsconfig
 /ComponentsSource/Win32/Debug
 /Demo/ScrollYearsDemo.stat
+/Demo/FMXComponentsDemo.dproj.local
+/ComponentsSource/FMXComponents.stat
+/Demo/FMXComponentsDemoMain.vlb

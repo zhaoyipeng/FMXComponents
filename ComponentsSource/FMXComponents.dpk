@@ -32,6 +32,7 @@ requires
   fmx;
 
 contains
-  FMX.ScrollableList in 'FMX.ScrollableList.pas';
+  FMX.ScrollableList in 'FMX.ScrollableList.pas',
+  FMX.RatingBar in 'FMX.RatingBar.pas';
 
 end.

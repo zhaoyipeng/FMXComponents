@@ -6,7 +6,7 @@
         <Projects Include="ComponentsSource\FMXComponents.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="Demo\ScrollYearsDemo.dproj">
+        <Projects Include="Demo\FMXComponentsDemo.dproj">
             <Dependencies/>
         </Projects>
     </ItemGroup>
@@ -26,23 +26,23 @@
     <Target Name="FMXComponents:Make">
         <MSBuild Projects="ComponentsSource\FMXComponents.dproj" Targets="Make"/>
     </Target>
-    <Target Name="ScrollYearsDemo">
-        <MSBuild Projects="Demo\ScrollYearsDemo.dproj"/>
+    <Target Name="FMXComponentsDemo">
+        <MSBuild Projects="Demo\FMXComponentsDemo.dproj"/>
     </Target>
-    <Target Name="ScrollYearsDemo:Clean">
-        <MSBuild Projects="Demo\ScrollYearsDemo.dproj" Targets="Clean"/>
+    <Target Name="FMXComponentsDemo:Clean">
+        <MSBuild Projects="Demo\FMXComponentsDemo.dproj" Targets="Clean"/>
     </Target>
-    <Target Name="ScrollYearsDemo:Make">
-        <MSBuild Projects="Demo\ScrollYearsDemo.dproj" Targets="Make"/>
+    <Target Name="FMXComponentsDemo:Make">
+        <MSBuild Projects="Demo\FMXComponentsDemo.dproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
-        <CallTarget Targets="FMXComponents;ScrollYearsDemo"/>
+        <CallTarget Targets="FMXComponents;FMXComponentsDemo"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="FMXComponents:Clean;ScrollYearsDemo:Clean"/>
+        <CallTarget Targets="FMXComponents:Clean;FMXComponentsDemo:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="FMXComponents:Make;ScrollYearsDemo:Make"/>
+        <CallTarget Targets="FMXComponents:Make;FMXComponentsDemo:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

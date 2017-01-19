@@ -1,19 +1,21 @@
-object Form5: TForm5
+object FMXComponentsDemoForm: TFMXComponentsDemoForm
   Left = 0
   Top = 0
-  Caption = 'Form5'
+  Caption = 'FMXComponents Demo'
   ClientHeight = 480
   ClientWidth = 311
   Fill.Kind = Solid
   FormFactor.Width = 320
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
   DesignerMasterStyle = 0
   object Layout16: TLayout
     Align = Left
     Position.X = 81.000000000000000000
+    Position.Y = 44.000000000000000000
     Size.Width = 120.000000000000000000
-    Size.Height = 480.000000000000000000
+    Size.Height = 436.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 1
     object Layout3: TLayout
@@ -73,7 +75,7 @@ object Form5: TForm5
   end
   object Label1: TLabel
     Position.X = 216.000000000000000000
-    Position.Y = 24.000000000000000000
+    Position.Y = 56.000000000000000000
     Size.Width = 81.000000000000000000
     Size.Height = 41.000000000000000000
     Size.PlatformDefault = False
@@ -81,8 +83,9 @@ object Form5: TForm5
   end
   object Layout1: TLayout
     Align = Left
+    Position.Y = 44.000000000000000000
     Size.Width = 81.000000000000000000
-    Size.Height = 480.000000000000000000
+    Size.Height = 436.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 0
     object Layout2: TLayout
@@ -137,13 +140,53 @@ object Form5: TForm5
         OnChange = FMXScrollableList1Change
       end
     end
+    object btnAnimation: TButton
+      Position.X = 72.000000000000000000
+      Position.Y = 248.000000000000000000
+      Size.Width = 121.000000000000000000
+      Size.Height = 44.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      Text = 'Animation'
+      OnClick = btnAnimationClick
+    end
   end
   object Label2: TLabel
     Position.X = 216.000000000000000000
-    Position.Y = 88.000000000000000000
+    Position.Y = 112.000000000000000000
     Size.Width = 81.000000000000000000
     Size.Height = 41.000000000000000000
     Size.PlatformDefault = False
     Text = 'Label1'
+  end
+  object FMXRatingBar1: TFMXRatingBar
+    Position.X = 24.000000000000000000
+    Position.Y = 224.000000000000000000
+    Size.Width = 174.000000000000000000
+    Size.Height = 30.000000000000000000
+    Size.PlatformDefault = False
+    ActiveColor = xFF0CD19D
+    InActiveColor = x230CD19D
+    Space = 6.000000000000000000
+    Value = 3.500000000000000000
+    Maximum = 5.000000000000000000
+    object FloatAnimation1: TFloatAnimation
+      Duration = 0.800000011920929000
+      PropertyName = 'Value'
+      StartValue = 0.000000000000000000
+      StopValue = 3.500000000000000000
+    end
+  end
+  object lblHeader: TLabel
+    Align = Top
+    StyledSettings = [Family, Style, FontColor]
+    Margins.Left = 15.000000000000000000
+    Margins.Right = 15.000000000000000000
+    Position.X = 15.000000000000000000
+    Size.Width = 281.000000000000000000
+    Size.Height = 44.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.Font.Size = 14.000000000000000000
+    Text = 'FMXComponents Demo Application'
   end
 end
