@@ -17,7 +17,7 @@ type
     Line4: TLine;
     FMXScrollableList2: TFMXScrollableList;
     Label1: TLabel;
-    Layout1: TLayout;
+    LayoutYears: TLayout;
     Layout2: TLayout;
     Line2: TLine;
     Line3: TLine;
@@ -29,10 +29,17 @@ type
     FloatAnimation1: TFloatAnimation;
     FMXCircleScoreIndicator1: TFMXCircleScoreIndicator;
     FloatAnimation2: TFloatAnimation;
+    Layout4: TLayout;
+    Layout5: TLayout;
+    Line5: TLine;
+    Line6: TLine;
+    FMXScrollableList3: TFMXScrollableList;
+    Label3: TLabel;
     procedure FMXScrollableList2Change(Sender: TObject);
     procedure FMXScrollableList1Change(Sender: TObject);
     procedure btnAnimationClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure FMXScrollableList3Change(Sender: TObject);
   private
     { Private declarations }
   public
@@ -60,6 +67,11 @@ end;
 procedure TFMXComponentsDemoForm.FMXScrollableList2Change(Sender: TObject);
 begin
   Label2.Text := FMXScrollableList2.GetSelected;
+end;
+
+procedure TFMXComponentsDemoForm.FMXScrollableList3Change(Sender: TObject);
+begin
+  Label3.Text := FMXScrollableList3.GetSelected;
 end;
 
 procedure TFMXComponentsDemoForm.FormCreate(Sender: TObject);
