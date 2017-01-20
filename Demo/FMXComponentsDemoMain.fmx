@@ -9,6 +9,7 @@ object FMXComponentsDemoForm: TFMXComponentsDemoForm
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
   OnCreate = FormCreate
+  OnResize = FormResize
   DesignerMasterStyle = 0
   object lblHeader: TLabel
     Align = Top

@@ -49,6 +49,7 @@ type
     procedure btnAnimationClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FMXScrollableList3Change(Sender: TObject);
+    procedure FormResize(Sender: TObject);
   private
     { Private declarations }
   public
@@ -92,6 +93,11 @@ begin
   FMXImageSlider1.SetPage(1, Image2);
   FMXImageSlider1.SetPage(2, Image3);
   FMXImageSlider1.SetPage(3, Image4);
+end;
+
+procedure TFMXComponentsDemoForm.FormResize(Sender: TObject);
+begin
+  FMXImageSlider1.Height := ClientWidth * 200 / 320;
 end;
 
 end.
