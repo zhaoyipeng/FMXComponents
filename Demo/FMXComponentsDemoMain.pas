@@ -7,7 +7,7 @@ uses
   System.Variants,FMX.Types, FMX.Controls, FMX.Forms,
   FMX.Objects, FMX.Layouts,
   FMX.StdCtrls, FMX.Controls.Presentation, FMX.ScrollableList, FMX.RatingBar,
-  FMX.Ani, FMX.CircleScoreIndicator;
+  FMX.Ani, FMX.CircleScoreIndicator, FMX.TabControl, FMX.ImageSlider;
 
 type
   TFMXComponentsDemoForm = class(TForm)
@@ -35,6 +35,15 @@ type
     Line6: TLine;
     FMXScrollableList3: TFMXScrollableList;
     Label3: TLabel;
+    TabControl1: TTabControl;
+    Basic: TTabItem;
+    Slider: TTabItem;
+    Image1: TImage;
+    Image2: TImage;
+    Image3: TImage;
+    Image4: TImage;
+    FMXImageSlider1: TFMXImageSlider;
+    FloatAnimation3: TFloatAnimation;
     procedure FMXScrollableList2Change(Sender: TObject);
     procedure FMXScrollableList1Change(Sender: TObject);
     procedure btnAnimationClick(Sender: TObject);
@@ -51,7 +60,6 @@ var
 
 implementation
 {$R *.fmx}
-
 
 procedure TFMXComponentsDemoForm.btnAnimationClick(Sender: TObject);
 begin
@@ -78,6 +86,12 @@ procedure TFMXComponentsDemoForm.FormCreate(Sender: TObject);
 begin
   Label1.Text := FMXScrollableList1.GetSelected;
   Label2.Text := FMXScrollableList2.GetSelected;
+  Label3.Text := FMXScrollableList3.GetSelected;
+
+  FMXImageSlider1.SetPage(0, Image1);
+  FMXImageSlider1.SetPage(1, Image2);
+  FMXImageSlider1.SetPage(2, Image3);
+  FMXImageSlider1.SetPage(3, Image4);
 end;
 
 end.

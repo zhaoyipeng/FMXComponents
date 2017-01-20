@@ -2,9 +2,9 @@
 //
 // A Simple Firemonkey Circle Score Indicator Component
 //
-// Copyright (c) 2017 Ð»¶Ù (zhaoyipeng@hotmail.com)
+// Copyright 2017 Ð»¶Ù (zhaoyipeng@hotmail.com)
 //
-// https://github.com/danieleteti/delphimvcframework
+// https://github.com/zhaoyipeng/FMXComponents
 //
 // ***************************************************************************
 //
@@ -21,6 +21,10 @@
 // limitations under the License.
 //
 // *************************************************************************** }
+
+// version history
+// 2017-01-20, v0.1.0.0 : first release
+
 unit FMX.CircleScoreIndicator;
 
 interface

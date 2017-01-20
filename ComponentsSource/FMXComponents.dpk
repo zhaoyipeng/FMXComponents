@@ -35,6 +35,7 @@ contains
   FMX.ScrollableList in 'FMX.ScrollableList.pas',
   FMX.RatingBar in 'FMX.RatingBar.pas',
   FMX.CircleScoreIndicator in 'FMX.CircleScoreIndicator.pas',
-  FMX.ComponentsCommon in 'FMX.ComponentsCommon.pas';
+  FMX.ComponentsCommon in 'FMX.ComponentsCommon.pas',
+  FMX.ImageSlider in 'FMX.ImageSlider.pas';
 
 end.

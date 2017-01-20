@@ -2,9 +2,9 @@
 //
 // A Simple Firemonkey Scrolleable List Component
 //
-// Copyright (c) 2017 谢顿 (zhaoyipeng@hotmail.com)
+// Copyright 2017 谢顿 (zhaoyipeng@hotmail.com)
 //
-// https://github.com/danieleteti/delphimvcframework
+// https://github.com/zhaoyipeng/FMXComponents
 //
 // ***************************************************************************
 //

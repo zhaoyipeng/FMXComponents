@@ -7,7 +7,8 @@ uses
   FMX.ScrollableList in '..\ComponentsSource\FMX.ScrollableList.pas',
   FMX.RatingBar in '..\ComponentsSource\FMX.RatingBar.pas',
   FMX.ComponentsCommon in '..\ComponentsSource\FMX.ComponentsCommon.pas',
-  FMX.CircleScoreIndicator in '..\ComponentsSource\FMX.CircleScoreIndicator.pas';
+  FMX.CircleScoreIndicator in '..\ComponentsSource\FMX.CircleScoreIndicator.pas',
+  FMX.ImageSlider in '..\ComponentsSource\FMX.ImageSlider.pas';
 
 {$R *.res}
 
