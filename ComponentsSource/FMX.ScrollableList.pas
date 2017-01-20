@@ -37,15 +37,12 @@ uses
   FMX.Graphics,
   FMX.Controls,
   FMX.Objects,
-  FMX.Ani;
-
-const
-  THHPlatforms = pidWin32 or pidWin64 or pidOSX32 or pidiOSSimulator or
-    pidiOSDevice32 or pidiOSDevice64 or pidAndroid;
+  FMX.Ani,
+  FMX.ComponentsCommon;
 
 type
 
-  [ComponentPlatformsAttribute(THHPlatforms)]
+  [ComponentPlatformsAttribute(TFMXPlatforms)]
   TFMXScrollableList = class(TLayout)
   private
     FContainer: TLayout;

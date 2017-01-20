@@ -25,4 +25,19 @@ A Simple Rating BarComponent
 
 这是一个简单的评级控件，目前只支持显示
  
+Rating property is Value
+
 评级属性为Value
+
+## 2.TFMXCircleScoreIndicator
+
+![TFMXCircleScoreIndicator](SnapShots/FMXCircleScoreIndicator.png)
+
+
+A Simple Circle Score Indicator
+
+这是一个简单的成绩显示控件
+ 
+score property is Value
+
+成绩属性为Value

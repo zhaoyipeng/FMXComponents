@@ -12,3 +12,7 @@
 /Demo/FMXComponentsDemo.dproj.local
 /ComponentsSource/FMXComponents.stat
 /Demo/FMXComponentsDemoMain.vlb
+/Demo/Android/Debug
+/Demo/FMXComponentsDemo.deployproj
+/Demo/FMXComponentsDemo.identcache
+/Demo/FMXComponentsDemo.stat

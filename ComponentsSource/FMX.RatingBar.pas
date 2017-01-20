@@ -36,15 +36,12 @@ uses
   FMX.Layouts,
   FMX.Graphics,
   FMX.Controls,
-  FMX.Objects;
-
-const
-  THHPlatforms = pidWin32 or pidWin64 or pidOSX32 or
-    pidiOSSimulator or pidiOSDevice32 or pidiOSDevice64 or pidAndroid;
+  FMX.Objects,
+  FMX.ComponentsCommon;
 
 type
 
-  [ComponentPlatformsAttribute(THHPlatforms)]
+  [ComponentPlatformsAttribute(TFMXPlatforms)]
   TFMXRatingBar = class(TShape)
   private
     FCount: Integer;

@@ -141,8 +141,8 @@ object FMXComponentsDemoForm: TFMXComponentsDemoForm
       end
     end
     object btnAnimation: TButton
-      Position.X = 72.000000000000000000
-      Position.Y = 248.000000000000000000
+      Position.X = 40.000000000000000000
+      Position.Y = 352.000000000000000000
       Size.Width = 121.000000000000000000
       Size.Height = 44.000000000000000000
       Size.PlatformDefault = False
@@ -162,7 +162,7 @@ object FMXComponentsDemoForm: TFMXComponentsDemoForm
   object FMXRatingBar1: TFMXRatingBar
     Position.X = 24.000000000000000000
     Position.Y = 224.000000000000000000
-    Size.Width = 174.000000000000000000
+    Size.Width = 145.000000000000000000
     Size.Height = 30.000000000000000000
     Size.PlatformDefault = False
     ActiveColor = xFF0CD19D
@@ -188,5 +188,36 @@ object FMXComponentsDemoForm: TFMXComponentsDemoForm
     Size.PlatformDefault = False
     TextSettings.Font.Size = 14.000000000000000000
     Text = 'FMXComponents Demo Application'
+  end
+  object FMXCircleScoreIndicator1: TFMXCircleScoreIndicator
+    Position.X = 48.000000000000000000
+    Position.Y = 280.000000000000000000
+    Size.Width = 121.000000000000000000
+    Size.Height = 81.000000000000000000
+    Size.PlatformDefault = False
+    Max = 100.000000000000000000
+    Value = 75.000000000000000000
+    Thickness = 11.000000000000000000
+    BackStroke.Thickness = 11.000000000000000000
+    ScoreBrush.Gradient.Points = <
+      item
+        Color = xFFF14D4D
+        Offset = 0.000000000000000000
+      end
+      item
+        Color = xFFE46161
+        Offset = 0.500000000000000000
+      end
+      item
+        Color = xFFEB8F73
+        Offset = 1.000000000000000000
+      end>
+    IsHealthy = False
+    object FloatAnimation2: TFloatAnimation
+      Duration = 0.800000011920929000
+      PropertyName = 'Value'
+      StartValue = 0.000000000000000000
+      StopValue = 75.000000000000000000
+    end
   end
 end

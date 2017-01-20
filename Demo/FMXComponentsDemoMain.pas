@@ -7,7 +7,7 @@ uses
   System.Variants,FMX.Types, FMX.Controls, FMX.Forms,
   FMX.Objects, FMX.Layouts,
   FMX.StdCtrls, FMX.Controls.Presentation, FMX.ScrollableList, FMX.RatingBar,
-  FMX.Ani;
+  FMX.Ani, FMX.CircleScoreIndicator;
 
 type
   TFMXComponentsDemoForm = class(TForm)
@@ -27,6 +27,8 @@ type
     lblHeader: TLabel;
     btnAnimation: TButton;
     FloatAnimation1: TFloatAnimation;
+    FMXCircleScoreIndicator1: TFMXCircleScoreIndicator;
+    FloatAnimation2: TFloatAnimation;
     procedure FMXScrollableList2Change(Sender: TObject);
     procedure FMXScrollableList1Change(Sender: TObject);
     procedure btnAnimationClick(Sender: TObject);
@@ -47,6 +49,7 @@ implementation
 procedure TFMXComponentsDemoForm.btnAnimationClick(Sender: TObject);
 begin
   FloatAnimation1.Start;
+  FloatAnimation2.Start;
 end;
 
 procedure TFMXComponentsDemoForm.FMXScrollableList1Change(Sender: TObject);

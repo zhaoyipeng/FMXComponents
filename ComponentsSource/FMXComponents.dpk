@@ -33,6 +33,8 @@ requires
 
 contains
   FMX.ScrollableList in 'FMX.ScrollableList.pas',
-  FMX.RatingBar in 'FMX.RatingBar.pas';
+  FMX.RatingBar in 'FMX.RatingBar.pas',
+  FMX.CircleScoreIndicator in 'FMX.CircleScoreIndicator.pas',
+  FMX.ComponentsCommon in 'FMX.ComponentsCommon.pas';
 
 end.
