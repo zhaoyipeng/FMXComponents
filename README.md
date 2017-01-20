@@ -29,7 +29,7 @@ Rating property is Value
 
 评级属性为Value
 
-## 2.TFMXCircleScoreIndicator
+## 3.TFMXCircleScoreIndicator
 
 ![TFMXCircleScoreIndicator](SnapShots/FMXCircleScoreIndicator.png)
 
