@@ -10,7 +10,11 @@ I will open some components created in my projects
 A Simple Firemonkey Scrolleable List Component  
 
 这是一个简单的滚动列表控件，可以用于选择年份或其它信息  
+<<<<<<< HEAD
   
+=======
+ 
+>>>>>>> 9fc2f27f8acff56abf00a3d49aefc376e210bdc6
 选项使用 Items 属性  
 
 
@@ -30,6 +34,10 @@ Rating property is Value
 
 A Simple Circle Score Indicator  
 这是一个简单的成绩显示控件  
+<<<<<<< HEAD
    
+=======
+ 
+>>>>>>> 9fc2f27f8acff56abf00a3d49aefc376e210bdc6
 score property is Value  
 成绩属性为Value  
