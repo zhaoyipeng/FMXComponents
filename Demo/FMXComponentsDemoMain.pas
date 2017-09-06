@@ -4,10 +4,13 @@ interface
 
 uses
   System.SysUtils, System.Types, System.UITypes, System.Classes,
-  System.Variants,FMX.Types, FMX.Controls, FMX.Forms,
+  System.Variants, FMX.Types, FMX.Controls, FMX.Forms,
   FMX.Objects, FMX.Layouts,
   FMX.StdCtrls, FMX.Controls.Presentation, FMX.ScrollableList, FMX.RatingBar,
-  FMX.Ani, FMX.CircleScoreIndicator, FMX.TabControl, FMX.ImageSlider;
+  FMX.Ani, FMX.CircleScoreIndicator, FMX.TabControl, FMX.ImageSlider,
+  FMX.ScrollBox, FMX.Memo, FMX.SimpleBBCodeText, ONE.Objects, Data.Bind.EngExt,
+  Fmx.Bind.DBEngExt, System.Rtti, System.Bindings.Outputs, Fmx.Bind.Editors,
+  Data.Bind.Components;
 
 type
   TFMXComponentsDemoForm = class(TForm)
@@ -44,14 +47,22 @@ type
     Image4: TImage;
     FMXImageSlider1: TFMXImageSlider;
     FloatAnimation3: TFloatAnimation;
+    BBCode: TTabItem;
+    Memo1: TMemo;
+    Layout1: TLayout;
+    FMXSimpleBBCodeText1: TFMXSimpleBBCodeText;
+    BindingsList1: TBindingsList;
     procedure FMXScrollableList2Change(Sender: TObject);
     procedure FMXScrollableList1Change(Sender: TObject);
     procedure btnAnimationClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FMXScrollableList3Change(Sender: TObject);
     procedure FormResize(Sender: TObject);
+    procedure FMXSimpleBBCodeText1Click(Sender: TObject);
+    procedure Memo1Change(Sender: TObject);
   private
     { Private declarations }
+    FSelection1: TOneSelection;
   public
     { Public declarations }
   end;
@@ -60,6 +71,7 @@ var
   FMXComponentsDemoForm: TFMXComponentsDemoForm;
 
 implementation
+
 {$R *.fmx}
 
 procedure TFMXComponentsDemoForm.btnAnimationClick(Sender: TObject);
@@ -83,6 +95,30 @@ begin
   Label3.Text := FMXScrollableList3.GetSelected;
 end;
 
+procedure TFMXComponentsDemoForm.FMXSimpleBBCodeText1Click(Sender: TObject);
+var
+  c: TControl;
+begin
+  if FSelection1.ChildrenCount > 0 then
+  begin
+    c := TControl(FSelection1.Children[0]);
+    c.HitTest := True;
+    c.Align := TAlignLayout.None;
+    c.Parent := Layout1;
+    c.BoundsRect := FSelection1.BoundsRect;
+    c.Position.Point := FSelection1.Position.Point;
+  end;
+
+  FSelection1.BoundsRect := TControl(Sender).BoundsRect;
+  FSelection1.Position.Point := TControl(Sender).Position.Point;
+  FSelection1.Visible := True;
+  FSelection1.BringToFront;
+
+  TControl(Sender).Parent := FSelection1;
+  TControl(Sender).Align := TAlignLayout.Client;
+  TControl(Sender).HitTest := False;
+end;
+
 procedure TFMXComponentsDemoForm.FormCreate(Sender: TObject);
 begin
   Label1.Text := FMXScrollableList1.GetSelected;
@@ -93,11 +129,23 @@ begin
   FMXImageSlider1.SetPage(1, Image2);
   FMXImageSlider1.SetPage(2, Image3);
   FMXImageSlider1.SetPage(3, Image4);
+
+  FSelection1 := TOneSelection.Create(Self);
+  FSelection1.GripSize := 8;
+  FSelection1.Proportional := False;
+  Layout1.AddObject(FSelection1);
+
+  FMXSimpleBBCodeText1Click(FMXSimpleBBCodeText1);
 end;
 
 procedure TFMXComponentsDemoForm.FormResize(Sender: TObject);
 begin
   FMXImageSlider1.Height := ClientWidth * 200 / 320;
+end;
+
+procedure TFMXComponentsDemoForm.Memo1Change(Sender: TObject);
+begin
+  self.FMXSimpleBBCodeText1.Lines.Assign(Memo1.Lines);
 end;
 
 end.

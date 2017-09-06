@@ -8,7 +8,9 @@ uses
   FMX.RatingBar in '..\ComponentsSource\FMX.RatingBar.pas',
   FMX.ComponentsCommon in '..\ComponentsSource\FMX.ComponentsCommon.pas',
   FMX.CircleScoreIndicator in '..\ComponentsSource\FMX.CircleScoreIndicator.pas',
-  FMX.ImageSlider in '..\ComponentsSource\FMX.ImageSlider.pas';
+  FMX.ImageSlider in '..\ComponentsSource\FMX.ImageSlider.pas',
+  FMX.SimpleBBCodeText in '..\ComponentsSource\FMX.SimpleBBCodeText.pas',
+  ONE.Objects in 'ONE.Objects.pas';
 
 {$R *.res}
 

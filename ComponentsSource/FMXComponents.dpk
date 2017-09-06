@@ -36,6 +36,7 @@ contains
   FMX.RatingBar in 'FMX.RatingBar.pas',
   FMX.CircleScoreIndicator in 'FMX.CircleScoreIndicator.pas',
   FMX.ComponentsCommon in 'FMX.ComponentsCommon.pas',
-  FMX.ImageSlider in 'FMX.ImageSlider.pas';
+  FMX.ImageSlider in 'FMX.ImageSlider.pas',
+  FMX.SimpleBBCodeText in 'FMX.SimpleBBCodeText.pas';
 
 end.
