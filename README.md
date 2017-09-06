@@ -50,7 +50,7 @@ A Simple Image Slider
  
 ## 5.TFMXSimpleBBCodeText
 
-![TFMXSimpleBBCodeText](SnapShots/FMXSimpleBBCodeText.png)  
+![TFMXSimpleBBCodeText](SnapShots/FMXSimpleBBCodeText.gif)  
 
 A Simple BBCode Text Display Control (Performance need more optimization)
 
