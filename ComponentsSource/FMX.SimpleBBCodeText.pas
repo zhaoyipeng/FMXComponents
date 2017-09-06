@@ -141,7 +141,6 @@ type
     property OnPainting;
     property OnPaint;
     property OnResize;
-    property OnResized;
   end;
 
 procedure register;
@@ -282,8 +281,6 @@ var
   txtHeight, txtWidth: Single;
   r: TRectF;
   OldFont: TFont;
-  DrawFont: TFont;
-  OldDrawFont: TFont;
   su, s: string;
   FontColor: TAlphaColor;
   OldFontColor: TAlphaColor;
@@ -304,6 +301,8 @@ var
     line: TObjectList<TTextBlock>;
     block: TTextBlock;
     layout: TTextLayout;
+    AverWidth: Single;
+    P: Integer;
   begin
     layout := TTextLayoutManager.TextLayoutByCanvas(ACanvas.ClassType)
       .Create(ACanvas);
@@ -346,14 +345,24 @@ var
           txtWidth := layout.TextRect.Width;
           if (dr.Left + txtWidth) > dr.Right then
           begin
-            su2 := su;
+            AverWidth := layout.TextRect.Width / su.Length;
+            P := Round(dr.Width / AverWidth);
+            su2 := su.Substring(0, P);
             if dr.Left <> r.Left then
               MinLength := 0
             else
               MinLength := 1;
+            layout.Text := su2;
+            txtWidth := layout.TextRect.Width;
 
-            while (Length(su2) > MinLength) and
-              ((dr.Left + txtWidth) > dr.Right) do
+            while ((dr.Left + txtWidth) < dr.Right) do
+            begin
+              C := su.Chars[su2.Length];
+              su2 := su2 + C;
+              layout.Text := su2;
+              txtWidth := layout.TextRect.Width;
+            end;
+            while (Length(su2) > MinLength) and ((dr.Left + txtWidth) > dr.Right) do
             begin
               C := su2.Chars[Length(su2) - 1];
               su2 := su2.Remove(Length(su2) - 1);
@@ -364,6 +373,7 @@ var
                 (Pos(su2.Chars[su2.Length - 1], HEAD_CHARS) > 0) then
                 su2 := su2.Remove(Length(su2) - 1);
               layout.Text := su2;
+
               txtWidth := layout.TextRect.Width;
             end;
             su := su2;
@@ -371,12 +381,15 @@ var
             WordLen := Length(su2);
             LineBreak := True;
           end;
-          block := TTextBlock.Create;
-          block.Color := FontColor;
-          block.Font := ACanvas.Font;
-          block.Bounds := dr;
-          block.Text := su;
-          line.Add(block);
+          if not su.IsEmpty then
+          begin
+            block := TTextBlock.Create;
+            block.Color := FontColor;
+            block.Font := ACanvas.Font;
+            block.Bounds := dr;
+            block.Text := su;
+            line.Add(block);
+          end;
           dr.Left := dr.Left + txtWidth;
           w := w + txtWidth;
           res := res + Copy(s, 1, WordLen);
@@ -392,23 +405,19 @@ var
           begin
             _tag := LowerCase(Copy(s, 1, TagPos));
             if _tag = '[b]' then
-              Canvas.Font.Style := Canvas.Font.Style + [TFontStyle.fsBold]
+              ACanvas.Font.Style := ACanvas.Font.Style + [TFontStyle.fsBold]
             else if _tag = '[u]' then
-              ACanvas.Font.Style := ACanvas.Font.Style +
-                [TFontStyle.fsUnderline]
+              ACanvas.Font.Style := ACanvas.Font.Style + [TFontStyle.fsUnderline]
             else if _tag = '[i]' then
               ACanvas.Font.Style := ACanvas.Font.Style + [TFontStyle.fsItalic]
             else if _tag = '[s]' then
-              ACanvas.Font.Style := ACanvas.Font.Style +
-                [TFontStyle.fsStrikeOut]
+              ACanvas.Font.Style := ACanvas.Font.Style + [TFontStyle.fsStrikeOut]
             else if _tag = '[/s]' then
-              ACanvas.Font.Style := ACanvas.Font.Style -
-                [TFontStyle.fsStrikeOut]
+              ACanvas.Font.Style := ACanvas.Font.Style - [TFontStyle.fsStrikeOut]
             else if _tag = '[/i]' then
               ACanvas.Font.Style := ACanvas.Font.Style - [TFontStyle.fsItalic]
             else if _tag = '[/u]' then
-              ACanvas.Font.Style := ACanvas.Font.Style -
-                [TFontStyle.fsUnderline]
+              ACanvas.Font.Style := ACanvas.Font.Style - [TFontStyle.fsUnderline]
             else if _tag = '[/b]' then
               ACanvas.Font.Style := ACanvas.Font.Style - [TFontStyle.fsBold]
             else if _tag.StartsWith('[color') then
@@ -452,11 +461,6 @@ var
 begin
   OldFont := TFont.Create;
   OldFont.Assign(ACanvas.Font);
-  DrawFont := TFont.Create;
-  DrawFont.Assign(ACanvas.Font);
-  OldDrawFont := TFont.Create;
-  OldDrawFont.Assign(ACanvas.Font);
-
   FColor := ACanvas.Fill.Color;
   FontColor := FColor;
   OldFontColor := FColor;
@@ -479,13 +483,7 @@ begin
 
     while Length(s) > 0 do
     begin
-      ACanvas.Font.Assign(DrawFont);
-      // FontColor := DrawFontColor;
-
       su := DrawBBCodeLine(s, r, txtWidth, txtHeight, XPos, YPos);
-
-      // DrawFontColor := ACanvas.Fill.Color;
-      OldDrawFont.Assign(OldFont);
 
       if txtWidth > XSize then
         XSize := txtWidth + 2;
@@ -519,8 +517,6 @@ begin
   else
     YSize := YSize - LineSpacing;
   ACanvas.Font.Assign(OldFont);
-  OldDrawFont.Free;
-  DrawFont.Free;
   OldFont.Free;
 end;
 

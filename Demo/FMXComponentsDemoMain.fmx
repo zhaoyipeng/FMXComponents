@@ -8055,7 +8055,13 @@ object FMXComponentsDemoForm: TFMXComponentsDemoForm
             
               #25925#20107#21457#29983#22312#19978#19968#38598'[color=red][b][i]'#12298'X'#25112#35686#65306#36870#36716#26410#26469#12299'[/i][/b][/color]'#32467#26463#30340#21313#24180#21518#65292#36825#19968#22238#24180#36731#30340 +
               'X'#25945#25480#65288#35449#22982#26031#183#40614#21345#27779#20234#39280#65289#23558#19982#39764#24418#22899'('#35449#22958#24343#183#21171#20262#26031#39280')'#37325#26032#32852#25163#20849#25239#22823#25932
-            '')
+            ''
+            
+              'Tuesday, September 19, 2017 09:00:00 to Tuesday, September 19, 2' +
+              '017 17:00:00 Location & full address: Evoluon, Noord Brabantlaan' +
+              ' 1a, 5652 LA EINDHOVEN Please read below in Dutch You are invite' +
+              'd for The LAB - a Conference... '
+            'View Detail')
           Position.X = 112.000000000000000000
           Position.Y = 64.000000000000000000
           Size.Width = 313.000000000000000000
@@ -8074,7 +8080,16 @@ object FMXComponentsDemoForm: TFMXComponentsDemoForm
             #25925#20107#21457#29983#22312#19978#19968#38598'[color=red][b][i]'#12298'X'#25112#35686#65306#36870#36716#26410#26469#12299'[/i][/b][/color]'#32467#26463#30340#21313#24180#21518#65292#36825#19968#22238#24180#36731#30340 +
             'X'#25945#25480#65288#35449#22982#26031#183#40614#21345#27779#20234#39280#65289#23558#19982#39764#24418#22899'('#35449#22958#24343#183#21171#20262#26031#39280')'#37325#26032#32852#25163#20849#25239#22823#25932
           ''
-          '')
+          
+            'Tuesday, September 19, 2017 09:00:00 to Tuesday, September 19, 2' +
+            '017 17:00:00'
+          
+            'Location & full address: Evoluon, Noord Brabantlaan 1a, 5652 LA ' +
+            'EINDHOVEN'
+          
+            'Please read below in Dutch You are invited for The LAB - a Confe' +
+            'rence...'
+          'View Detail')
         StyledSettings = [Family, Style, FontColor]
         TextSettings.Font.Size = 16.000000000000000000
         TextSettings.WordWrap = True
