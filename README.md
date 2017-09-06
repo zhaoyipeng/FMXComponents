@@ -48,4 +48,10 @@ A Simple Image Slider
 
 一个简单的图片轮播控件（还不完善）
  
+## 5.TFMXSimpleBBCodeText
 
+![TFMXSimpleBBCodeText](SnapShots/FMXSimpleBBCodeText.png)  
+
+A Simple BBCode Text Display Control (Performance need more optimization)
+
+一个简单的BBCode显示控件，实现简单的富文本显示（性能有待优化）
