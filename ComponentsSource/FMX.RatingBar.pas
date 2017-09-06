@@ -161,9 +161,7 @@ procedure TFMXRatingBar.DrawStar(ARect: TRectF; AValue: Single);
 var
   P: TPolygon;
   fillBrush: TBrush;
-  outlinePen: TStrokeBrush;
   l, cx, cy: Single;
-  I: Integer;
   cr: TRectF;
   State: TCanvasSaveState;
 begin

@@ -76,7 +76,7 @@ type
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
-    procedure SetData(const AList: TArray<string>);
+    procedure SetData(const AList: TArray<string>); reintroduce;
     function GetSelected: string;
   published
     property SelectedColor: TAlphaColor read FSelectedColor

@@ -44,25 +44,19 @@ type
   TFMXSimpleBBCodeText = class(TControl)
   private
     FLineSpacing: Single;
-    FAutoHeight: Boolean;
     FAutoSize: Boolean;
     FNeedUpdate: Boolean;
     FTextSettings: TTextSettings;
     FDefaultTextSettings: TTextSettings;
-    FStyledSettings: TStyledSettings;
     FIsChanging: Boolean;
     FLines: TStrings;
     FBlockLines: TObjectList<TObjectList<TTextBlock>>;
     FColor: TAlphaColor;
     procedure SetLineSpacing(const Value: Single);
-    function GetTextHeight: Single;
-    function GetTextWidth: Single;
-    procedure SetAutoHeight(const Value: Boolean);
     procedure SetAutoSize(const Value: Boolean);
     function GetLines: TStrings;
     procedure SetFont(const Value: TFont);
     procedure SetLines(const Value: TStrings);
-    procedure NeedUpdate;
     procedure SetWordWrap(const Value: Boolean);
     function GetFont: TFont;
     function GetHorzTextAlign: TTextAlign;
@@ -77,15 +71,11 @@ type
     procedure CreateBBCodeTexts(ACanvas: TCanvas; fr: TRectF;
       XPos, YPos: Integer; WordWrap: Boolean; var XSize, YSize: Single;
       TextSettings: TTextSettings; Opacity, LineSpacing: Single);
-    procedure SetStyledSettings(const Value: TStyledSettings);
-    function GetStyledSettings: TStyledSettings;
     procedure SetColor(const Value: TAlphaColor);
-    function GetDefaultTextSettings: TTextSettings;
   protected
     procedure Paint; override;
     function IsBBCode: Boolean;
     procedure BBCodeDraw;
-    procedure InvalidateHeight;
     procedure RecreateTexts;
     procedure SetNeedUpdate;
     function GetTextSettingsClass: TTextSettingsClass; virtual;
@@ -95,7 +85,6 @@ type
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
-    procedure SetBounds(X, Y, AWidth, AHeight: Single); override;
     procedure SetBBText(const AText: string);
     property Font: TFont read GetFont write SetFont;
     property HorzTextAlign: TTextAlign read GetHorzTextAlign
@@ -106,7 +95,6 @@ type
   published
     property Align;
     property Anchors;
-    property AutoHeight: Boolean read FAutoHeight write SetAutoHeight;
     property AutoSize: Boolean read FAutoSize write SetAutoSize default False;
     property ClipChildren default False;
     property ClipParent default False;
@@ -263,26 +251,44 @@ begin
     AWordWrap);
 end;
 
-procedure BBCodeDrawEx(ACanvas: TCanvas; Text: string; fr: TRectF;
-  XPos, YPos: Integer; CheckHeight, WordWrap: Boolean; var XSize, YSize: Single;
+{ TTextTextSettings }
+
+type
+  TTextTextSettings = class(TTextSettings)
+  public
+    constructor Create(const AOwner: TPersistent); override;
+  published
+    property Font;
+    property FontColor;
+    property Trimming default TTextTrimming.None;
+    property WordWrap default True;
+    property HorzAlign default TTextAlign.Center;
+    property VertAlign default TTextAlign.Center;
+  end;
+
+constructor TTextTextSettings.Create(const AOwner: TPersistent);
+begin
+  inherited;
+  Trimming := TTextTrimming.None;
+  WordWrap := True;
+  HorzAlign := TTextAlign.Center;
+  VertAlign := TTextAlign.Center;
+end;
+
+procedure TFMXSimpleBBCodeText.CreateBBCodeTexts(ACanvas: TCanvas; fr: TRectF;
+  XPos, YPos: Integer; WordWrap: Boolean; var XSize, YSize: Single;
   TextSettings: TTextSettings; Opacity, LineSpacing: Single);
 var
   txtHeight, txtWidth: Single;
-  r, dr: TRectF;
+  r: TRectF;
   OldFont: TFont;
-  CalcFont: TFont;
   DrawFont: TFont;
-  OldCalcFont: TFont;
   OldDrawFont: TFont;
   su, s: string;
   FontColor: TAlphaColor;
   OldFontColor: TAlphaColor;
-  OldCalcFontColor: TAlphaColor;
-  CalcFontColor: TAlphaColor;
-  OldDrawFontColor: TAlphaColor;
-  DrawFontColor: TAlphaColor;
-  function DrawBBCodeLine(ACanvas: TCanvas; var s: string; r: TRectF;
-    Calc: Boolean; var w, h: Single; XPos, YPos: Integer): string;
+  function DrawBBCodeLine(var s: string; r: TRectF; var w, h: Single;
+    XPos, YPos: Integer): string;
   var
     dr: TRectF;
     TagPos: Integer;
@@ -294,7 +300,9 @@ var
     NewColor: TAlphaColor;
     C: Char;
     MinLength: Integer;
-    sr: TRectF;
+    txt: TText;
+    line: TObjectList<TTextBlock>;
+    block: TTextBlock;
     layout: TTextLayout;
   begin
     layout := TTextLayoutManager.TextLayoutByCanvas(ACanvas.ClassType)
@@ -311,15 +319,15 @@ var
       layout.Color := FontColor;
       layout.RightToLeft := False;
       layout.EndUpdate;
-
       Result := '';
       res := '';
       w := 0;
       LineBreak := False;
       dr := r;
-
       layout.Text := 'gh';
       txtHeight := layout.TextRect.Height;
+      line := TObjectList<TTextBlock>.Create;
+      FBlockLines.Add(line);
       while (s <> '') and (not LineBreak) do
       begin
         TagPos := Pos('[', s);
@@ -363,12 +371,12 @@ var
             WordLen := Length(su2);
             LineBreak := True;
           end;
-          if not Calc then
-          begin
-            ACanvas.Fill.Color := FontColor;
-            ACanvas.FillText(dr, su, False, Opacity, [], TTextAlign.Leading,
-              TTextAlign.Center);
-          end;
+          block := TTextBlock.Create;
+          block.Color := FontColor;
+          block.Font := ACanvas.Font;
+          block.Bounds := dr;
+          block.Text := su;
+          line.Add(block);
           dr.Left := dr.Left + txtWidth;
           w := w + txtWidth;
           res := res + Copy(s, 1, WordLen);
@@ -384,7 +392,7 @@ var
           begin
             _tag := LowerCase(Copy(s, 1, TagPos));
             if _tag = '[b]' then
-              ACanvas.Font.Style := ACanvas.Font.Style + [TFontStyle.fsBold]
+              Canvas.Font.Style := Canvas.Font.Style + [TFontStyle.fsBold]
             else if _tag = '[u]' then
               ACanvas.Font.Style := ACanvas.Font.Style +
                 [TFontStyle.fsUnderline]
@@ -431,273 +439,8 @@ var
       end;
       Result := res;
     finally
-      FreeAndNil(layout);
+      layout.Free;
     end;
-  end;
-
-begin
-  OldFont := TFont.Create;
-  OldFont.Assign(ACanvas.Font);
-  CalcFont := TFont.Create;
-  CalcFont.Assign(ACanvas.Font);
-  DrawFont := TFont.Create;
-  DrawFont.Assign(ACanvas.Font);
-  OldCalcFont := TFont.Create;
-  OldCalcFont.Assign(ACanvas.Font);
-  OldDrawFont := TFont.Create;
-  OldDrawFont.Assign(ACanvas.Font);
-
-  FontColor := ACanvas.Fill.Color;
-  OldFontColor := ACanvas.Fill.Color;
-  OldCalcFontColor := ACanvas.Fill.Color;
-  CalcFontColor := ACanvas.Fill.Color;
-  OldDrawFontColor := ACanvas.Fill.Color;
-  DrawFontColor := ACanvas.Fill.Color;
-
-  XSize := 0;
-  YSize := 0;
-  r := fr;
-  s := Text;
-  while Pos('[[', s) > 0 do
-  begin
-    s.Replace('[[', '&#91;');
-  end;
-
-  while Pos(']]', s) > 0 do
-  begin
-    s.Replace(']]', '&#93;');
-  end;
-
-  while Length(s) > 0 do
-  begin
-    OldFont.Assign(OldCalcFont);
-    OldFontColor := OldCalcFontColor;
-    ACanvas.Font.Assign(CalcFont);
-    FontColor := CalcFontColor;
-
-    su := DrawBBCodeLine(ACanvas, s, r, True, txtWidth, txtHeight, XPos, YPos);
-
-    CalcFont.Assign(ACanvas.Font);
-    CalcFontColor := ACanvas.Fill.Color;
-    OldCalcFont.Assign(OldFont);
-    OldCalcFontColor := OldFontColor;
-
-    if txtWidth > XSize then
-      XSize := txtWidth + 2;
-    if not CheckHeight then
-    begin
-      dr := r;
-
-      case TextSettings.HorzAlign of
-        TTextAlign.Center:
-          if (r.Right - r.Left - txtWidth > 0) then
-            dr.Left := r.Left + ((r.Right - r.Left - txtWidth) / 2);
-        TTextAlign.Trailing:
-          if r.Right - txtWidth > r.Left then
-            dr.Left := r.Right - txtWidth;
-      end;
-
-      dr.Left := dr.Left;
-      dr.Bottom := dr.Top + txtHeight;
-
-      OldFont.Assign(OldDrawFont);
-      OldFontColor := OldDrawFontColor;
-      ACanvas.Font.Assign(DrawFont);
-      FontColor := DrawFontColor;
-      DrawBBCodeLine(ACanvas, su, dr, False, txtWidth, txtHeight, XPos, YPos);
-      DrawFont.Assign(ACanvas.Font);
-      DrawFontColor := FontColor;
-      OldDrawFont.Assign(OldFont);
-      OldDrawFontColor := OldFontColor;
-    end;
-
-    txtHeight := txtHeight + LineSpacing;
-    r.Top := r.Top + txtHeight;
-    YSize := YSize + txtHeight;
-    // do not draw below bottom
-    if (r.Top + txtHeight - LineSpacing > r.Bottom + 1) and not CheckHeight then
-      s := '';
-  end;
-
-  if (YSize = 0) then
-    YSize := CalculateText(ACanvas, 'gh').Height
-  else
-    YSize := YSize - LineSpacing;
-  ACanvas.Font.Assign(OldFont);
-  OldDrawFont.Free;
-  OldCalcFont.Free;
-  DrawFont.Free;
-  CalcFont.Free;
-  OldFont.Free;
-end;
-
-{ TTextTextSettings }
-
-type
-  TTextTextSettings = class(TTextSettings)
-  public
-    constructor Create(const AOwner: TPersistent); override;
-  published
-    property Font;
-    property FontColor;
-    property Trimming default TTextTrimming.None;
-    property WordWrap default True;
-    property HorzAlign default TTextAlign.Center;
-    property VertAlign default TTextAlign.Center;
-  end;
-
-constructor TTextTextSettings.Create(const AOwner: TPersistent);
-begin
-  inherited;
-  Trimming := TTextTrimming.None;
-  WordWrap := True;
-  HorzAlign := TTextAlign.Center;
-  VertAlign := TTextAlign.Center;
-end;
-
-procedure TFMXSimpleBBCodeText.CreateBBCodeTexts(ACanvas: TCanvas; fr: TRectF;
-  XPos, YPos: Integer; WordWrap: Boolean; var XSize, YSize: Single;
-  TextSettings: TTextSettings; Opacity, LineSpacing: Single);
-var
-  txtHeight, txtWidth: Single;
-  r, dr: TRectF;
-  OldFont: TFont;
-  DrawFont: TFont;
-  OldDrawFont: TFont;
-  su, s: string;
-  FontColor: TAlphaColor;
-  OldFontColor: TAlphaColor;
-  OldDrawFontColor: TAlphaColor;
-  DrawFontColor: TAlphaColor;
-  function DrawBBCodeLine(var s: string; r: TRectF; var w, h: Single;
-    XPos, YPos: Integer): string;
-  var
-    dr: TRectF;
-    TagPos: Integer;
-    su, su2: string;
-    WordLen, Idx: Integer;
-    _tag: string;
-    LineBreak: Boolean;
-    res, colorStr: string;
-    NewColor: TAlphaColor;
-    C: Char;
-    MinLength: Integer;
-    txt: TText;
-    line: TObjectList<TTextBlock>;
-    block: TTextBlock;
-  begin
-    Result := '';
-    res := '';
-    w := 0;
-    LineBreak := False;
-    dr := r;
-    txtHeight := CalculateText(ACanvas, 'gh').Height;
-    line := TObjectList<TTextBlock>.Create;
-    FBlockLines.Add(line);
-    while (s <> '') and (not LineBreak) do
-    begin
-      TagPos := Pos('[', s);
-      if (TagPos > 0) then
-        su := Copy(s, 1, TagPos - 1)
-      else
-      begin
-        su := s;
-      end;
-      WordLen := Length(su);
-      su := DecodeBBCode(su);
-      if WordLen > 0 then
-      begin
-        dr.Bottom := dr.Top + txtHeight;
-        txtWidth := CalculateText(ACanvas, su).Width;
-        if (dr.Left + txtWidth) > dr.Right then
-        begin
-          su2 := su;
-          if dr.Left <> r.Left then
-            MinLength := 0
-          else
-            MinLength := 1;
-
-          while (Length(su2) > MinLength) and
-            ((dr.Left + txtWidth) > dr.Right) do
-          begin
-            C := su2.Chars[Length(su2) - 1];
-            su2 := su2.Remove(Length(su2) - 1);
-
-            if (Pos(C, TAIL_CHARS) > 0) and (Length(su2) > 1) then
-              su2 := su2.Remove(Length(su2) - 1)
-            else if (Length(su2) > 1) and
-              (Pos(su2.Chars[su2.Length - 1], HEAD_CHARS) > 0) then
-              su2 := su2.Remove(Length(su2) - 1);
-            txtWidth := CalculateText(ACanvas, su2).Width;
-          end;
-          su := su2;
-          su2 := EncodeBBCode(su2);
-          WordLen := Length(su2);
-          LineBreak := True;
-        end;
-        block := TTextBlock.Create;
-        block.Color := FontColor;
-        block.Font := ACanvas.Font;
-        block.Bounds := dr;
-        block.Text := su;
-        line.Add(block);
-        dr.Left := dr.Left + txtWidth;
-        w := w + txtWidth;
-        res := res + Copy(s, 1, WordLen);
-        Delete(s, 1, WordLen);
-      end;
-      TagPos := Pos('[', s);
-      if (TagPos = 1) and (Length(s) <= 2) then
-        s := ''
-      else if not LineBreak then
-      begin
-        TagPos := Pos(']', s);
-        if TagPos > 0 then
-        begin
-          _tag := LowerCase(Copy(s, 1, TagPos));
-          if _tag = '[b]' then
-            Canvas.Font.Style := Canvas.Font.Style + [TFontStyle.fsBold]
-          else if _tag = '[u]' then
-            ACanvas.Font.Style := ACanvas.Font.Style + [TFontStyle.fsUnderline]
-          else if _tag = '[i]' then
-            ACanvas.Font.Style := ACanvas.Font.Style + [TFontStyle.fsItalic]
-          else if _tag = '[s]' then
-            ACanvas.Font.Style := ACanvas.Font.Style + [TFontStyle.fsStrikeOut]
-          else if _tag = '[/s]' then
-            ACanvas.Font.Style := ACanvas.Font.Style - [TFontStyle.fsStrikeOut]
-          else if _tag = '[/i]' then
-            ACanvas.Font.Style := ACanvas.Font.Style - [TFontStyle.fsItalic]
-          else if _tag = '[/u]' then
-            ACanvas.Font.Style := ACanvas.Font.Style - [TFontStyle.fsUnderline]
-          else if _tag = '[/b]' then
-            ACanvas.Font.Style := ACanvas.Font.Style - [TFontStyle.fsBold]
-          else if _tag.StartsWith('[color') then
-          begin
-            Idx := Pos('=', _tag);
-            if Idx > 0 then
-            begin
-              OldFontColor := ACanvas.Fill.Color;
-              colorStr := Trim(Copy(s, Idx + 1, Length(_tag) - Idx - 1));
-              if colorStr.StartsWith('#') then
-                NewColor := Hex2Color(colorStr)
-              else
-                NewColor := Text2Color(AnsiLowerCase(colorStr));
-              FontColor := NewColor;
-            end;
-          end
-          else if _tag = '[/color]' then
-          begin
-            FontColor := OldFontColor;
-          end;
-
-          res := res + Copy(s, 1, TagPos);
-          Delete(s, 1, TagPos);
-        end
-        else
-          s := '';
-      end;
-    end;
-    Result := res;
   end;
 
 var
@@ -717,8 +460,6 @@ begin
   FColor := ACanvas.Fill.Color;
   FontColor := FColor;
   OldFontColor := FColor;
-  OldDrawFontColor := FColor;
-  DrawFontColor := FColor;
 
   XSize := 0;
   YSize := 0;
@@ -739,17 +480,17 @@ begin
     while Length(s) > 0 do
     begin
       ACanvas.Font.Assign(DrawFont);
-//      FontColor := DrawFontColor;
+      // FontColor := DrawFontColor;
 
       su := DrawBBCodeLine(s, r, txtWidth, txtHeight, XPos, YPos);
 
-//      DrawFontColor := ACanvas.Fill.Color;
+      // DrawFontColor := ACanvas.Fill.Color;
       OldDrawFont.Assign(OldFont);
-      OldDrawFontColor := OldFontColor;
 
       if txtWidth > XSize then
         XSize := txtWidth + 2;
 
+      xOffset := 0;
       case TextSettings.HorzAlign of
         TTextAlign.Center:
           if (r.Right - r.Left - txtWidth > 0) then
@@ -757,8 +498,6 @@ begin
         TTextAlign.Trailing:
           if r.Right - txtWidth > r.Left then
             xOffset := r.Right - txtWidth;
-      else
-        xOffset := 0;
       end;
       line := FBlockLines.Last;
       for block in line do
@@ -814,11 +553,6 @@ begin
     Result := s;
 end;
 
-function TFMXSimpleBBCodeText.GetDefaultTextSettings: TTextSettings;
-begin
-  Result := FDefaultTextSettings;
-end;
-
 function TFMXSimpleBBCodeText.GetFont: TFont;
 begin
   Result := FTextSettings.Font;
@@ -834,42 +568,6 @@ begin
   Result := FLines;
 end;
 
-function TFMXSimpleBBCodeText.GetStyledSettings: TStyledSettings;
-begin
-  Result := FStyledSettings;
-end;
-
-function TFMXSimpleBBCodeText.GetTextHeight: Single;
-var
-  r: TRectF;
-  XSize, YSize: Single;
-  str: String;
-  bmp: TBitmap;
-begin
-  try
-    bmp := nil;
-    try
-      bmp := TBitmap.Create(1, 1);
-      str := Lines.Text;
-      bmp.Canvas.Font.Assign(Font);
-      r := LocalRect;
-      if IsBBCode then
-      begin
-        BBCodeDrawEx(bmp.Canvas, str, r, 0, 0, True, WordWrap, XSize, YSize,
-          TextSettings, Opacity, LineSpacing);
-        Result := Ceil(YSize);
-      end
-      else
-        Result := bmp.Canvas.TextHeight(str);
-    finally
-      if Assigned(bmp) then
-        bmp.Free;
-    end;
-  except
-    raise Exception.Create('GetTextHeight Error');
-  end;
-end;
-
 function TFMXSimpleBBCodeText.GetTextSettings: TTextSettings;
 begin
   Result := FTextSettings;
@@ -878,33 +576,6 @@ end;
 function TFMXSimpleBBCodeText.GetTextSettingsClass: TTextSettingsClass;
 begin
   Result := nil;
-end;
-
-function TFMXSimpleBBCodeText.GetTextWidth: Single;
-var
-  r: TRectF;
-  XSize, YSize: Single;
-  str: String;
-  bmp: TBitmap;
-begin
-  bmp := nil;
-  try
-    bmp := TBitmap.Create(1, 1);
-    str := Lines.Text;
-    bmp.Canvas.Font.Assign(Font);
-    r := LocalRect;
-    if IsBBCode then
-    begin
-      BBCodeDrawEx(bmp.Canvas, str, r, 0, 0, True, WordWrap, XSize, YSize,
-        TextSettings, Opacity, LineSpacing);
-      Result := XSize;
-    end
-    else
-      Result := bmp.Canvas.TextWidth(str);
-  finally
-    if Assigned(bmp) then
-      bmp.Free;
-  end;
 end;
 
 function TFMXSimpleBBCodeText.GetVertTextAlign: TTextAlign;
@@ -1020,14 +691,6 @@ begin
   end;
 end;
 
-procedure TFMXSimpleBBCodeText.InvalidateHeight;
-begin
-  if AutoHeight then
-  begin
-    Height := Self.GetTextHeight;
-  end;
-end;
-
 function TFMXSimpleBBCodeText.IsBBCode: Boolean;
 var
   s: string;
@@ -1045,16 +708,6 @@ begin
     s.Replace(']]', '&#93;');
   end;
   Result := (AnsiPos('[/', Lines.Text) > 0);
-end;
-
-procedure TFMXSimpleBBCodeText.NeedUpdate;
-begin
-  SetNeedUpdate;
-  if FUpdating = 0 then
-  begin
-    RecreateTexts;
-    FNeedUpdate := False;
-  end;
 end;
 
 procedure TFMXSimpleBBCodeText.OnFontChanged(Sender: TObject);
@@ -1077,15 +730,6 @@ begin
       block.Draw(Canvas);
 end;
 
-procedure TFMXSimpleBBCodeText.SetAutoHeight(const Value: Boolean);
-begin
-  if FAutoHeight <> Value then
-  begin
-    FAutoHeight := Value;
-    InvalidateHeight;
-  end;
-end;
-
 procedure TFMXSimpleBBCodeText.SetAutoSize(const Value: Boolean);
 begin
   if FAutoSize <> Value then
@@ -1100,22 +744,7 @@ begin
   if Lines.Text <> AText then
   begin
     Lines.Text := AText;
-    InvalidateHeight;
   end;
-end;
-
-procedure TFMXSimpleBBCodeText.SetBounds(X, Y, AWidth, AHeight: Single);
-var
-  h: Single;
-begin
-  inherited;
-  if AutoHeight and IsBBCode then
-  begin
-    h := GetTextHeight;
-    inherited SetBounds(X, Y, AWidth, h);
-  end
-  else
-    inherited;
 end;
 
 procedure TFMXSimpleBBCodeText.SetColor(const Value: TAlphaColor);
@@ -1154,11 +783,6 @@ end;
 procedure TFMXSimpleBBCodeText.SetNeedUpdate;
 begin
   FNeedUpdate := True;
-end;
-
-procedure TFMXSimpleBBCodeText.SetStyledSettings(const Value: TStyledSettings);
-begin
-  FStyledSettings := Value;
 end;
 
 procedure TFMXSimpleBBCodeText.SetTextSettings(const Value: TTextSettings);

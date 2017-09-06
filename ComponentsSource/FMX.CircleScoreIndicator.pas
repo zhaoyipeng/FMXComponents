@@ -34,6 +34,7 @@ uses
   System.Types,
   System.Math.Vectors,
   System.UITypes,
+  System.Generics.Collections,
   FMX.Controls,
   FMX.Graphics,
   FMX.Objects,
@@ -181,7 +182,6 @@ var
   M1: TMatrix;
   M2: TMatrix;
   RotMatrix: TMatrix;
-  TranslateMatrix: TMatrix;
 begin
   ScaleMatrix := TMatrix.Identity;
   ScaleMatrix.m11 := Scale.X;

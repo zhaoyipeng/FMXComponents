@@ -46,7 +46,6 @@ type
   TFMXImageSlider = class(TLayout)
   private
     FContainer: TLayout;
-    FButtonsContainer: TLayout;
     FPages: TList<TLayout>;
     FActivePage: Integer;
     FStartDrag: Boolean;

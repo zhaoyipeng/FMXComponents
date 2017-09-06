@@ -306,7 +306,7 @@ object FMXComponentsDemoForm: TFMXComponentsDemoForm
           end>
         IsHealthy = False
         object FloatAnimation2: TFloatAnimation
-          Duration = 0.800000011920928900
+          Duration = 0.800000011920929000
           PropertyName = 'Value'
           StartValue = 0.000000000000000000
           StopValue = 75.000000000000000000
@@ -324,7 +324,7 @@ object FMXComponentsDemoForm: TFMXComponentsDemoForm
         Value = 3.500000000000000000
         Maximum = 5.000000000000000000
         object FloatAnimation1: TFloatAnimation
-          Duration = 0.800000011920928900
+          Duration = 0.800000011920929000
           PropertyName = 'Value'
           StartValue = 0.000000000000000000
           StopValue = 3.500000000000000000
@@ -8050,7 +8050,6 @@ object FMXComponentsDemoForm: TFMXComponentsDemoForm
         Size.PlatformDefault = False
         TabOrder = 0
         object FMXSimpleBBCodeText1: TFMXSimpleBBCodeText
-          AutoHeight = False
           Color = claNull
           Lines.Strings = (
             
