@@ -66,5 +66,5 @@ A Guesture Password input Control
 
 手势密码输入控件
 
-感谢 xubzhlin 的支持，原始控件来自于FMX-UI-Controls项目，经作者同意进行收集整理，由 谢顿 收集整理
+感谢 xubzhlin 的支持，原始控件来自于FMX-UI-Controls项目，经作者同意由 谢顿 收集整理
 原项目地址为：https://github.com/xubzhlin/FMX-UI-Controls
