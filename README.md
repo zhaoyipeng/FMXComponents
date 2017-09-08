@@ -1,8 +1,8 @@
 # FMXComponents
 
-I will open some components created in my projects  
+This project includes the components that I and donors have actually used in applications
 
-我将开放一些项目中开发的控件  
+本项目包括本人及捐赠人实际应用中使用的控件
  
 ## 1.TFMXScrollableList
 
