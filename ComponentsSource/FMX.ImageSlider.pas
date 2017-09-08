@@ -1,5 +1,7 @@
 // ***************************************************************************
 //
+// FMXComponents: Firemonkey Opensource Components Set from China
+//
 // A Simple Firemonkey Image Slider Component
 //
 // Copyright 2017 Ð»¶Ù (zhaoyipeng@hotmail.com)
@@ -73,14 +75,7 @@ type
     property Height;
   end;
 
-  procedure register;
-
 implementation
-
-procedure register;
-begin
-  RegisterComponents('FMXComponents', [TFMXImageSlider]);
-end;
 
 { TFMXImageSlider }
 

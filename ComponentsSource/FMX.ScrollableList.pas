@@ -88,14 +88,7 @@ type
     property OnChange: TNotifyEvent read FOnChange write SetOnChange;
   end;
 
-procedure register;
-
 implementation
-
-procedure register;
-begin
-  RegisterComponents('FMXComponents', [TFMXScrollableList]);
-end;
 
 { TFMXScrollYears }
 

@@ -10,7 +10,7 @@ uses
   FMX.Ani, FMX.CircleScoreIndicator, FMX.TabControl, FMX.ImageSlider,
   FMX.ScrollBox, FMX.Memo, FMX.SimpleBBCodeText, ONE.Objects, Data.Bind.EngExt,
   Fmx.Bind.DBEngExt, System.Rtti, System.Bindings.Outputs, Fmx.Bind.Editors,
-  Data.Bind.Components;
+  Data.Bind.Components, FMX.GesturePassword;
 
 type
   TFMXComponentsDemoForm = class(TForm)
@@ -52,6 +52,12 @@ type
     Layout1: TLayout;
     FMXSimpleBBCodeText1: TFMXSimpleBBCodeText;
     BindingsList1: TBindingsList;
+    TabItem1: TTabItem;
+    FMXGesturePassword1: TFMXGesturePassword;
+    ImageCircle: TImage;
+    ImageBackground: TImage;
+    ImagePoint: TImage;
+    Layout6: TLayout;
     procedure FMXScrollableList2Change(Sender: TObject);
     procedure FMXScrollableList1Change(Sender: TObject);
     procedure btnAnimationClick(Sender: TObject);

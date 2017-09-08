@@ -133,6 +133,7 @@
         <DCCReference Include="..\ComponentsSource\FMX.ImageSlider.pas"/>
         <DCCReference Include="..\ComponentsSource\FMX.SimpleBBCodeText.pas"/>
         <DCCReference Include="ONE.Objects.pas"/>
+        <DCCReference Include="..\ComponentsSource\FMX.GesturePassword.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

@@ -118,14 +118,7 @@ type
     property Maximum: Single read FMaximum write SetMaximum;
   end;
 
-procedure register;
-
 implementation
-
-procedure register;
-begin
-  RegisterComponents('FMXComponents', [TFMXRatingBar]);
-end;
 
 { THHRating }
 

@@ -1,6 +1,8 @@
 // ***************************************************************************
 //
-// A Simple Firemonkey Circle Score Indicator Component
+// FMXComponents: Firemonkey Opensource Components Set from China
+//
+// A simple Firemonkey Circle Score Indicator component
 //
 // Copyright 2017 Ð»¶Ù (zhaoyipeng@hotmail.com)
 //
@@ -123,17 +125,10 @@ type
     property IsHealthy: Boolean read FIsHealthy write SetIsHealthy;
   end;
 
-procedure Register;
-
 implementation
 
 uses
   System.Math;
-
-procedure Register;
-begin
-  RegisterComponents('FMXComponents', [TFMXCircleScoreIndicator]);
-end;
 
 { TFMXCircleScore }
 

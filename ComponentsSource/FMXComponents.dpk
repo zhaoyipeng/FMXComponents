@@ -37,6 +37,8 @@ contains
   FMX.CircleScoreIndicator in 'FMX.CircleScoreIndicator.pas',
   FMX.ComponentsCommon in 'FMX.ComponentsCommon.pas',
   FMX.ImageSlider in 'FMX.ImageSlider.pas',
-  FMX.SimpleBBCodeText in 'FMX.SimpleBBCodeText.pas';
+  FMX.SimpleBBCodeText in 'FMX.SimpleBBCodeText.pas',
+  FMX.GesturePassword in 'FMX.GesturePassword.pas',
+  FMX.RegComponents in 'FMX.RegComponents.pas';
 
 end.

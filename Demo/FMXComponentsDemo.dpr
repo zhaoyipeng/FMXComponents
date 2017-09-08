@@ -10,7 +10,8 @@ uses
   FMX.CircleScoreIndicator in '..\ComponentsSource\FMX.CircleScoreIndicator.pas',
   FMX.ImageSlider in '..\ComponentsSource\FMX.ImageSlider.pas',
   FMX.SimpleBBCodeText in '..\ComponentsSource\FMX.SimpleBBCodeText.pas',
-  ONE.Objects in 'ONE.Objects.pas';
+  ONE.Objects in 'ONE.Objects.pas',
+  FMX.GesturePassword in '..\ComponentsSource\FMX.GesturePassword.pas';
 
 {$R *.res}
 
