@@ -58,13 +58,10 @@ A Simple BBCode Text Display Control
 
 感谢 龟山Aone 的提示，TFMXSimpleBBCodeText性能得到了极大地优化，基本达到实用程度
 
-## 6.TFMXGuesturePassword
+## 6.[TFMXGuesturePassword](Documents/FMXGuesturePassword.md)
 
 ![TFMXGuesturePassword](SnapShots/FMXGuesturePassword.gif)  
 
 A Guesture Password input Control 
 
 手势密码输入控件
-
-感谢 xubzhlin 的支持，原始控件来自于FMX-UI-Controls项目，经作者同意由 谢顿 收集整理
-原项目地址为：https://github.com/xubzhlin/FMX-UI-Controls

@@ -24,6 +24,13 @@
 // limitations under the License.
 //
 // *************************************************************************** }
+// version history
+// 2017-09-06, v0.1.0.0 :
+//    first release
+// 2017-09-07, v0.2.0.0 :
+//    fixed bugs, do not used TImage, change to internal TFixedMultiResBitmap
+//    add default draw method if the bitmap not set, if user do not want set
+//    bitmap, just drop the component onto form, it can be used
 
 unit FMX.GesturePassword;
 
@@ -32,6 +39,7 @@ interface
 uses
   System.Classes, System.UITypes, System.Types, System.UIConsts,
   FMX.Graphics, FMX.Layouts, System.Math, FMX.Controls,
+  FMX.Dialogs, FMX.MultiResBitmap,
   System.SysUtils, FMX.Types, FMX.Objects, System.Generics.Collections;
 
 type
@@ -42,83 +50,85 @@ type
 
   TPasswordItem = class(TObject)
   private const
-    cDefaultMargin = 15;
+    cDefaultMargin = 7;
     cDefaultMargin_2 = cDefaultMargin*2;
   private
-    [waek]
-    FOwner: TFMXGesturePassword;
+    [Weak] FOwner: TFMXGesturePassword;
     FSelected: Boolean;
     FIndex:Integer;
-    FBackground: TBitMap;
-    FPoint: TBitMap;
-    FCircle:TBitMap;
     FLocalRect: TRectF;
     FCliRect:TRectF;
     FPointRect: TRectF;
     procedure Render(const Canvas: TCanvas);
-    procedure SetBackground(const Value: TBitMap);
     procedure SetLocalRect(const Value: TRectF);
-    procedure SetPoint(const Value: TBitMap);
     procedure SetSelected(const Value: Boolean);
-    procedure SetCircle(const Value: TBitMap);
   public
     constructor Create(AOwner: TFMXGesturePassword);
-    destructor Destroy; override;
+    function IsContains(APoint: TPointF): Boolean;
     property Selected: Boolean read FSelected write SetSelected;
-    property Background: TBitMap read FBackground write SetBackground;
-    property Point: TBitMap read FPoint write SetPoint;
-    property Circle: TBitMap read FCircle write SetCircle;
     property LocalRect: TRectF read FLocalRect write SetLocalRect;
     property Index:Integer read FIndex write FIndex;
+  end;
+
+  TGesturePasswordMultiResBitmap = class (TFixedMultiResBitmap)
+  private
+    [Weak] FControl: TFMXGesturePassword;
+  protected
+    procedure Update(Item: TCollectionItem); override;
+    function GetDefaultSize: TSize; override;
   end;
 
   TFMXGesturePassword = class(TControl)
   private const
     cDefaultPadding = 10;
-  private type
-    TNotify = class(TComponent)
-    private
-      FOwner: TFMXGesturePassword;
-    protected
-      procedure Notification(AComponent: TComponent;
-        Operation: TOperation); override;
-    end;
   private
+    FScreenScale: Single;
+    FCurrentScale: Single;
     FLeastCount:Integer;
     FLineWidth:Integer;
     FLineColor:TAlphaColor;
     FOnEnterCompleteEvent:TOnEnterCompleteEvent;
-    FPassWord:String;
+    FPassword:String;
     FIsDown: Boolean;
     FCanDrawNowPoint: Boolean;
-    FItemSize: Single;
     FNowPoint: TPointF;
     FSelectedItem: TList<TPasswordItem>;
     FItems: TObjectList<TPasswordItem>;
     FColumnCount: Integer;
     FRowCount: Integer;
-    FBackground: TImage;
-    FBackgroundNotify: TNotify;
-    FPoint: TImage;
-    FPointNotify: TNotify;
-    FCircle:TImage;
-    FCircleNotify: TNotify;
-    procedure SetBackground(const Value: TImage);
+    FBackground: TFixedMultiResBitmap;
+    FPoint: TFixedMultiResBitmap;
+    FCircle:TFixedMultiResBitmap;
+    [weak] FBackgroundBitmap: TBitmap;
+    [weak] FCircleBitmap: TBitmap;
+    [weak] FPointBitmap: TBitmap;
+    FButtonSize: Single;
+    FCircleStroke1: TStrokeBrush;
+    FCircleStroke2: TStrokeBrush;
+    FButtonBrush: TBrush;
     procedure SetColumnCount(const Value: Integer);
-    procedure SetPoint(const Value: TImage);
     procedure SetRowCount(const Value: Integer);
-    procedure DoReSetItemCount;
-    function GetItemSize: TPointF; overload;
-    function GetItemSize(ASize: Single; APoint: TPointF; AIndex: Integer)
-      : TRectF; overload;
+    procedure DoResetItemCount;
+    function GetTileSize: TSizeF; overload;
+    function GetButtonRect(ASize: TSizeF; AIndex: Integer): TRectF;
     procedure DoSelectedItem(APoint: TPointF);
     procedure DoGetPassWord;
     procedure FillItems;
     procedure FillLines;
     function FindItemByPoint(Point: TPointF): TPasswordItem;
-    function GetPassWord: String;
-    procedure SetCircle(const Value: TImage);
+    function GetPassword: String;
+    procedure SetBackground(const Value: TFixedMultiResBitmap);
+    procedure SetCircle(const Value: TFixedMultiResBitmap);
+    procedure SetPoint(const Value: TFixedMultiResBitmap);
+    function CreateMultiResBitmap: TFixedMultiResBitmap;
+    function PointStored: Boolean;
+    function CircleStored: Boolean;
+    function BackgroundStored: Boolean;
+    function MultiResBitmapStored(ABitmap: TFixedMultiResBitmap): Boolean;
+    procedure UpdateCurrentBitmap;
+    procedure SetButtonSize(const Value: Single);
   protected
+    procedure DoChanged;
     procedure Paint; override;
     procedure Resize; override;
     procedure MouseDown(Button: TMouseButton; Shift: TShiftState;
@@ -130,14 +140,17 @@ type
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
+    property Password: String read GetPassword;
   published
     property Align;
+    property Anchors;
+    property Margins;
+    property ButtonSize: Single read FButtonSize write SetButtonSize;
     property ColumnCount: Integer read FColumnCount write SetColumnCount;
     property RowCount: Integer read FRowCount write SetRowCount;
-    property Background: TImage read FBackground write SetBackground;
-    property Point: TImage read FPoint write SetPoint;
-    property Circle: TImage read FCircle write SetCircle;
-    property PassWord: String read GetPassWord;
+    property Background: TFixedMultiResBitmap read FBackground write SetBackground;
+    property Point: TFixedMultiResBitmap read FPoint write SetPoint  stored PointStored;
+    property Circle: TFixedMultiResBitmap read FCircle write SetCircle;
     property LineColor: TAlphaColor read FLineColor write FLineColor;
     property LineWidth: Integer read FLineWidth write FLineWidth;
     property LeastCount: Integer read FLeastCount write FLeastCount;
@@ -157,71 +170,73 @@ begin
 
 end;
 
-destructor TPasswordItem.Destroy;
+function TPasswordItem.IsContains(APoint: TPointF): Boolean;
 begin
-
-  inherited;
+  Result := LocalRect.CenterPoint.Distance(APoint) < (LocalRect.Height / 2)
 end;
 
 procedure TPasswordItem.Render(const Canvas: TCanvas);
+var
+  R: TRectF;
 begin;
-  Canvas.Fill.Kind := TBrushKind.Bitmap;
-  Canvas.Fill.Bitmap.WrapMode := TWrapMode.TileStretch;
-  Canvas.Stroke.Kind := TBrushKind.None;
-
-  //ª≠»¶
-  Canvas.Fill.Bitmap.Bitmap.Assign(FCircle);
-  Canvas.FillRect(FCliRect, 0, 0, AllCorners, 1, Canvas.Fill,
-    TCornerType.Round);
-
   if FSelected then
   begin
     //ª≠±≥æ∞
-    if FBackground<>nil then
+    if FOwner.FBackgroundBitmap<>nil then
     begin
-      Canvas.Fill.Bitmap.Bitmap.Assign(FBackground);
-      Canvas.FillRect(FCliRect, 0, 0, AllCorners, 1, Canvas.Fill,
-        TCornerType.Round);
+    Canvas.DrawBitmap(FOwner.FBackgroundBitmap,
+      TRectF.Create(0,0,FOwner.FBackgroundBitmap.Width, FOwner.FBackgroundBitmap.Height),
+      FLocalRect, 1
+    )
+    end
+    else
+    begin
+      R := FLocalRect;
+      R.Inflate(-2,-2);
+      Canvas.DrawEllipse(R, 1, FOwner.FCircleStroke2);
+      Canvas.FillEllipse(FLocalRect, 1, FOwner.FButtonBrush);
+      R := TRectF.Create(0,0,26,26);
+      R := R.CenterAt(FLocalRect);
+      Canvas.FillEllipse(R, 1, FOwner.FCircleStroke2);
     end;
     //ª≠‘≤µ„
-    if FPoint<>nil then
+//    if FPoint<>nil then
+//    begin
+//      Canvas.Fill.Bitmap.Bitmap.Assign(FPoint);
+//      Canvas.FillRect(FPointRect, 0, 0, AllCorners, 1, Canvas.Fill,
+//        TCornerType.Round);
+//    end;
+  end
+  else
+  begin
+     //ª≠»¶
+    if Assigned(FOwner.FCircleBitmap) then
     begin
-      Canvas.Fill.Bitmap.Bitmap.Assign(FPoint);
-      Canvas.FillRect(FPointRect, 0, 0, AllCorners, 1, Canvas.Fill,
-        TCornerType.Round);
+      Canvas.DrawBitmap(FOwner.FCircleBitmap,
+        TRectF.Create(0,0,FOwner.FCircleBitmap.Width, FOwner.FCircleBitmap.Height),
+        FLocalRect, 1
+      );
+    end
+    else
+    begin
+      Canvas.DrawEllipse(FLocalRect, 1, FOwner.FCircleStroke1);
     end;
   end;
-end;
-
-procedure TPasswordItem.SetBackground(const Value: TBitMap);
-begin
-  FBackground := Value;
-end;
-
-procedure TPasswordItem.SetCircle(const Value: TBitMap);
-begin
-  FCircle := Value;
 end;
 
 procedure TPasswordItem.SetLocalRect(const Value: TRectF);
 begin
   FLocalRect := Value;
 
-  FCliRect:= FLocalRect;
-  FCliRect:= FLocalRect;
-  FCliRect.Offset(cDefaultMargin , cDefaultMargin);
-  FCliRect.Width:=FCliRect.Width - 2*cDefaultMargin;
-  FCliRect.Height:=FCliRect.Height - 2*cDefaultMargin;
-
-  FPointRect:= FCliRect;
-  FPointRect.Offset(-cDefaultMargin_2, -cDefaultMargin_2);
-  FPointRect.Width:=FPointRect.Width + 2*cDefaultMargin_2;
-  FPointRect.Height:=FPointRect.Height + 2*cDefaultMargin_2;
-end;
-
-procedure TPasswordItem.SetPoint(const Value: TBitMap);
-begin
-  FPoint := Value;
+//  FCliRect:= FLocalRect;
+//  FCliRect.Offset(cDefaultMargin , cDefaultMargin);
+//  FCliRect.Width:=FCliRect.Width - 2*cDefaultMargin;
+//  FCliRect.Height:=FCliRect.Height - 2*cDefaultMargin;
+//
+//  FPointRect:= FCliRect;
+//  FPointRect.Offset(-cDefaultMargin_2, -cDefaultMargin_2);
+//  FPointRect.Width:=FPointRect.Width + 2*cDefaultMargin_2;
+//  FPointRect.Height:=FPointRect.Height + 2*cDefaultMargin_2;
 end;
 
 procedure TPasswordItem.SetSelected(const Value: Boolean);
@@ -235,26 +250,57 @@ end;
 
 { TPasswordLayout }
 
+function TFMXGesturePassword.CreateMultiResBitmap: TFixedMultiResBitmap;
+begin
+  Result := TGesturePasswordMultiResBitmap.Create(Self, TFixedBitmapItem);
+end;
+
+function TFMXGesturePassword.BackgroundStored: Boolean;
+begin
+  Result := MultiResBitmapStored(FBackground);
+end;
+
+function TFMXGesturePassword.CircleStored: Boolean;
+begin
+  Result := MultiResBitmapStored(FCircle);
+end;
+
 constructor TFMXGesturePassword.Create(AOwner: TComponent);
 begin
   inherited;
+  FCircleStroke1 := TStrokeBrush.Create(TBrushKind.Solid, TAlphaColors.Gray);
+  FCircleStroke1.Thickness := 2;
+  FCircleStroke2 := TStrokeBrush.Create(TBrushKind.Solid, $FF00A0E5);
+  FCircleStroke2.Thickness := 2;
+  FButtonBrush := TStrokeBrush.Create(TBrushKind.Solid, $80C0E8F9);
+
   FCanDrawNowPoint := False;
   FSelectedItem := TList<TPasswordItem>.Create;
   FItems := TObjectList<TPasswordItem>.Create;
-  FLeastCount:=3;
+  FLeastCount := 3;
   FColumnCount := 3;
   FRowCount := 3;
-  FLineColor := TAlphaColors.White;
+  FLineColor := TAlphaColors.Slateblue;
   FLineWidth := 15;
-  DoReSetItemCount;
+
+  FBackground := CreateMultiResBitmap;
+  FCircle := CreateMultiResBitmap;
+  FPoint := CreateMultiResBitmap;
+
+  FButtonSize := 74;
+  DoResetItemCount;
 end;
 
 destructor TFMXGesturePassword.Destroy;
 begin
+  FPoint.Free;
+  FCircle.Free;
+  FBackground.Free;
+
   FItems.Free;
-  FBackgroundNotify.Free;
-  FPointNotify.Free;
-  FCircleNotify.Free;
+  FButtonBrush.Free;
+  FCircleStroke2.Free;
+  FCircleStroke1.Free;
   inherited;
 end;
 
@@ -277,34 +323,59 @@ begin
   DoGetPassWord;
 end;
 
-procedure TFMXGesturePassword.DoGetPassWord;
+function TFMXGesturePassword.MultiResBitmapStored(
+  ABitmap: TFixedMultiResBitmap): Boolean;
+var
+  I: Integer;
+begin
+  Result := (ABitmap.TransparentColor <> TColors.SysNone) or
+            (ABitmap.SizeKind <> TSizeKind.Custom) or
+            (ABitmap.Width <> ABitmap.DefaultSize.cx) or
+            (ABitmap.Height <> ABitmap.DefaultSize.cy);
+  if not Result then
+    for I := 0 to ABitmap.Count - 1 do
+      if (ABitmap[I].FileName <> '') or
+         (not ABitmap[I].IsEmpty) then
+      begin
+        Result := True;
+        Exit;
+      end;
+end;
+
+procedure TFMXGesturePassword.DoChanged;
+begin
+  Repaint;
+  UpdateEffects;
+end;
+
+procedure TFMXGesturePassword.DoGetPassword;
 var
   i: Integer;
 begin
   if FIsDown then
   begin
     FIsDown := False;
-    FPassWord := '';
+    FPassword := '';
     if FSelectedItem.Count >= LeastCount then
     begin
       for i := 0 to FSelectedItem.Count - 1 do
       begin
-        FPassWord := FPassWord + InttoStr(FSelectedItem[i].Index);
+        FPassword := FPassword + InttoStr(FSelectedItem[i].Index);
       end;
     end;
     for i := 0 to FSelectedItem.Count - 1 do
       FSelectedItem[i].Selected := False;
     FSelectedItem.Clear;
     if Assigned(FOnEnterCompleteEvent) then
-      FOnEnterCompleteEvent(Self, FPassWord);
+      FOnEnterCompleteEvent(Self, FPassword);
   end;
 end;
 
-procedure TFMXGesturePassword.DoReSetItemCount;
+procedure TFMXGesturePassword.DoResetItemCount;
 var
   i, ItemCount: Integer;
-  APoint: TPointF;
-  PassWordItem: TPasswordItem;
+  sz: TSizeF;
+  Item: TPasswordItem;
 begin
   if (FRowCount <> 0) and (FColumnCount <> 0) then
   begin
@@ -313,17 +384,12 @@ begin
     FItems.Clear;
     for i := 0 to ItemCount - 1 do
     begin
-      PassWordItem := TPasswordItem.Create(Self);
-      PassWordItem.Index:=i;
-      PassWordItem.Selected := False;
-      APoint := GetItemSize;
-      FItemSize := Round(Min(APoint.X, APoint.Y)) - cDefaultPadding;
-      PassWordItem.LocalRect := GetItemSize(FItemSize, APoint, i);
-      if FBackground <> nil then
-        PassWordItem.Background := FBackground.Bitmap;
-      if Point <> nil then
-        PassWordItem.Point := FPoint.Bitmap;
-      FItems.Add(PassWordItem);
+      Item := TPasswordItem.Create(Self);
+      Item.Index:=i;
+      Item.Selected := False;
+      sz := GetTileSize;
+      Item.LocalRect := GetButtonRect(sz, i);
+      FItems.Add(Item);
     end;
     Repaint;
   end;
@@ -381,7 +447,6 @@ begin
     Stroke.Cap:= TStrokeCap.Round;
     Stroke.Color := Self.LineColor;
     Stroke.Thickness := Self.LineWidth;
-
   end;
   if FSelectedItem.Count = 1 then
   begin
@@ -409,7 +474,7 @@ begin
   Result := nil;
   for i := 0 to FItems.Count - 1 do
   begin
-    if FItems[i].LocalRect.Contains(Point) then
+    if FItems[i].IsContains(Point) then
     begin
       Result := FItems[i];
       Break;
@@ -417,24 +482,23 @@ begin
   end;
 end;
 
-function TFMXGesturePassword.GetItemSize(ASize: Single; APoint: TPointF;
-  AIndex: Integer): TRectF;
+function TFMXGesturePassword.GetButtonRect(ASize: TSizeF; AIndex: Integer): TRectF;
 var
   ARect: TRectF;
 begin
-  ARect.TopLeft := TPointF.Create(APoint.X * (AIndex mod FColumnCount),
-    APoint.Y * (AIndex div FColumnCount));
-  ARect.Width := APoint.X;
-  ARect.Height := APoint.Y;
-  Result := TRectF.Create(0, 0, ASize, ASize);
+  ARect.Left := Margins.Left + ASize.Width * (AIndex mod FColumnCount);
+  ARect.Top := Margins.Top + ASize.Height * (AIndex div FColumnCount);
+  ARect.Width := ASize.Width;
+  ARect.Height := ASize.Height;
+  Result := TRectF.Create(0, 0, ButtonSize, ButtonSize);
   Result := Result.CenterAt(ARect);
 end;
 
 function TFMXGesturePassword.GetPassWord: String;
 begin
-  Result := FPassWord;
+  Result := FPassword;
   // ªÒ»°¡À «Âø’
-  FPassWord := '';
+  FPassword := '';
 end;
 
 procedure TFMXGesturePassword.MouseMove(Shift: TShiftState; X, Y: Single);
@@ -444,82 +508,65 @@ begin
 end;
 
 procedure TFMXGesturePassword.Paint;
+var
+  R: TRectF;
 begin
-  // inherited;
-  Canvas.BeginScene;
-  try
-    // ª≠œﬂ
-    if FIsDown then
-      FillLines;
-    FillItems;
-  finally
-    Canvas.EndScene;
+  if (csDesigning in ComponentState) and not Locked and not FInPaintTo then
+  begin
+    R := LocalRect;
+    InflateRect(R, -0.5, -0.5);
+    Canvas.DrawDashRect(R, 0, 0, AllCorners, AbsoluteOpacity, $A0909090);
   end;
+
+  UpdateCurrentBitmap;
+  // ª≠œﬂ
+  if FIsDown then
+    FillLines;
+  FillItems;
+end;
+
+function TFMXGesturePassword.PointStored: Boolean;
+begin
+  Result := MultiResBitmapStored(FPoint);
 end;
 
 procedure TFMXGesturePassword.Resize;
 var
   i: Integer;
-  APoint: TPointF;
+  sz: TSizeF;
 begin
   inherited;
   for i := 0 to FItems.Count - 1 do
   begin
-    APoint := GetItemSize;
-    FItemSize := Min(APoint.X, APoint.Y) - cDefaultPadding;
-    FItems[i].LocalRect := GetItemSize(FItemSize, APoint, i);
+    sz := GetTileSize;
+    FItems[i].LocalRect := GetButtonRect(sz, i);
   end;
 end;
 
-function TFMXGesturePassword.GetItemSize: TPointF;
+function TFMXGesturePassword.GetTileSize: TSizeF;
 begin
-  Result := TPointF.Create(Width / FRowCount, Height / FColumnCount);
+  Result := TSizeF.Create(
+    (Width - Margins.Left - Margins.Right) / FRowCount,
+    (Height - Margins.Top - Margins.Bottom) / FColumnCount);
 end;
 
-procedure TFMXGesturePassword.SetBackground(const Value: TImage);
-var
-  i: Integer;
+procedure TFMXGesturePassword.SetBackground(const Value: TFixedMultiResBitmap);
 begin
-  if FBackground <> Value then
+  FBackground.Assign(Value);
+end;
+
+procedure TFMXGesturePassword.SetButtonSize(const Value: Single);
+begin
+  if FButtonSize <> Value then
   begin
-    if FBackgroundNotify = nil then
-    begin
-      FBackgroundNotify := TNotify.Create(nil);
-      FBackgroundNotify.FOwner := Self;
-    end;
-    if FBackground <> nil then
-      FBackground.RemoveFreeNotification(FBackgroundNotify);
-    FBackground := Value;
-    if FBackground <> nil then
-    begin
-      FBackground.FreeNotification(FBackgroundNotify);
-      for i := 0 to FItems.Count - 1 do
-        FItems[i].Background := FBackground.Bitmap;
-    end;
+    FButtonSize := Value;
+    Repaint;
   end;
 end;
 
-procedure TFMXGesturePassword.SetCircle(const Value: TImage);
-var
-  i: Integer;
+procedure TFMXGesturePassword.SetCircle(const Value: TFixedMultiResBitmap);
 begin
-  if FCircle <> Value then
-  begin
-    if FCircleNotify = nil then
-    begin
-      FCircleNotify := TNotify.Create(nil);
-      FCircleNotify.FOwner := Self;
-    end;
-    if FCircle <> nil then
-      FCircle.RemoveFreeNotification(FCircleNotify);
-    FCircle := Value;
-    if FCircle <> nil then
-    begin
-      FCircle.FreeNotification(FCircleNotify);
-      for i := 0 to FItems.Count - 1 do
-        FItems[i].Circle := FCircle.Bitmap;
-    end;
-  end;
+  FCircle.Assign(Value);
 end;
 
 procedure TFMXGesturePassword.SetColumnCount(const Value: Integer);
@@ -527,31 +574,13 @@ begin
   if FColumnCount <> Value then
   begin
     FColumnCount := Value;
-    DoReSetItemCount;
+    DoResetItemCount;
   end;
 end;
 
-procedure TFMXGesturePassword.SetPoint(const Value: TImage);
-var
-  i: Integer;
+procedure TFMXGesturePassword.SetPoint(const Value: TFixedMultiResBitmap);
 begin
-  if FPoint <> Value then
-  begin
-    if FPointNotify = nil then
-    begin
-      FPointNotify := TNotify.Create(nil);
-      FPointNotify.FOwner := Self;
-    end;
-    if FPoint <> nil then
-      FPoint.RemoveFreeNotification(FPointNotify);
-    FPoint := Value;
-    if FPoint <> nil then
-    begin
-      FPoint.FreeNotification(FPointNotify);
-      for i := 0 to FItems.Count - 1 do
-        FItems[i].Point := FPoint.Bitmap;
-    end;
-  end;
+  FPoint.Assign(Value);
 end;
 
 procedure TFMXGesturePassword.SetRowCount(const Value: Integer);
@@ -559,22 +588,56 @@ begin
   if FRowCount <> Value then
   begin
     FRowCount := Value;
-    DoReSetItemCount;
+    DoResetItemCount;
   end;
 end;
 
-{ TPasswordLayout.TNotify }
+procedure TFMXGesturePassword.UpdateCurrentBitmap;
+begin
 
-procedure TFMXGesturePassword.TNotify.Notification(AComponent: TComponent;
-  Operation: TOperation);
+end;
+
+{ TGesturePasswordMultiResBitmap }
+
+function TGesturePasswordMultiResBitmap.GetDefaultSize: TSize;
+begin
+  if FControl = nil then
+  begin
+    if Owner is TFMXGesturePassword then
+      FControl := TFMXGesturePassword(Owner);
+  end;
+  if FControl <> nil then
+  begin
+    Result.cx := Round(FControl.ButtonSize);
+    Result.cy := Round(FControl.ButtonSize);
+  end
+  else
+    Result := inherited GetDefaultSize;
+end;
+
+procedure TGesturePasswordMultiResBitmap.Update(Item: TCollectionItem);
 begin
   inherited;
-  if Operation = TOperation.opRemove then
+  if FControl = nil then
   begin
-    if AComponent = FOwner.FBackgroundNotify then
-      FOwner.Background := nil;
-    if AComponent = FOwner.FPointNotify then
-      FOwner.Point := nil;
+    if Owner is TFMXGesturePassword then
+      FControl := TFMXGesturePassword(Owner);
+  end;
+  if (FControl <> nil) and ([csLoading, csDestroying] * FControl.ComponentState = []) then
+  begin
+    if Item = nil then
+      FControl.DoChanged
+    else
+    begin
+      if (TCustomBitmapItem(Item).Scale = FControl.FCurrentScale) then
+        FControl.DoChanged
+      else
+      begin
+        FControl.UpdateCurrentBitmap;
+        if (TCustomBitmapItem(Item).Scale = FControl.FCurrentScale) then
+          FControl.DoChanged
+      end;
+    end;
   end;
 end;
 

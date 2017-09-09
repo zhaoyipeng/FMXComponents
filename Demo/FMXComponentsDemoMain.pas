@@ -53,11 +53,10 @@ type
     FMXSimpleBBCodeText1: TFMXSimpleBBCodeText;
     BindingsList1: TBindingsList;
     TabItem1: TTabItem;
-    FMXGesturePassword1: TFMXGesturePassword;
-    ImageCircle: TImage;
-    ImageBackground: TImage;
-    ImagePoint: TImage;
     Layout6: TLayout;
+    FMXGesturePassword1: TFMXGesturePassword;
+    lbl1: TLabel;
+    lblPassword: TLabel;
     procedure FMXScrollableList2Change(Sender: TObject);
     procedure FMXScrollableList1Change(Sender: TObject);
     procedure btnAnimationClick(Sender: TObject);
@@ -66,6 +65,8 @@ type
     procedure FormResize(Sender: TObject);
     procedure FMXSimpleBBCodeText1Click(Sender: TObject);
     procedure Memo1Change(Sender: TObject);
+    procedure FMXGesturePassword1EnterCompleteEvent(Sender: TObject;
+      const APassword: string);
   private
     { Private declarations }
     FSelection1: TOneSelection;
@@ -84,6 +85,12 @@ procedure TFMXComponentsDemoForm.btnAnimationClick(Sender: TObject);
 begin
   FloatAnimation1.Start;
   FloatAnimation2.Start;
+end;
+
+procedure TFMXComponentsDemoForm.FMXGesturePassword1EnterCompleteEvent(
+  Sender: TObject; const APassword: string);
+begin
+  lblPassword.Text := self.FMXGesturePassword1.Password;
 end;
 
 procedure TFMXComponentsDemoForm.FMXScrollableList1Change(Sender: TObject);
