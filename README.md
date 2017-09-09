@@ -58,7 +58,7 @@ A Simple BBCode Text Display Control
 
 感谢 龟山Aone 的提示，TFMXSimpleBBCodeText性能得到了极大地优化，基本达到实用程度
 
-## 6.[TFMXGuesturePassword](Documents/FMXGuesturePassword.md)
+## 6.[TFMXGuesturePassword](Documents/FMXGesturePassword.md)
 
 ![TFMXGuesturePassword](SnapShots/FMXGuesturePassword.gif)  
 
