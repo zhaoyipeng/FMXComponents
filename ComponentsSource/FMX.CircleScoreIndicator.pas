@@ -1,10 +1,10 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 //
 // FMXComponents: Firemonkey Opensource Components Set from China
 //
 // A simple Firemonkey Circle Score Indicator component
 //
-// Copyright 2017 л�� (zhaoyipeng@hotmail.com)
+// Copyright 2017 谢顿 (zhaoyipeng@hotmail.com)
 //
 // https://github.com/zhaoyipeng/FMXComponents
 //

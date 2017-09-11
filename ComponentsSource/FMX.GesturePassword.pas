@@ -1,11 +1,11 @@
-// ***************************************************************************
+ï»¿// ***************************************************************************
 //
 // FMXComponents: Firemonkey Opensource Components Set from China
 //
 // A gesture password component
 //
-// ¸Ã¿Ø¼şÀ´×Ô xubzhlinµÄFMX-UI-ControlsÏîÄ¿£¬¾­×÷ÕßÍ¬Òâ½øĞĞÊÕ¼¯ÕûÀí
-// Ô­ÏîÄ¿µØÖ·Îª£ºhttps://github.com/xubzhlin/FMX-UI-Controls
+// è¯¥æ§ä»¶æ¥è‡ª xubzhlinçš„FMX-UI-Controlsé¡¹ç›®ï¼Œç»ä½œè€…åŒæ„è¿›è¡Œæ”¶é›†æ•´ç†
+// åŸé¡¹ç›®åœ°å€ä¸ºï¼šhttps://github.com/xubzhlin/FMX-UI-Controls
 //
 //  https://github.com/zhaoyipeng/FMXComponents
 //
@@ -181,7 +181,7 @@ var
 begin;
   if FSelected then
   begin
-    //»­±³¾°
+    //ç”»èƒŒæ™¯
     if FOwner.FBackgroundBitmap<>nil then
     begin
     Canvas.DrawBitmap(FOwner.FBackgroundBitmap,
@@ -199,7 +199,7 @@ begin;
       R := R.CenterAt(FLocalRect);
       Canvas.FillEllipse(R, 1, FOwner.FCircleStroke2);
     end;
-    //»­Ô²µã
+    //ç”»åœ†ç‚¹
 //    if FPoint<>nil then
 //    begin
 //      Canvas.Fill.Bitmap.Bitmap.Assign(FPoint);
@@ -209,7 +209,7 @@ begin;
   end
   else
   begin
-     //»­È¦
+     //ç”»åœˆ
     if Assigned(FOwner.FCircleBitmap) then
     begin
       Canvas.DrawBitmap(FOwner.FCircleBitmap,
@@ -380,7 +380,7 @@ begin
   if (FRowCount <> 0) and (FColumnCount <> 0) then
   begin
     ItemCount := FRowCount * FColumnCount;
-    // ÖØÖÃItem¸öÊı ºÍÎ»ÖÃ
+    // é‡ç½®Itemä¸ªæ•° å’Œä½ç½®
     FItems.Clear;
     for i := 0 to ItemCount - 1 do
     begin
@@ -497,7 +497,7 @@ end;
 function TFMXGesturePassword.GetPassWord: String;
 begin
   Result := FPassword;
-  // »ñÈ¡ÁË Çå¿Õ
+  // è·å–äº† æ¸…ç©º
   FPassword := '';
 end;
 
@@ -519,7 +519,7 @@ begin
   end;
 
   UpdateCurrentBitmap;
-  // »­Ïß
+  // ç”»çº¿
   if FIsDown then
     FillLines;
   FillItems;

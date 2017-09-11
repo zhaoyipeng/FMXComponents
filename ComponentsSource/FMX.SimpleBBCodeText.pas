@@ -1,10 +1,10 @@
-// ***************************************************************************
+ï»¿// ***************************************************************************
 //
 // FMXComponents: Firemonkey Opensource Components Set from China
 //
 // This is a simple BBCode text component
 //
-// Copyright 2017 Ð»¶Ù (zhaoyipeng@hotmail.com)
+// Copyright 2017 è°¢é¡¿ (zhaoyipeng@hotmail.com)
 //
 // https://github.com/zhaoyipeng/FMXComponents
 //
@@ -171,8 +171,8 @@ type
 implementation
 
 const
-  TAIL_CHARS: string = '!)>,.:;?]}¡¢¡£¡ª¡¦¡§¡¨¡©¡«¡¬¡­¡¯¡¯¡±¡³¡µ¡·¡¹¡»¡½¡¿¡Ã£¡£¢£§£©£¬£®£º£»£¿£Ý£à£ü£ý¡¤';
-  HEAD_CHARS: string = '(<[{¡®¡°¡²¡´¡¶¡¸¡º¡¼¡¾£¨£Û£û£®¡¤';
+  TAIL_CHARS: string = '!)>,.:;?]}ã€ã€‚â€”Ë‡Â¨ã€ƒã€…ï½žâ€–â€¦â€™â€™â€ã€•ã€‰ã€‹ã€ã€ã€—ã€‘âˆ¶ï¼ï¼‚ï¼‡ï¼‰ï¼Œï¼Žï¼šï¼›ï¼Ÿï¼½ï½€ï½œï½Â·';
+  HEAD_CHARS: string = '(<[{â€˜â€œã€”ã€ˆã€Šã€Œã€Žã€–ã€ï¼ˆï¼»ï½›ï¼ŽÂ·';
 
 var
   FColorLookup: TDictionary<string, TAlphaColor>;

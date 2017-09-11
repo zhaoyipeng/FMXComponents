@@ -72,7 +72,7 @@ type
     FIsSelected: Boolean;
     FDayText:String;
     FDay: TDate;
-    FBitMap:TBitMap;
+    FBitmap: TBitmap;
     function GetIsMark: Boolean;
     procedure SetDay(const Value: TDate);
     procedure SetIsPressed(const Value: Boolean);
@@ -327,7 +327,7 @@ begin
   end;
 
 
-  // ±ê¼Ç
+  // 标记
   if GetIsMark then
   begin
     Canvas.Fill.Color := TAlphaColors.Gainsboro;
@@ -408,8 +408,8 @@ begin
   Text.Height := 0;
   Text.TextAlign := TTextAlign.Leading;
   Text.TextVertAlign := TTextAlign.Center;
-  Text.Font.Size:=20;
-  Text.TextColor:=TAlphaColors.Cadetblue;
+  Text.Font.Size := 20;
+  Text.TextColor := TAlphaColors.Cadetblue;
 
   FYear := TClendarYearObjectAppearance.Create;
   FYear.Owner := Self;

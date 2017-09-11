@@ -1,8 +1,8 @@
-// ***************************************************************************
+ï»¿// ***************************************************************************
 //
 // FMXComponents: Firemonkey Opensource Components Set from China
 //
-// Copyright 2017 Ğ»¶Ù (zhaoyipeng@hotmail.com)
+// Copyright 2017 è°¢é¡¿ (zhaoyipeng@hotmail.com)
 //
 // https://github.com/zhaoyipeng/FMXComponents
 //
@@ -27,7 +27,7 @@ interface
 
 uses
   System.Classes
-// ¿É¸ù¾İĞèÒª×¢ÊÍµ÷²»ĞèÒªµÄ¿Ø¼şµ¥ÔªºÍ×¢²á
+// å¯æ ¹æ®éœ€è¦æ³¨é‡Šè°ƒä¸éœ€è¦çš„æ§ä»¶å•å…ƒå’Œæ³¨å†Œ
   , FMX.CircleScoreIndicator
   , FMX.ImageSlider
   , FMX.RatingBar

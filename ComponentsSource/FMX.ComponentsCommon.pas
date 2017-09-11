@@ -1,8 +1,8 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 //
 // FMXComponents
 //
-// Copyright 2017 л�� (zhaoyipeng@hotmail.com)
+// Copyright 2017 谢顿 (zhaoyipeng@hotmail.com)
 //
 // https://github.com/zhaoyipeng/FMXComponents
 //

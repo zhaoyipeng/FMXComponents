@@ -61,6 +61,8 @@ type
     FMXCalendarControl1: TFMXCalendarControl;
     Layout7: TLayout;
     chkShowLunarDate: TCheckBox;
+    rbCnMonths: TRadioButton;
+    rbEnMonths: TRadioButton;
     procedure FMXScrollableList2Change(Sender: TObject);
     procedure FMXScrollableList1Change(Sender: TObject);
     procedure btnAnimationClick(Sender: TObject);
@@ -72,6 +74,7 @@ type
     procedure FMXGesturePassword1EnterCompleteEvent(Sender: TObject;
       const APassword: string);
     procedure chkShowLunarDateChange(Sender: TObject);
+    procedure rbCnMonthsChange(Sender: TObject);
   private
     { Private declarations }
     FSelection1: TOneSelection;
@@ -169,6 +172,14 @@ end;
 procedure TFMXComponentsDemoForm.Memo1Change(Sender: TObject);
 begin
   self.FMXSimpleBBCodeText1.Lines.Assign(Memo1.Lines);
+end;
+
+procedure TFMXComponentsDemoForm.rbCnMonthsChange(Sender: TObject);
+begin
+  if (Sender as TControl).Tag = 0 then
+    Self.FMXCalendarControl1.SetMonthNames(TCnMonths)
+  else
+    Self.FMXCalendarControl1.SetMonthNames(TEnMonths);
 end;
 
 end.

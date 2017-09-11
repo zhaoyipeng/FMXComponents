@@ -1,17 +1,17 @@
-unit qcndate;
+ï»¿unit qcndate;
 
 interface
 
 {
-  ±¾µ¥ÔªËã·¨Êý¾ÝÊ¹ÓÃ×ÔÔçÆÚ UCDOS µÄÅ©ÀúÊý¾Ý£¬±¾À´ÏëÊ¹ÓÃÊÙÐÇÍòÄêÀúµÄÊý¾Ý£¬µ«Ì«¸´ÔÓ
-  ËùÒÔÔÝÊ±ÉáÆú¡£
+  æœ¬å•å…ƒç®—æ³•æ•°æ®ä½¿ç”¨è‡ªæ—©æœŸ UCDOS çš„å†œåŽ†æ•°æ®ï¼Œæœ¬æ¥æƒ³ä½¿ç”¨å¯¿æ˜Ÿä¸‡å¹´åŽ†çš„æ•°æ®ï¼Œä½†å¤ªå¤æ‚
+  æ‰€ä»¥æš‚æ—¶èˆå¼ƒã€‚
 
-  ±¾µ¥ÔªDelphi½Ó¿ÚÓÉswishÉè¼ÆÊµÏÖ£¬°æÈ¨¹éswishËùÓÐ¡£
+  æœ¬å•å…ƒDelphiæŽ¥å£ç”±swishè®¾è®¡å®žçŽ°ï¼Œç‰ˆæƒå½’swishæ‰€æœ‰ã€‚
 
-¸üÐÂÈÕÖ¾
+æ›´æ–°æ—¥å¿—
   2015.2.26
   ==========
-  * ÐÞÕýÁËÔÚ2007ÏÂµÄ±àÒë¾¯¸æ£¨¸ÐÐ»Âó×ÓÖÙ·Ê£©
+  * ä¿®æ­£äº†åœ¨2007ä¸‹çš„ç¼–è¯‘è­¦å‘Šï¼ˆæ„Ÿè°¢éº¦å­ä»²è‚¥ï¼‰
 }
 uses
   System.Classes,
@@ -22,204 +22,204 @@ type
   TCnDate = record
     case Integer of
       1:
-        (Year: Word; Month: Shortint; Day: Byte); // 16Î»Äê£¬8Î»ÔÂ£¬8Î»ÈÕ
+        (Year: Word; Month: Shortint; Day: Byte); // 16ä½å¹´ï¼Œ8ä½æœˆï¼Œ8ä½æ—¥
       2:
-        (Value: Integer); // 32Î»µÄÕûÊýÖµ
+        (Value: Integer); // 32ä½çš„æ•´æ•°å€¼
   end;
 
 const
-  CnDayNames: array [1 .. 30] of String = ('³õÒ»', '³õ¶þ', '³õÈý', '³õËÄ', '³õÎå', '³õÁù',
-    '³õÆß', '³õ°Ë', '³õ¾Å', '³õÊ®', 'Ê®Ò»', 'Ê®¶þ', 'Ê®Èý', 'Ê®ËÄ', 'Ê®Îå', 'Ê®Áù', 'Ê®Æß', 'Ê®°Ë',
-    'Ê®¾Å', '¶þÊ®', 'Ø¥Ò»', 'Ø¥¶þ', 'Ø¥Èý', 'Ø¥ËÄ', 'Ø¥Îå', 'Ø¥Áù', 'Ø¥Æß', 'Ø¥°Ë', 'Ø¥¾Å', 'ÈýÊ®');
-  CnMonthNames: array [1 .. 12] of String = ('ÕýÔÂ', '¶þÔÂ', 'ÈýÔÂ', 'ËÄÔÂ', 'ÎåÔÂ',
-    'ÁùÔÂ', 'ÆßÔÂ', '°ËÔÂ', '¾ÅÔÂ', 'Ê®ÔÂ', '¶¬ÔÂ', 'À°ÔÂ');
-  CnSkyNames: array [1 .. 10] of String = ('¼×', 'ÒÒ', '±û', '¶¡', 'Îì', '¼º', '¸ý',
-    'ÐÁ', 'ÈÉ', '¹ï');
-  CnEarthNames: array [1 .. 12] of String = ('×Ó', '³ó', 'Òú', 'Ã®', '³½', 'ËÈ',
-    'Îç', 'Î´', 'Éê', 'ÓÏ', 'Ðç', 'º¥');
-  CnAnimals: array [1 .. 12] of String = ('Êó', 'Å£', '»¢', 'ÍÃ', 'Áú', 'Éß', 'Âí',
-    'Ñò', 'ºï', '¼¦', '¹·', 'Öí');
-  CnSolarTerms: array [0 .. 24] of String = ('', 'Ð¡º®', '´óº®', 'Á¢´º', 'ÓêË®', '¾ªÕÝ',
-    '´º·Ö', 'ÇåÃ÷', '¹ÈÓê', 'Á¢ÏÄ', 'Ð¡Âú', 'Ã¢ÖÖ', 'ÏÄÖÁ', 'Ð¡Êî', '´óÊî', 'Á¢Çï', '´¦Êî', '°×Â¶',
-    'Çï·Ö', 'º®Â¶', 'Ëª½µ', 'Á¢¶¬', 'Ð¡Ñ©', '´óÑ©', '¶¬ÖÁ');
-  CnWeekNames: array [1 .. 7] of String = ('Ò»', '¶þ', 'Èý', 'ËÄ', 'Îå', 'Áù', 'ÈÕ');
+  CnDayNames: array [1 .. 30] of String = ('åˆä¸€', 'åˆäºŒ', 'åˆä¸‰', 'åˆå››', 'åˆäº”', 'åˆå…­',
+    'åˆä¸ƒ', 'åˆå…«', 'åˆä¹', 'åˆå', 'åä¸€', 'åäºŒ', 'åä¸‰', 'åå››', 'åäº”', 'åå…­', 'åä¸ƒ', 'åå…«',
+    'åä¹', 'äºŒå', 'å»¿ä¸€', 'å»¿äºŒ', 'å»¿ä¸‰', 'å»¿å››', 'å»¿äº”', 'å»¿å…­', 'å»¿ä¸ƒ', 'å»¿å…«', 'å»¿ä¹', 'ä¸‰å');
+  CnMonthNames: array [1 .. 12] of String = ('æ­£æœˆ', 'äºŒæœˆ', 'ä¸‰æœˆ', 'å››æœˆ', 'äº”æœˆ',
+    'å…­æœˆ', 'ä¸ƒæœˆ', 'å…«æœˆ', 'ä¹æœˆ', 'åæœˆ', 'å†¬æœˆ', 'è…Šæœˆ');
+  CnSkyNames: array [1 .. 10] of String = ('ç”²', 'ä¹™', 'ä¸™', 'ä¸', 'æˆŠ', 'å·±', 'åºš',
+    'è¾›', 'å£¬', 'ç™¸');
+  CnEarthNames: array [1 .. 12] of String = ('å­', 'ä¸‘', 'å¯…', 'å¯', 'è¾°', 'å·³',
+    'åˆ', 'æœª', 'ç”³', 'é…‰', 'æˆŒ', 'äº¥');
+  CnAnimals: array [1 .. 12] of String = ('é¼ ', 'ç‰›', 'è™Ž', 'å…”', 'é¾™', 'è›‡', 'é©¬',
+    'ç¾Š', 'çŒ´', 'é¸¡', 'ç‹—', 'çŒª');
+  CnSolarTerms: array [0 .. 24] of String = ('', 'å°å¯’', 'å¤§å¯’', 'ç«‹æ˜¥', 'é›¨æ°´', 'æƒŠè›°',
+    'æ˜¥åˆ†', 'æ¸…æ˜Ž', 'è°·é›¨', 'ç«‹å¤', 'å°æ»¡', 'èŠ’ç§', 'å¤è‡³', 'å°æš‘', 'å¤§æš‘', 'ç«‹ç§‹', 'å¤„æš‘', 'ç™½éœ²',
+    'ç§‹åˆ†', 'å¯’éœ²', 'éœœé™', 'ç«‹å†¬', 'å°é›ª', 'å¤§é›ª', 'å†¬è‡³');
+  CnWeekNames: array [1 .. 7] of String = ('ä¸€', 'äºŒ', 'ä¸‰', 'å››', 'äº”', 'å…­', 'æ—¥');
   /// <summary>
-  /// ½«Ö¸¶¨µÄÅ©ÀúÄêÔÂÈÕ±àÂëÎªÒ»¸öTCnDate±äÁ¿
+  /// å°†æŒ‡å®šçš„å†œåŽ†å¹´æœˆæ—¥ç¼–ç ä¸ºä¸€ä¸ªTCnDateå˜é‡
   /// </summary>
   /// <params>
-  /// <param name="Y">Å©ÀúÄê·Ý£¬È¡Öµ·¶Î§Îª1901-2050  </param>
-  /// <param name="M">Å©ÀúÔÂ·Ý£¬¸ºÊý´ú±íÊÇÈòÔÂ</param>
-  /// <param name="D">Å©ÀúÈÕÊý£¬È¡Öµ·¶Î§Îª1-30</param>
+  /// <param name="Y">å†œåŽ†å¹´ä»½ï¼Œå–å€¼èŒƒå›´ä¸º1901-2050  </param>
+  /// <param name="M">å†œåŽ†æœˆä»½ï¼Œè´Ÿæ•°ä»£è¡¨æ˜¯é—°æœˆ</param>
+  /// <param name="D">å†œåŽ†æ—¥æ•°ï¼Œå–å€¼èŒƒå›´ä¸º1-30</param>
   /// </params>
-  /// <returns>·µ»Ø±àÂëºóÈÕÆÚ</returns>
+  /// <returns>è¿”å›žç¼–ç åŽæ—¥æœŸ</returns>
 function CnDate(Y: Word; M, D: Shortint): TCnDate; inline;
-/// <summary>½«Ö¸¶¨µÄÈÕÆÚ×ª»»ÎªÅ©ÀúÈÕÆÚ</summary>
+/// <summary>å°†æŒ‡å®šçš„æ—¥æœŸè½¬æ¢ä¸ºå†œåŽ†æ—¥æœŸ</summary>
 /// <params>
-/// <param name=¡°ADate">ÑôÀúÈÕÆÚ</param>
+/// <param name=â€œADate">é˜³åŽ†æ—¥æœŸ</param>
 /// </params>
-/// <returns>·µ»Ø×ª»»ºóµÄÈÕÆÚ</returns>
+/// <returns>è¿”å›žè½¬æ¢åŽçš„æ—¥æœŸ</returns>
 function ToCnDate(ADate: TDateTime): TCnDate; overload;
-/// <summary>½«Ö¸¶¨µÄÈÕÆÚ×ª»»ÎªÅ©ÀúÈÕÆÚ</summary>
+/// <summary>å°†æŒ‡å®šçš„æ—¥æœŸè½¬æ¢ä¸ºå†œåŽ†æ—¥æœŸ</summary>
 /// <params>
-/// <param name=¡°yyyy">ÑôÀúÄê·Ý</param>
-/// <param name="mm">ÑôÀúÔÂ·Ý</param>
-/// <param name="dd">ÑôÀúÈÕ</param>
+/// <param name=â€œyyyy">é˜³åŽ†å¹´ä»½</param>
+/// <param name="mm">é˜³åŽ†æœˆä»½</param>
+/// <param name="dd">é˜³åŽ†æ—¥</param>
 /// </params>
-/// <returns>·µ»Ø×ª»»ºóµÄÈÕÆÚ</returns>
+/// <returns>è¿”å›žè½¬æ¢åŽçš„æ—¥æœŸ</returns>
 function ToCnDate(yyyy, mm, dd: Word): TCnDate; overload;
-/// <summary>½«Ö¸¶¨Å©ÀúÈÕÆÚ×ª»»ÎªÑôÀúÈÕÆÚ</summary>
+/// <summary>å°†æŒ‡å®šå†œåŽ†æ—¥æœŸè½¬æ¢ä¸ºé˜³åŽ†æ—¥æœŸ</summary>
 /// <params>
-/// <param name="ADate">ÒõÀúÈÕÆÚ</param>
+/// <param name="ADate">é˜´åŽ†æ—¥æœŸ</param>
 /// </params>
-/// <returns>·µ»Ø×ª»»ºóµÄÑôÀúÈÕÆÚ</returns>
+/// <returns>è¿”å›žè½¬æ¢åŽçš„é˜³åŽ†æ—¥æœŸ</returns>
 function ToEnDate(ADate: TCnDate): TDateTime;
-/// <summary>»ñÈ¡Ö¸¶¨ÑôÀúÈÕÆÚµÄÅ©ÀúÄê·Ý</summary>
+/// <summary>èŽ·å–æŒ‡å®šé˜³åŽ†æ—¥æœŸçš„å†œåŽ†å¹´ä»½</summary>
 /// <params>
-/// <param name="ADate">ÑôÀúÈÕÆÚ</param>
+/// <param name="ADate">é˜³åŽ†æ—¥æœŸ</param>
 /// </params>
-/// <returns>·µ»ØÖ¸¶¨ÑôÀúÈÕÆÚµÄÅ©ÀúÄê·Ý</returns>
+/// <returns>è¿”å›žæŒ‡å®šé˜³åŽ†æ—¥æœŸçš„å†œåŽ†å¹´ä»½</returns>
 function CnYearOf(ADate: TDateTime): Smallint; overload;
-/// <summary>»ñÈ¡Ö¸¶¨Å©ÀúÈÕÆÚµÄÄê·ÝµÄÌì¸ÉµØÖ§Ãû³Æ</summary>
+/// <summary>èŽ·å–æŒ‡å®šå†œåŽ†æ—¥æœŸçš„å¹´ä»½çš„å¤©å¹²åœ°æ”¯åç§°</summary>
 /// <params>
-/// <param name="ADate">ÒõÀúÈÕÆÚ</param>
+/// <param name="ADate">é˜´åŽ†æ—¥æœŸ</param>
 /// </params>
-/// <returns>·µ»ØÌì¸ÉµØÖ§Ãû³Æ£¬Èç"¼×Îç"</reutrns>
+/// <returns>è¿”å›žå¤©å¹²åœ°æ”¯åç§°ï¼Œå¦‚"ç”²åˆ"</reutrns>
 function CnYearName(ADate: TCnDate): String; overload;
-/// <summary>»ñÈ¡Ö¸¶¨ÑôÀúÈÕÆÚ¶ÔÓ¦µÄÅ©ÀúÄê·ÝµÄÌì¸ÉµØÖ§Ãû³Æ</summary>
+/// <summary>èŽ·å–æŒ‡å®šé˜³åŽ†æ—¥æœŸå¯¹åº”çš„å†œåŽ†å¹´ä»½çš„å¤©å¹²åœ°æ”¯åç§°</summary>
 /// <params>
-/// <param name="ADate">ÒõÀúÈÕÆÚ</param>
+/// <param name="ADate">é˜´åŽ†æ—¥æœŸ</param>
 /// </params>
-/// <returns>·µ»ØÌì¸ÉµØÖ§Ãû³Æ£¬Èç"¼×Îç"</reutrns>
+/// <returns>è¿”å›žå¤©å¹²åœ°æ”¯åç§°ï¼Œå¦‚"ç”²åˆ"</reutrns>
 function CnYearName(ADate: TDateTime): String; overload;
-/// <summary>»ñÈ¡Ö¸¶¨ÑôÀúÈÕÆÚ¶ÔÓ¦µÄÔÂ·ÝÊý</summary>
+/// <summary>èŽ·å–æŒ‡å®šé˜³åŽ†æ—¥æœŸå¯¹åº”çš„æœˆä»½æ•°</summary>
 /// <params>
-/// <param name="ADate">ÑôÀúÈÕÆÚ</param>
+/// <param name="ADate">é˜³åŽ†æ—¥æœŸ</param>
 /// </params>
-/// <returns>·µ»ØÔÂ·ÝÊý£¬È¡Öµ·¶Î§Îª1-12£¬-12~-1£¬¸ºÊý´ú±íÊÇÈòÔÂ</returns>
+/// <returns>è¿”å›žæœˆä»½æ•°ï¼Œå–å€¼èŒƒå›´ä¸º1-12ï¼Œ-12~-1ï¼Œè´Ÿæ•°ä»£è¡¨æ˜¯é—°æœˆ</returns>
 function CnMonthOf(ADate: TDateTime): Shortint; overload;
-/// <summary>»ñÈ¡Ö¸¶¨Å©ÀúÈÕÆÚ¶ÔÓ¦µÄÔÂ·ÝÃû³Æ</summary>
+/// <summary>èŽ·å–æŒ‡å®šå†œåŽ†æ—¥æœŸå¯¹åº”çš„æœˆä»½åç§°</summary>
 /// <params>
-/// <param name="ADate">Å©ÀúÈÕÆÚ</param>
+/// <param name="ADate">å†œåŽ†æ—¥æœŸ</param>
 /// </params>
-/// <returns>·µ»ØÅ©ÀúÔÂ·ÝÃû³Æ£¬Èç¡°À°ÔÂ¡±</param>
+/// <returns>è¿”å›žå†œåŽ†æœˆä»½åç§°ï¼Œå¦‚â€œè…Šæœˆâ€</param>
 function CnMonthName(ADate: TCnDate): String; overload;
-/// <summary>»ñÈ¡Ö¸¶¨ÑôÀúÈÕÆÚ¶ÔÓ¦Å©ÀúÈÕÆÚ¶ÔÓ¦µÄÔÂ·ÝÃû³Æ</summary>
+/// <summary>èŽ·å–æŒ‡å®šé˜³åŽ†æ—¥æœŸå¯¹åº”å†œåŽ†æ—¥æœŸå¯¹åº”çš„æœˆä»½åç§°</summary>
 /// <params>
-/// <param name="ADate">Å©ÀúÈÕÆÚ</param>
+/// <param name="ADate">å†œåŽ†æ—¥æœŸ</param>
 /// </params>
-/// <returns>·µ»ØÅ©ÀúÔÂ·ÝÃû³Æ£¬Èç¡°À°ÔÂ¡±</param>
+/// <returns>è¿”å›žå†œåŽ†æœˆä»½åç§°ï¼Œå¦‚â€œè…Šæœˆâ€</param>
 function CnMonthName(ADate: TDateTime): String; overload;
-/// <summary>»ñÈ¡Ö¸¶¨Å©ÀúÄêÔÂµÄÌìÊý</summary>
+/// <summary>èŽ·å–æŒ‡å®šå†œåŽ†å¹´æœˆçš„å¤©æ•°</summary>
 /// <params>
-/// <param name="Y">Å©ÀúÄê·Ý</param>
-/// <param name="M">Å©ÀúÔÂ·Ý£¬¸ºÊý´ú±íÈòÔÂ</param>
+/// <param name="Y">å†œåŽ†å¹´ä»½</param>
+/// <param name="M">å†œåŽ†æœˆä»½ï¼Œè´Ÿæ•°ä»£è¡¨é—°æœˆ</param>
 /// </params>
-/// <returns>·µ»ØÖ¸¶¨Å©ÀúÄêÔÂµÄÌìÊý</returns>
+/// <returns>è¿”å›žæŒ‡å®šå†œåŽ†å¹´æœˆçš„å¤©æ•°</returns>
 function CnMonthDays(Y: Word; M: Shortint): Byte;
-/// <summary>»ñÈ¡Ö¸¶¨ÑôÀúÈÕÆÚµÄÅ©ÀúÈÕ</summary>
+/// <summary>èŽ·å–æŒ‡å®šé˜³åŽ†æ—¥æœŸçš„å†œåŽ†æ—¥</summary>
 /// <params>
-/// <param name="ADate">ÑôÀúÈÕÆÚ</param>
+/// <param name="ADate">é˜³åŽ†æ—¥æœŸ</param>
 /// </params>
-/// <returns>·µ»ØÖ¸¶¨µÄÅ©ÀúÈÕ</returns>
+/// <returns>è¿”å›žæŒ‡å®šçš„å†œåŽ†æ—¥</returns>
 function CnDayOf(ADate: TDateTime): Shortint; overload;
-/// <summary>»ñÈ¡Ö¸¶¨Å©ÀúÈÕÆÚµÄÖÐÎÄÃû³Æ</summary>
+/// <summary>èŽ·å–æŒ‡å®šå†œåŽ†æ—¥æœŸçš„ä¸­æ–‡åç§°</summary>
 /// <params>
-/// <param name="ADate">Å©ÀúÈÕÆÚ</param>
+/// <param name="ADate">å†œåŽ†æ—¥æœŸ</param>
 /// </params>
-/// <returns>·µ»ØÖ¸¶¨ÈÕÆÚµÄÈÕµÄÖÐÎÄÃû³Æ</returns>
+/// <returns>è¿”å›žæŒ‡å®šæ—¥æœŸçš„æ—¥çš„ä¸­æ–‡åç§°</returns>
 function CnDayName(ADate: TCnDate): String; overload;
-/// <summary>»ñÈ¡Ö¸¶¨ÑôÀúÈÕÆÚ¶ÔÓ¦Å©ÀúÈÕÆÚÈÕµÄÖÐÎÄÃû³Æ</summary>
+/// <summary>èŽ·å–æŒ‡å®šé˜³åŽ†æ—¥æœŸå¯¹åº”å†œåŽ†æ—¥æœŸæ—¥çš„ä¸­æ–‡åç§°</summary>
 /// <params>
-/// <param name="ADate">ÑôÀúÈÕÆÚ</param>
+/// <param name="ADate">é˜³åŽ†æ—¥æœŸ</param>
 /// </params>
-/// <returns>·µ»ØÖ¸¶¨ÈÕÆÚµÄÈÕµÄÖÐÎÄÃû³Æ</returns>
+/// <returns>è¿”å›žæŒ‡å®šæ—¥æœŸçš„æ—¥çš„ä¸­æ–‡åç§°</returns>
 function CnDayName(ADate: TDateTime): String; overload;
-/// <summary>»ñÈ¡Ö¸¶¨Ð¡Ê±µÄÊ±¿ÌÃû³Æ</summary>
+/// <summary>èŽ·å–æŒ‡å®šå°æ—¶çš„æ—¶åˆ»åç§°</summary>
 /// <params>
-/// <param name="AHour">Ð¡Ê±Êý£¬È¡Öµ·¶Î§0-23</param>
+/// <param name="AHour">å°æ—¶æ•°ï¼Œå–å€¼èŒƒå›´0-23</param>
 /// </params>
-/// <returns>·µ»ØÖÐÎÄµÄÐ¡Ê±¶ÔÓ¦µÄÊ±¿ÌÃû³Æ£¨×Ó¡¢³óµÈ£©</returns>
+/// <returns>è¿”å›žä¸­æ–‡çš„å°æ—¶å¯¹åº”çš„æ—¶åˆ»åç§°ï¼ˆå­ã€ä¸‘ç­‰ï¼‰</returns>
 function CnHourName(AHour: Byte): String; overload;
-/// <summary>»ñÈ¡Ö¸¶¨µÄÅ©ÀúÈÕÆÚµÄÊôÏàÃû³Æ</summary>
+/// <summary>èŽ·å–æŒ‡å®šçš„å†œåŽ†æ—¥æœŸçš„å±žç›¸åç§°</summary>
 /// <params>
-/// <param name="ADate">Å©ÀúÈÕÆÚ</param>
+/// <param name="ADate">å†œåŽ†æ—¥æœŸ</param>
 /// </params>
-/// <returns>·µ»ØÖ¸¶¨µÄÅ©ÀúÄê·Ý¶ÔÓ¦µÄÊôÏàÃû³Æ</returns>
+/// <returns>è¿”å›žæŒ‡å®šçš„å†œåŽ†å¹´ä»½å¯¹åº”çš„å±žç›¸åç§°</returns>
 function CnAnimalOf(ADate: TCnDate): String; overload;
-/// <summary>»ñÈ¡Ö¸¶¨µÄÑôÀúÈÕÆÚµÄÊôÏàÃû³Æ</summary>
+/// <summary>èŽ·å–æŒ‡å®šçš„é˜³åŽ†æ—¥æœŸçš„å±žç›¸åç§°</summary>
 /// <params>
-/// <param name="ADate">ÑôÀúÈÕÆÚ</param>
+/// <param name="ADate">é˜³åŽ†æ—¥æœŸ</param>
 /// </params>
-/// <returns>·µ»ØÖ¸¶¨µÄÑôÀúÄê·Ý¶ÔÓ¦µÄÊôÏàÃû³Æ</returns>
+/// <returns>è¿”å›žæŒ‡å®šçš„é˜³åŽ†å¹´ä»½å¯¹åº”çš„å±žç›¸åç§°</returns>
 function CnAnimalOf(ADate: TDateTime): String; overload;
-/// <summary>»ñÈ¡Ö¸¶¨Äê·ÝÏàÓ¦½ÚÆø¶ÔÓ¦µÄÑôÀúÈÕÆÚ</summary>
+/// <summary>èŽ·å–æŒ‡å®šå¹´ä»½ç›¸åº”èŠ‚æ°”å¯¹åº”çš„é˜³åŽ†æ—¥æœŸ</summary>
 /// <params>
-/// <param name="AYear">Å©ÀúÄê·Ý</param>
-/// <param name="AName">½ÚÆøÃû³Æ</param>
+/// <param name="AYear">å†œåŽ†å¹´ä»½</param>
+/// <param name="AName">èŠ‚æ°”åç§°</param>
 /// </params>
-/// <returns>·µ»Ø¶ÔÓ¦µÄÑôÀúÈÕÆÚ</returns>
+/// <returns>è¿”å›žå¯¹åº”çš„é˜³åŽ†æ—¥æœŸ</returns>
 function DateOfCnSolarTerm(AYear: Smallint; AName: String)
   : TDateTime; overload;
-/// <summary>»ñÈ¡Ö¸¶¨ÑôÀúÈÕÆÚ¶ÔÓ¦µÄ½ÚÆøÐòºÅ</summary>
+/// <summary>èŽ·å–æŒ‡å®šé˜³åŽ†æ—¥æœŸå¯¹åº”çš„èŠ‚æ°”åºå·</summary>
 /// <params>
-/// <param name="AYear">ÑôÀúÄê·Ý</param>
-/// <param name="AMonth">ÑôÀúÔÂ·Ý</param>
-/// <param name="ADay">ÑôÀúÈÕ</param>
+/// <param name="AYear">é˜³åŽ†å¹´ä»½</param>
+/// <param name="AMonth">é˜³åŽ†æœˆä»½</param>
+/// <param name="ADay">é˜³åŽ†æ—¥</param>
 /// </params>
-/// <returns>·µ»Ø½ÚÆøÐòÁÐ£¬Èç¹û²»ÊÇÈÎºÎ½ÚÆø£¬·µ»Ø0</returns>
+/// <returns>è¿”å›žèŠ‚æ°”åºåˆ—ï¼Œå¦‚æžœä¸æ˜¯ä»»ä½•èŠ‚æ°”ï¼Œè¿”å›ž0</returns>
 function CnSolarTerm(AYear, AMonth, ADay: Word): Shortint; overload;
-/// <summary>»ñÈ¡Ö¸¶¨Å©ÀúÈÕÆÚ¶ÔÓ¦µÄ½ÚÆøÐòºÅ</summary>
+/// <summary>èŽ·å–æŒ‡å®šå†œåŽ†æ—¥æœŸå¯¹åº”çš„èŠ‚æ°”åºå·</summary>
 /// <params>
-/// <param name="AYear">Å©ÀúÄê·Ý</param>
-/// <param name="AMonth">Å©ÀúÔÂ·Ý</param>
-/// <param name="ADay">Å©ÀúÈÕ</param>
+/// <param name="AYear">å†œåŽ†å¹´ä»½</param>
+/// <param name="AMonth">å†œåŽ†æœˆä»½</param>
+/// <param name="ADay">å†œåŽ†æ—¥</param>
 /// </params>
-/// <returns>·µ»Ø½ÚÆøÐòÁÐ£¬Èç¹û²»ÊÇÈÎºÎ½ÚÆø£¬·µ»Ø0</returns>
+/// <returns>è¿”å›žèŠ‚æ°”åºåˆ—ï¼Œå¦‚æžœä¸æ˜¯ä»»ä½•èŠ‚æ°”ï¼Œè¿”å›ž0</returns>
 function CnSolarTerm(ADate: TCnDate): Shortint; overload;
-/// <summary>»ñÈ¡Ö¸¶¨ÑôÀúÈÕÆÚ¶ÔÓ¦µÄ½ÚÆøÐòºÅ</summary>
+/// <summary>èŽ·å–æŒ‡å®šé˜³åŽ†æ—¥æœŸå¯¹åº”çš„èŠ‚æ°”åºå·</summary>
 /// <params>
-/// <param name="ADate">ÑôÀúÈÕÆÚ</param>
+/// <param name="ADate">é˜³åŽ†æ—¥æœŸ</param>
 /// </params>
-/// <returns>·µ»Ø½ÚÆøÐòÁÐ£¬Èç¹û²»ÊÇÈÎºÎ½ÚÆø£¬·µ»Ø0</returns>
+/// <returns>è¿”å›žèŠ‚æ°”åºåˆ—ï¼Œå¦‚æžœä¸æ˜¯ä»»ä½•èŠ‚æ°”ï¼Œè¿”å›ž0</returns>
 function CnSolarTerm(ADate: TDateTime): Shortint; overload;
-/// <summary>»ñÈ¡Ö¸¶¨Å©ÀúÈÕÆÚ¶ÔÓ¦µÄ½ÚÆøÃû³Æ</summary>
+/// <summary>èŽ·å–æŒ‡å®šå†œåŽ†æ—¥æœŸå¯¹åº”çš„èŠ‚æ°”åç§°</summary>
 /// <params>
-/// <param name="ADate">Å©ÀúÈÕÆÚ</param>
+/// <param name="ADate">å†œåŽ†æ—¥æœŸ</param>
 /// </params>
-/// <returns>·µ»Ø½ÚÆøÃû³Æ£¬Èç¹û²»ÊôÓÚÈÎºÎ½ÚÆø£¬·µ»Ø¿Õ×Ö·û´®</returns>
+/// <returns>è¿”å›žèŠ‚æ°”åç§°ï¼Œå¦‚æžœä¸å±žäºŽä»»ä½•èŠ‚æ°”ï¼Œè¿”å›žç©ºå­—ç¬¦ä¸²</returns>
 function CnSolarTermName(ADate: TCnDate): String; overload;
-/// <summary>»ñÈ¡Ö¸¶¨ÑôÀúÈÕÆÚ¶ÔÓ¦µÄ½ÚÆøÃû³Æ</summary>
+/// <summary>èŽ·å–æŒ‡å®šé˜³åŽ†æ—¥æœŸå¯¹åº”çš„èŠ‚æ°”åç§°</summary>
 /// <params>
-/// <param name="ADate">ÑôÀúÈÕÆÚ</param>
+/// <param name="ADate">é˜³åŽ†æ—¥æœŸ</param>
 /// </params>
-/// <returns>·µ»Ø½ÚÆøÃû³Æ£¬Èç¹û²»ÊôÓÚÈÎºÎ½ÚÆø£¬·µ»Ø¿Õ×Ö·û´®</returns>
+/// <returns>è¿”å›žèŠ‚æ°”åç§°ï¼Œå¦‚æžœä¸å±žäºŽä»»ä½•èŠ‚æ°”ï¼Œè¿”å›žç©ºå­—ç¬¦ä¸²</returns>
 function CnSolarTermName(ADate: TDateTime): String; overload;
-/// <summary>»ñÈ¡Ö¸¶¨ÈÕÆÚÔÚÏàÓ¦µÄÅ©ÀúÄê·ÝÖÐµÄÖÜ´Î</summary>
+/// <summary>èŽ·å–æŒ‡å®šæ—¥æœŸåœ¨ç›¸åº”çš„å†œåŽ†å¹´ä»½ä¸­çš„å‘¨æ¬¡</summary>
 /// <params>
-/// <param name="ADate">ÑôÀúÈÕÆÚ</param>
+/// <param name="ADate">é˜³åŽ†æ—¥æœŸ</param>
 /// </params>
-/// <returns>·µ»ØÖÜ´Î</returns>
+/// <returns>è¿”å›žå‘¨æ¬¡</returns>
 function CnWeeksInYear(const ADate: TDateTime): Byte;
-/// <summary>Ôö¼ÓÖ¸¶¨µÄÅ©ÀúµÄÄêÊý</summary>
+/// <summary>å¢žåŠ æŒ‡å®šçš„å†œåŽ†çš„å¹´æ•°</summary>
 /// <params>
-/// <param name="ADate">µ±Ç°ÈÕÆÚ</param>
-/// <param name="ADelta">ÔöÁ¿</param>
+/// <param name="ADate">å½“å‰æ—¥æœŸ</param>
+/// <param name="ADelta">å¢žé‡</param>
 /// </params>
-/// <returns>·µ»ØÔö¼Ó»ò¼õÉÙ£¨¸ºÔöÁ¿£©µÄÄêÊýºóµÄÅ©ÀúÈÕÆÚ</returns>
+/// <returns>è¿”å›žå¢žåŠ æˆ–å‡å°‘ï¼ˆè´Ÿå¢žé‡ï¼‰çš„å¹´æ•°åŽçš„å†œåŽ†æ—¥æœŸ</returns>
 function CnIncYear(ADate: TCnDate; ADelta: Integer = 1): TCnDate;
-/// <summary>Ôö¼ÓÖ¸¶¨µÄÅ©ÀúµÄÔÂÊý</summary>
+/// <summary>å¢žåŠ æŒ‡å®šçš„å†œåŽ†çš„æœˆæ•°</summary>
 /// <params>
-/// <param name="ADate">µ±Ç°ÈÕÆÚ</param>
-/// <param name="ADelta">ÔöÁ¿</param>
+/// <param name="ADate">å½“å‰æ—¥æœŸ</param>
+/// <param name="ADelta">å¢žé‡</param>
 /// </params>
-/// <returns>·µ»ØÔö¼Ó»ò¼õÉÙ£¨¸ºÔöÁ¿£©µÄÔÂÊýºóµÄÅ©ÀúÈÕÆÚ</returns>
+/// <returns>è¿”å›žå¢žåŠ æˆ–å‡å°‘ï¼ˆè´Ÿå¢žé‡ï¼‰çš„æœˆæ•°åŽçš„å†œåŽ†æ—¥æœŸ</returns>
 function CnIncMonth(ADate: TCnDate; ADelta: Integer = 1): TCnDate;
-/// <summary>Ôö¼ÓÖ¸¶¨µÄÅ©ÀúµÄÌìÊý</summary>
+/// <summary>å¢žåŠ æŒ‡å®šçš„å†œåŽ†çš„å¤©æ•°</summary>
 /// <params>
-/// <param name="ADate">µ±Ç°ÈÕÆÚ</param>
-/// <param name="ADelta">ÔöÁ¿</param>
+/// <param name="ADate">å½“å‰æ—¥æœŸ</param>
+/// <param name="ADelta">å¢žé‡</param>
 /// </params>
-/// <returns>·µ»ØÔö¼Ó»ò¼õÉÙ£¨¸ºÔöÁ¿£©µÄÔÂÊýºóµÄÅ©ÀúÈÕÆÚ</returns>
+/// <returns>è¿”å›žå¢žåŠ æˆ–å‡å°‘ï¼ˆè´Ÿå¢žé‡ï¼‰çš„æœˆæ•°åŽçš„å†œåŽ†æ—¥æœŸ</returns>
 function CnIncDay(ADate: TCnDate; ADelta: Integer = 1): TCnDate;
 
 implementation
@@ -227,21 +227,21 @@ implementation
 uses math, dateutils;
 
 const
-  // Å©ÀúÔÂ·ÝÊý¾Ý£¬Ã¿Äê4×Ö½Ú£¬´Ó1901Äê¿ªÊ¼£¬¹²150Äê
-  // Êý¾ÝÀ´Ô´£ºUCDOS 6.0 UCT.COM
-  // ·ÖÎöÕûÀí£ºCopyright (c) 1996-1998, Randolph
-  // Êý¾Ý½âÎö£º
-  // Èç¹ûµÚÒ»×Ö½ÚµÄbit7Îª1£¬Ôò¸ÃÄê1ÔÂ1ÈÕÎ»ÓÚÅ©Àú12ÔÂ£¬·ñÔòÎ»ÓÚ11ÔÂ
-  // µÚÒ»×Ö½ÚÈ¥³ýbit7Îª¸ÃÄê1ÔÂ1ÈÕµÄÅ©ÀúÈÕÆÚ
-  // µÚ¶þ×Ö½Ú                 µÚÈý×Ö½Ú
+  // å†œåŽ†æœˆä»½æ•°æ®ï¼Œæ¯å¹´4å­—èŠ‚ï¼Œä»Ž1901å¹´å¼€å§‹ï¼Œå…±150å¹´
+  // æ•°æ®æ¥æºï¼šUCDOS 6.0 UCT.COM
+  // åˆ†æžæ•´ç†ï¼šCopyright (c) 1996-1998, Randolph
+  // æ•°æ®è§£æžï¼š
+  // å¦‚æžœç¬¬ä¸€å­—èŠ‚çš„bit7ä¸º1ï¼Œåˆ™è¯¥å¹´1æœˆ1æ—¥ä½äºŽå†œåŽ†12æœˆï¼Œå¦åˆ™ä½äºŽ11æœˆ
+  // ç¬¬ä¸€å­—èŠ‚åŽ»é™¤bit7ä¸ºè¯¥å¹´1æœˆ1æ—¥çš„å†œåŽ†æ—¥æœŸ
+  // ç¬¬äºŒå­—èŠ‚                 ç¬¬ä¸‰å­—èŠ‚
   // bit:     7  6  5  4  3  2  1  0   7  6  5  4  3  2  1  0
-  // Å©ÀúÔÂ·Ý:16 15 14 13 12 11 10 9   8  7  6  5  4  3  2  1
-  // Å©ÀúÔÂ·ÝÖ¸µÄÊÇ´Ó¸ÃÄê1ÔÂ1ÈÕµÄÅ©ÀúÔÂ·ÝËãÆðµÄË³ÐòºÅ
-  // Å©ÀúÔÂ·Ý¶ÔÓ¦µÄbitÎª1Ôò¸ÃÔÂÎª30ÈÕ£¬·ñÔòÎª29ÈÕ
-  // µÚËÄ×Ö½ÚÎªÈòÔÂÔÂ·Ý
-  // BaseDate='2000/02/04';//2000Á¢´º
-  BaseAnimalDate  = 1972; // 1972ÄêÖ§Îª×Ó(ÊÇÊóÄê)
-  BaseSkyStemDate = 1974; // 1974Äê¸ÉÎª¼×
+  // å†œåŽ†æœˆä»½:16 15 14 13 12 11 10 9   8  7  6  5  4  3  2  1
+  // å†œåŽ†æœˆä»½æŒ‡çš„æ˜¯ä»Žè¯¥å¹´1æœˆ1æ—¥çš„å†œåŽ†æœˆä»½ç®—èµ·çš„é¡ºåºå·
+  // å†œåŽ†æœˆä»½å¯¹åº”çš„bitä¸º1åˆ™è¯¥æœˆä¸º30æ—¥ï¼Œå¦åˆ™ä¸º29æ—¥
+  // ç¬¬å››å­—èŠ‚ä¸ºé—°æœˆæœˆä»½
+  // BaseDate='2000/02/04';//2000ç«‹æ˜¥
+  BaseAnimalDate  = 1972; // 1972å¹´æ”¯ä¸ºå­(æ˜¯é¼ å¹´)
+  BaseSkyStemDate = 1974; // 1974å¹´å¹²ä¸ºç”²
   START_YEAR      = 1901;
   END_YEAR        = 2050;
 
@@ -442,23 +442,23 @@ const
 function CnDate(Y: Word; M, D: Shortint): TCnDate;
 begin
 if (Y < 1901) or (Y > 2050) then
-  raise EConvertError.CreateFmt('Å©ÀúÄê·Ý·¶Î§ÎÞÐ§£¬Ö»Ö§³Ö 1901-2050 Äê¼äµÄÅ©Àú·¶Î§¡£', [Y]);
+  raise EConvertError.CreateFmt('å†œåŽ†å¹´ä»½èŒƒå›´æ— æ•ˆï¼Œåªæ”¯æŒ 1901-2050 å¹´é—´çš„å†œåŽ†èŒƒå›´ã€‚', [Y]);
 if (M > 12) or (M = 0) or (M < -12) then
-  raise EConvertError.CreateFmt('Å©ÀúÔÂ·Ý·¶Î§ÎÞÐ§£¬Ö»Ö§³Ö -12~-1,1-12 Ö®¼äµÄÓÐÐ§Öµ¡£', [M]);
+  raise EConvertError.CreateFmt('å†œåŽ†æœˆä»½èŒƒå›´æ— æ•ˆï¼Œåªæ”¯æŒ -12~-1,1-12 ä¹‹é—´çš„æœ‰æ•ˆå€¼ã€‚', [M]);
 if (D < 1) or (D > 30) then
-  raise EConvertError.CreateFmt('Å©ÀúÈÕÖµ·¶Î§ÎÞÐ§£¬Ö»Ö§³Ö 1-30 Ö®¼äµÄÓÐÐ§Öµ¡£', [M]);
+  raise EConvertError.CreateFmt('å†œåŽ†æ—¥å€¼èŒƒå›´æ— æ•ˆï¼Œåªæ”¯æŒ 1-30 ä¹‹é—´çš„æœ‰æ•ˆå€¼ã€‚', [M]);
 Result.Year := Y;
 Result.Day := CnMonthDays(Y, M);
 if Result.Day = 0 then
-  raise Exception.CreateFmt('Ö¸¶¨µÄÄê·Ý %d ²»´æÔÚ %s ÔÂ', [Y, CnMonthName(M)]);
+  raise Exception.CreateFmt('æŒ‡å®šçš„å¹´ä»½ %d ä¸å­˜åœ¨ %s æœˆ', [Y, CnMonthName(M)]);
 Result.Month := M;
 if Byte(D) > Result.Day then
-  raise Exception.CreateFmt('Ö¸¶¨µÄ %d Äê %s ÔÂ %d ÈÕÎÞÐ§£¬¸ÃÔÂÖ»ÓÐ %d Ìì',
+  raise Exception.CreateFmt('æŒ‡å®šçš„ %d å¹´ %s æœˆ %d æ—¥æ— æ•ˆï¼Œè¯¥æœˆåªæœ‰ %d å¤©',
     [Y, CnMonthName(M), Result.Day]);
 Result.Day := D;
 end;
 
-// ÈÕÆÚÊÇ¸ÃÄêµÄµÚ¼¸Ìì£¬1ÔÂ1ÈÕÎªµÚÒ»Ìì
+// æ—¥æœŸæ˜¯è¯¥å¹´çš„ç¬¬å‡ å¤©ï¼Œ1æœˆ1æ—¥ä¸ºç¬¬ä¸€å¤©
 function DaysNumberOfDate(yyyy, mm, dd: Word): Integer; overload;
 var
   I: Integer;
@@ -517,7 +517,7 @@ for I := 15 downto 0 do
     CnMonth[15 - I + 1] := -LeapMonth
   else
     begin
-    if CnMonth[15 - I] < 0 then // ÉÏÔÂÎªÈòÔÂ
+    if CnMonth[15 - I] < 0 then // ä¸Šæœˆä¸ºé—°æœˆ
       CnMonth[15 - I + 1] := -CnMonth[15 - I] + 1
     else
       CnMonth[15 - I + 1] := CnMonth[15 - I] + 1;
@@ -528,7 +528,7 @@ for I := 15 downto 0 do
 I := 0;
 while I < 16 do
   begin
-  if CnMonth[I] = 1 then // 1ÔÂ
+  if CnMonth[I] = 1 then // 1æœˆ
     begin
     while I < 16 do
       begin
@@ -582,7 +582,7 @@ for I := 15 downto 0 do
     CnMonth[15 - I + 1] := -LeapMonth
   else
     begin
-    if CnMonth[15 - I] < 0 then // ÉÏÔÂÎªÈòÔÂ
+    if CnMonth[15 - I] < 0 then // ä¸Šæœˆä¸ºé—°æœˆ
       CnMonth[15 - I + 1] := -CnMonth[15 - I] + 1
     else
       CnMonth[15 - I + 1] := CnMonth[15 - I] + 1;
@@ -680,7 +680,7 @@ end;
 function CnMonthName(ADate: TCnDate): String;
 begin
 if ADate.Month < 0 then
-  Result := 'Èò' + CnMonthNames[-ADate.Month]
+  Result := 'é—°' + CnMonthNames[-ADate.Month]
 else
   Result := CnMonthNames[ADate.Month]
 end;
@@ -825,7 +825,7 @@ var
 begin
 Inc(ADate.Year, ADelta);
 if (ADate.Year < 1901) or (ADate.Year > 2050) then
-  raise Exception.Create('Ö¸¶¨µÄÄê·Ý·¶Î§Ô½½ç£¬Å©ÀúÖ»Ö§³Ö 1901-2050Äê·¶Î§¡£');
+  raise Exception.Create('æŒ‡å®šçš„å¹´ä»½èŒƒå›´è¶Šç•Œï¼Œå†œåŽ†åªæ”¯æŒ 1901-2050å¹´èŒƒå›´ã€‚');
 Result.Year := ADate.Year;
 if ADate.Month < 0 then
   Result.Month := -ADate.Month
@@ -835,7 +835,7 @@ Days := CnMonthDays(Result.Year, Result.Month);
 if ADate.Day <= Days then
   Result.Day := ADate.Day
 else
-  raise Exception.CreateFmt('±àÂëÈÕÆÚÊ±³ö´í£¬ÎÞ·¨»ñÈ¡ %d Äê %s ÔÂµÄÌìÊý¡£',
+  raise Exception.CreateFmt('ç¼–ç æ—¥æœŸæ—¶å‡ºé”™ï¼Œæ— æ³•èŽ·å– %d å¹´ %s æœˆçš„å¤©æ•°ã€‚',
     [Result.Year, CnMonthName(Result.Month)]);
 end;
 

@@ -1,4 +1,4 @@
-// ***************************************************************************
+ï»¿// ***************************************************************************
 //
 // FMXComponents: Firemonkey Opensource Components Set from China
 //
@@ -9,8 +9,8 @@
 // arrange by the author's agreement
 // The original project at: https://github.com/xubzhlin/FMX-UI-Controls
 //
-// ¸Ã¿Ø¼şÀ´×Ô xubzhlinµÄFMX-UI-ControlsÏîÄ¿£¬¾­×÷ÕßÍ¬Òâ½øĞĞÊÕ¼¯ÕûÀí
-// Ô­ÏîÄ¿µØÖ·Îª£ºhttps://github.com/xubzhlin/FMX-UI-Controls
+// è¯¥æ§ä»¶æ¥è‡ª xubzhlinçš„FMX-UI-Controlsé¡¹ç›®ï¼Œç»ä½œè€…åŒæ„è¿›è¡Œæ”¶é›†æ•´ç†
+// åŸé¡¹ç›®åœ°å€ä¸ºï¼šhttps://github.com/xubzhlin/FMX-UI-Controls
 //
 //  https://github.com/zhaoyipeng/FMXComponents
 //
@@ -40,21 +40,29 @@
 //    fixed FWeekLayout and FCalenderView stored problem
 // 2017-09-11, v0.2.0.0 :
 //    add lunar date option
+// 2017-09-11, v0.3.0.0 :
+//    fixed the bug when EndData's month is December
+//    add set month names method
 
 unit FMX.CalendarControl;
 
 interface
 
 uses
-  System.Classes, System.SysUtils, System.Types, System.UITypes, System.DateUtils, FMX.Platform, FMX.Controls, FMX.Layouts, FMX.Types, FMX.Calendar, FMX.ListView, FMX.ListView.Types, FMX.CalendarItemAppearance;
+  System.Classes, System.SysUtils, System.Types, System.UITypes,
+  System.DateUtils, FMX.Platform, FMX.Controls, FMX.Layouts,
+  FMX.Types, FMX.Calendar, FMX.ListView, FMX.ListView.Types,
+  FMX.CalendarItemAppearance;
+
+type
+  TMonthNames = array [1..12] of string;
 
 const
-  TWeeks: array [0 .. 6] of string = ('ÈÕ', 'Ò»', '¶ş', 'Èı', 'ËÄ',
-    'Îå', 'Áù');
-    (*
-  TMonths: array [1 .. 12] of string = ('Ò»ÔÂ', '¶şÔÂ', 'ÈıÔÂ', 'ËÄÔÂ', 'ÎåÔÂ', 'ÁùÔÂ',
-    'ÆßÔÂ', '°ËÔÂ', '¾ÅÔÂ', 'Ê®ÔÂ', 'Ê®Ò»ÔÂ', 'Ê®¶şÔÂ'); *)
-  TMonths: array [1 .. 12] of String = (
+  TWeeks: array [0 .. 6] of string = ('æ—¥', 'ä¸€', 'äºŒ', 'ä¸‰', 'å››',
+    'äº”', 'å…­');
+  TCnMonths: TMonthNames = ('ä¸€æœˆ', 'äºŒæœˆ', 'ä¸‰æœˆ', 'å››æœˆ', 'äº”æœˆ', 'å…­æœˆ',
+    'ä¸ƒæœˆ', 'å…«æœˆ', 'ä¹æœˆ', 'åæœˆ', 'åä¸€æœˆ', 'åäºŒæœˆ');
+  TEnMonths: TMonthNames = (
     'January',
     'February',
     'March',
@@ -75,7 +83,6 @@ type
   protected
     procedure Paint; override;
   end;
-
   TFMXCalendarControl = class(TControl)
   private
     FFirstDayOfWeekNum:Integer;
@@ -92,6 +99,7 @@ type
     FStartDate: TDate;
     FEndDate: TDate;
     FIsShowLunarDate: Boolean;
+    FMonthNames: array [1..12] of string;
 
     procedure SetSelectedDate(const Value: TDate);
     function DefineItemIndexOfFirstDayInMonth(ADate:TDate):Integer;
@@ -101,7 +109,7 @@ type
     procedure DoCalenderViewItemClickEx(const Sender: TObject; ItemIndex: Integer; const LocalClickPos: TPointF; const ItemObject: TListItemDrawable);
     procedure DoGetItemIsMark(ADayItem:TClendarDayItem; var AIsMark:Boolean);
     function GetSelectedDate: TDate;
-    function CheckDateChnaged(NewValue, OldValue:TDate; IsStartDate:Boolean = True):Boolean;
+    function CheckDateChanged(NewValue, OldValue:TDate; IsStartDate:Boolean = True):Boolean;
     procedure SetEndDate(const Value: TDate);
     procedure SetStartDate(const Value: TDate);
     procedure SetIsShowLunarDate(const Value: Boolean);
@@ -110,6 +118,7 @@ type
     procedure Paint; override;
   public
     constructor Create(AOwner: TComponent); override;
+    procedure SetMonthNames(const Names: TMonthNames; IsRepaint: Boolean = True);
   published
     property Align;
     property Anchors;
@@ -172,7 +181,7 @@ end;
 
 { TCalendarControl }
 
-function TFMXCalendarControl.CheckDateChnaged(NewValue, OldValue: TDate; IsStartDate:Boolean = True): Boolean;
+function TFMXCalendarControl.CheckDateChanged(NewValue, OldValue: TDate; IsStartDate:Boolean = True): Boolean;
 begin
   if (MonthOf(NewValue)<MonthOf(OldValue)) and IsStartDate then
     Result:=True
@@ -188,7 +197,8 @@ var
   LocaleService:IFMXLocaleService;
 begin
   inherited;
-  //Ä¬ÈÏ ×î½üÁ½¸öÔÂ
+  SetMonthNames(TCnMonths, False);
+  //é»˜è®¤ æœ€è¿‘ä¸¤ä¸ªæœˆ
   FStartDate := Now;
   FEndDate := IncMonth(Now, 1);
 
@@ -261,7 +271,7 @@ procedure TFMXCalendarControl.DoCalenderViewMouseMove(Sender: TObject;
 begin
   if FIsClickDayItem then
   begin
-    // Æ«ÒÆÁË10 ÈÏÎª²»ÊÇµã»÷
+    // åç§»äº†10 è®¤ä¸ºä¸æ˜¯ç‚¹å‡»
     if (Abs(FAtPoint.X - X) > 10) or (Abs(FAtPoint.Y - Y) > 10) then
       FIsClickDayItem := False;
   end;
@@ -275,7 +285,7 @@ end;
 
 procedure TFMXCalendarControl.FillDays;
 var
-  FDate: TDate;
+  FDate, LastDate: TDate;
   First: Word;
   Year: Word;
   ItemIndex, NewIndex:Integer;
@@ -315,7 +325,7 @@ var
   begin
     AYear := YearOf(ADate);
     //FillYear
-    if (Year=0) or (AYear<>Year) then
+    if (Year = 0) or (AYear <> Year) then
     begin
       Year:=AYear;
       AItem:=TClendarWeekListViewItem(FCalenderView.Items.Add);
@@ -323,17 +333,17 @@ var
       AItem.YearItem.Year := Year;
     end;
     AItem := TClendarWeekListViewItem(FCalenderView.Items.Add);
-    AItem.Text := TMonths[MonthOf(ADate)];
+    AItem.Text := FMonthNames[MonthOf(ADate)];
     First := DefineItemIndexOfFirstDayInMonth(ADate);
-    case (First + FFirstDayOfWeekNum) mod 7 of
-      0: AItem.Objects.TextObject.PlaceOffset.X := AItem.SunDayItem.PlaceOffset.X;
-      1: AItem.Objects.TextObject.PlaceOffset.X := AItem.MonDayItem.PlaceOffset.X;
-      2: AItem.Objects.TextObject.PlaceOffset.X := AItem.TurDayItem.PlaceOffset.X;
-      3: AItem.Objects.TextObject.PlaceOffset.X := AItem.WedDayItem.PlaceOffset.X;
-      4: AItem.Objects.TextObject.PlaceOffset.X := AItem.ThuDayItem.PlaceOffset.X;
-      5: AItem.Objects.TextObject.PlaceOffset.X := AItem.RuiDayItem.PlaceOffset.X;
-      6: AItem.Objects.TextObject.PlaceOffset.X := AItem.SatDayItem.PlaceOffset.X;
-    end;
+//    case (First + FFirstDayOfWeekNum) mod 7 of
+//      0: AItem.Objects.TextObject.PlaceOffset.X := AItem.SunDayItem.PlaceOffset.X;
+//      1: AItem.Objects.TextObject.PlaceOffset.X := AItem.MonDayItem.PlaceOffset.X;
+//      2: AItem.Objects.TextObject.PlaceOffset.X := AItem.TurDayItem.PlaceOffset.X;
+//      3: AItem.Objects.TextObject.PlaceOffset.X := AItem.WedDayItem.PlaceOffset.X;
+//      4: AItem.Objects.TextObject.PlaceOffset.X := AItem.ThuDayItem.PlaceOffset.X;
+//      5: AItem.Objects.TextObject.PlaceOffset.X := AItem.RuiDayItem.PlaceOffset.X;
+//      6: AItem.Objects.TextObject.PlaceOffset.X := AItem.SatDayItem.PlaceOffset.X;
+//    end;
     FillDaysOfMonth(ADate);
   end;
 begin
@@ -342,7 +352,8 @@ begin
   try
     Year:=0;
     FDate:=FStartDate;
-    while (FDate<FEndDate) or (MonthOf(FDate)<=MonthOf(FEndDate)) do
+
+    while (FDate<EndOfTheMonth(FEndDate)) do
     begin
       FillMonth(FDate);
       FDate := IncMonth(FDate);
@@ -372,7 +383,7 @@ end;
 
 procedure TFMXCalendarControl.SetEndDate(const Value: TDate);
 begin
-  if CheckDateChnaged(Value, FEndDate, False) then
+  if CheckDateChanged(Value, FEndDate, False) then
   begin
     FEndDate := Value;
     FNeedFillDays := True;
@@ -426,9 +437,25 @@ begin
   end;
 end;
 
+procedure TFMXCalendarControl.SetMonthNames(const Names: TMonthNames;
+  IsRepaint: Boolean);
+var
+  I: Integer;
+begin
+  for I := Low(Names) to High(Names) do
+  begin
+    FMonthNames[I] := Names[I];
+  end;
+  if IsRepaint then
+  begin
+    FNeedFillDays := True;
+    Repaint;
+  end;
+end;
+
 procedure TFMXCalendarControl.SetStartDate(const Value: TDate);
 begin
-  if CheckDateChnaged(Value, FStartDate, True) then
+  if CheckDateChanged(Value, FStartDate, True) then
   begin
     FStartDate := Value;
     FNeedFillDays := True;
