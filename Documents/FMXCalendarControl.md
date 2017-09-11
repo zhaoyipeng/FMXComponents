@@ -10,11 +10,20 @@ A calendar component like iOS style
 原项目地址为：https://github.com/xubzhlin/FMX-UI-Controls
 
 version history
+
 2017-09-01, v0.1.0.0 :
+
    first release
+   
    rename component to TFMXCalendarControl
+   
    add  properties Align, Anchors, ClipChildren, ClipParent, Cursor
+   
                    DragMode, EnableDragHighlight, Enabled, Height, HitTest
+                   
                    Locked, Padding, Opacity, Margins, PopupMenu, Position
+                   
                    RotationAngle, RotationCenter, Scale, Size, Visible, Width
+                   
    fixed FWeekLayout and FCalenderView stored problem
+   
