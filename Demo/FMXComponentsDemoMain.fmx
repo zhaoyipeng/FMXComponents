@@ -26,22 +26,22 @@ object FMXComponentsDemoForm: TFMXComponentsDemoForm
   object TabControl1: TTabControl
     Align = Client
     Size.Width = 320.000000000000000000
-    Size.Height = 523.000000000000000000
+    Size.Height = 462.000000000000000000
     Size.PlatformDefault = False
     TabIndex = 4
     TabOrder = 2
     TabPosition = Bottom
     Sizes = (
       320s
-      497s
+      436s
       320s
-      497s
+      436s
       320s
-      497s
+      436s
       320s
-      497s
+      436s
       320s
-      497s)
+      436s)
     object tabBasic: TTabItem
       CustomIcon = <
         item
@@ -58,7 +58,7 @@ object FMXComponentsDemoForm: TFMXComponentsDemoForm
       object Layout16: TLayout
         Align = Left
         Size.Width = 120.000000000000000000
-        Size.Height = 497.000000000000000000
+        Size.Height = 436.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 3
         object Layout3: TLayout
@@ -135,7 +135,7 @@ object FMXComponentsDemoForm: TFMXComponentsDemoForm
       object Layout4: TLayout
         Align = Client
         Size.Width = 119.000000000000000000
-        Size.Height = 497.000000000000000000
+        Size.Height = 436.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 4
         object Layout5: TLayout
@@ -208,7 +208,7 @@ object FMXComponentsDemoForm: TFMXComponentsDemoForm
         Align = Left
         Position.X = 120.000000000000000000
         Size.Width = 81.000000000000000000
-        Size.Height = 497.000000000000000000
+        Size.Height = 436.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 5
         object Layout2: TLayout
@@ -8050,7 +8050,7 @@ object FMXComponentsDemoForm: TFMXComponentsDemoForm
       object Layout1: TLayout
         Align = Client
         Size.Width = 320.000000000000000000
-        Size.Height = 397.000000000000000000
+        Size.Height = 336.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 0
         object FMXSimpleBBCodeText1: TFMXSimpleBBCodeText
@@ -8165,13 +8165,29 @@ object FMXComponentsDemoForm: TFMXComponentsDemoForm
       object FMXCalendarControl1: TFMXCalendarControl
         Align = Client
         Size.Width = 320.000000000000000000
-        Size.Height = 497.000000000000000000
+        Size.Height = 436.000000000000000000
         Size.PlatformDefault = False
-        StartData = 42989.471784224540000000
-        EndData = 43019.471784224540000000
+        StartData = 42989.619973055550000000
+        EndData = 43019.619973055550000000
         FirstDayOfWeek = 7
         SelectedDate = 42989.000000000000000000
+        IsShowLunarDate = False
       end
+    end
+  end
+  object Layout7: TLayout
+    Align = Top
+    Position.Y = 44.000000000000000000
+    Size.Width = 320.000000000000000000
+    Size.Height = 61.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 5
+    object chkShowLunarDate: TCheckBox
+      Position.X = 24.000000000000000000
+      Position.Y = 24.000000000000000000
+      TabOrder = 0
+      Text = #26174#31034#20892#21382
+      OnChange = chkShowLunarDateChange
     end
   end
   object BindingsList1: TBindingsList

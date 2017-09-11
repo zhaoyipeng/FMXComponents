@@ -59,6 +59,8 @@ type
     lblPassword: TLabel;
     tabCalendarControl: TTabItem;
     FMXCalendarControl1: TFMXCalendarControl;
+    Layout7: TLayout;
+    chkShowLunarDate: TCheckBox;
     procedure FMXScrollableList2Change(Sender: TObject);
     procedure FMXScrollableList1Change(Sender: TObject);
     procedure btnAnimationClick(Sender: TObject);
@@ -69,6 +71,7 @@ type
     procedure Memo1Change(Sender: TObject);
     procedure FMXGesturePassword1EnterCompleteEvent(Sender: TObject;
       const APassword: string);
+    procedure chkShowLunarDateChange(Sender: TObject);
   private
     { Private declarations }
     FSelection1: TOneSelection;
@@ -87,6 +90,11 @@ procedure TFMXComponentsDemoForm.btnAnimationClick(Sender: TObject);
 begin
   FloatAnimation1.Start;
   FloatAnimation2.Start;
+end;
+
+procedure TFMXComponentsDemoForm.chkShowLunarDateChange(Sender: TObject);
+begin
+  FMXCalendarControl1.IsShowLunarDate := chkShowLunarDate.IsChecked;
 end;
 
 procedure TFMXComponentsDemoForm.FMXGesturePassword1EnterCompleteEvent(

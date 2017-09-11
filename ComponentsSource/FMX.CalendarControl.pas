@@ -30,7 +30,7 @@
 //
 // *************************************************************************** }
 // version history
-// 2017-09-01, v0.1.0.0 :
+// 2017-09-11, v0.1.0.0 :
 //    first release
 //    rename component to TFMXCalendarControl
 //    add  properties Align, Anchors, ClipChildren, ClipParent, Cursor
@@ -38,6 +38,8 @@
 //                    Locked, Padding, Opacity, Margins, PopupMenu, Position
 //                    RotationAngle, RotationCenter, Scale, Size, Visible, Width
 //    fixed FWeekLayout and FCalenderView stored problem
+// 2017-09-11, v0.2.0.0 :
+//    add lunar date option
 
 unit FMX.CalendarControl;
 
@@ -89,9 +91,9 @@ type
     FNeedFillDays:Boolean;
     FStartDate: TDate;
     FEndDate: TDate;
+    FIsShowLunarDate: Boolean;
 
     procedure SetSelectedDate(const Value: TDate);
-    function GetModel: TCalendarModel;
     function DefineItemIndexOfFirstDayInMonth(ADate:TDate):Integer;
     procedure FillDays;
     procedure DoCalenderViewMouseDown(Sender:TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Single);
@@ -102,11 +104,12 @@ type
     function CheckDateChnaged(NewValue, OldValue:TDate; IsStartDate:Boolean = True):Boolean;
     procedure SetEndDate(const Value: TDate);
     procedure SetStartDate(const Value: TDate);
+    procedure SetIsShowLunarDate(const Value: Boolean);
+    procedure SetFirstDayOfWeekNum(const Value: Integer);
   protected
     procedure Paint; override;
   public
     constructor Create(AOwner: TComponent); override;
-    destructor Destroy; override;
   published
     property Align;
     property Anchors;
@@ -132,8 +135,9 @@ type
     property Width;
     property StartData:TDate read FStartDate write SetStartDate;
     property EndData:TDate read FEndDate write SetEndDate;
-    property FirstDayOfWeek:Integer read FFirstDayOfWeekNum write FFirstDayOfWeekNum;
+    property FirstDayOfWeek:Integer read FFirstDayOfWeekNum write SetFirstDayOfWeekNum;
     property SelectedDate:TDate read GetSelectedDate write SetSelectedDate;
+    property IsShowLunarDate: Boolean read FIsShowLunarDate write SetIsShowLunarDate default true;
     property OnGetItemIsMark:TOnGetItemIsMark read FOnGetItemIsMark write FOnGetItemIsMark;
     property OnSelectedItem:TNotifyEvent read FOnSelectedItem write FOnSelectedItem;
   end;
@@ -185,36 +189,36 @@ var
 begin
   inherited;
   //默认 最近两个月
-  FStartDate:=Now;
-  FEndDate:=IncMonth(Now, 1);
+  FStartDate := Now;
+  FEndDate := IncMonth(Now, 1);
 
-  FSelectedItem:=nil;
+  FSelectedItem := nil;
 
   if TPlatformServices.Current.SupportsPlatformService(IFMXLocaleService, LocaleService) then
     FFirstDayOfWeekNum := LocaleService.GetFirstWeekday
   else
     FFirstDayOfWeekNum := DayMonday;
 
-  FWeekLayout:=TWeekLayout.Create(Self);
-  FWeekLayout.Height:=28;
-  FWeekLayout.Parent:=Self;
+  FWeekLayout := TWeekLayout.Create(Self);
+  FWeekLayout.Height := 28;
   FWeekLayout.Stored := False;
-  FWeekLayout.Align:=TAlignLayout.Top;
+  FWeekLayout.Align := TAlignLayout.Top;
+  FWeekLayout.Parent := Self;
 
-  FCalenderView:=TCalenderView.Create(Self);
+  FCalenderView := TCalenderView.Create(Self);
   FCalenderView.Stored := False;
-  FCalenderView.Parent:=Self;
-  FCalenderView.Align:=TAlignLayout.Client;
-  FCalenderView.OnMouseDown:=DoCalenderViewMouseDown;
-  FCalenderView.OnMouseMove:=DoCalenderViewMouseMove;
-  FCalenderView.OnItemClickEx:=DoCalenderViewItemClickEx;
-  FCalenderView.OnGetItemIsMark:=DoGetItemIsMark;
-  FCalenderView.ItemAppearanceName:='ClendarDayListItem';
-  FCalenderView.CanSwipeDelete:=False;
-  FCalenderView.ShowSelection:=False;
+  FCalenderView.Align := TAlignLayout.Client;
+  FCalenderView.OnMouseDown := DoCalenderViewMouseDown;
+  FCalenderView.OnMouseMove := DoCalenderViewMouseMove;
+  FCalenderView.OnItemClickEx := DoCalenderViewItemClickEx;
+  FCalenderView.OnGetItemIsMark := DoGetItemIsMark;
+  FCalenderView.ItemAppearanceName := 'ClendarDayListItem';
+  FCalenderView.CanSwipeDelete := False;
+  FCalenderView.ShowSelection := False;
+  FCalenderView.Parent := Self;
 
-  FWeekLayout.Margins.Left:= FCalenderView.ItemSpaces.Left;
-  FWeekLayout.Margins.Right:= FCalenderView.ItemSpaces.Right;
+  FWeekLayout.Margins.Left := FCalenderView.ItemSpaces.Left;
+  FWeekLayout.Margins.Right := FCalenderView.ItemSpaces.Right;
 
   FNeedFillDays:=True;
 end;
@@ -229,14 +233,6 @@ begin
   Result := (Interval + DayOfTheWeek(BeginDate)) mod DaysPerWeek;
 end;
 
-destructor TFMXCalendarControl.Destroy;
-begin
-  FSelectedItem:=nil;
-  FWeekLayout.Free;
-  FCalenderView.Free;
-  inherited;
-end;
-
 procedure TFMXCalendarControl.DoCalenderViewItemClickEx(const Sender: TObject;
   ItemIndex: Integer; const LocalClickPos: TPointF;
   const ItemObject: TListItemDrawable);
@@ -244,10 +240,10 @@ begin
   if FIsClickDayItem and (ItemObject is TClendarDayItem) then
   begin
     if TClendarDayItem(ItemObject).Day = 0 then exit;
-    if FSelectedItem<>nil then
-      FSelectedItem.IsSelected:=False;
-    FSelectedItem:=TClendarDayItem(ItemObject);
-    FSelectedItem.IsSelected:=True;
+    if FSelectedItem <> nil then
+      FSelectedItem.IsSelected := False;
+    FSelectedItem := TClendarDayItem(ItemObject);
+    FSelectedItem.IsSelected := True;
     if Assigned(FOnSelectedItem) then
       FOnSelectedItem(FSelectedItem);
   end;
@@ -279,9 +275,9 @@ end;
 
 procedure TFMXCalendarControl.FillDays;
 var
-  FDate:TDate;
+  FDate: TDate;
   First: Word;
-  Year:Word;
+  Year: Word;
   ItemIndex, NewIndex:Integer;
   AItem:TClendarWeekListViewItem;
   procedure FillDaysOfMonth(ADate:TDate);
@@ -291,25 +287,25 @@ var
     I: Word;
   begin
     //FillMonth
-    ItemIndex:= -1;
+    ItemIndex := -1;
     DaysInMonthTmp := DaysInMonth(ADate);
     for I := First to First + DaysInMonthTmp - 1 do
     begin
-      NewIndex:= i div 7;
-      if NewIndex>ItemIndex then
+      NewIndex := i div 7;
+      if NewIndex > ItemIndex then
       begin
-        AItem:=TClendarWeekListViewItem(FCalenderView.Items.Add);
-        ItemIndex:= NewIndex;
+        AItem := TClendarWeekListViewItem(FCalenderView.Items.Add);
+        ItemIndex := NewIndex;
       end;
       Day:= I - First + 1;
       case (i+FFirstDayOfWeekNum) mod 7 of
-        0:AItem.SunDayItem.Day:= Trunc(RecodeDay(ADate, Day));
-        1:AItem.MonDayItem.Day:= Trunc(RecodeDay(ADate, Day));
-        2:AItem.TurDayItem.Day:= Trunc(RecodeDay(ADate, Day));
-        3:AItem.WedDayItem.Day:= Trunc(RecodeDay(ADate, Day));
-        4:AItem.ThuDayItem.Day:= Trunc(RecodeDay(ADate, Day));
-        5:AItem.RuiDayItem.Day:= Trunc(RecodeDay(ADate, Day));
-        6:AItem.SatDayItem.Day:= Trunc(RecodeDay(ADate, Day));
+        0: AItem.SunDayItem.Day := Trunc(RecodeDay(ADate, Day));
+        1: AItem.MonDayItem.Day := Trunc(RecodeDay(ADate, Day));
+        2: AItem.TurDayItem.Day := Trunc(RecodeDay(ADate, Day));
+        3: AItem.WedDayItem.Day := Trunc(RecodeDay(ADate, Day));
+        4: AItem.ThuDayItem.Day := Trunc(RecodeDay(ADate, Day));
+        5: AItem.RuiDayItem.Day := Trunc(RecodeDay(ADate, Day));
+        6: AItem.SatDayItem.Day := Trunc(RecodeDay(ADate, Day));
       end;
     end;
   end;
@@ -317,26 +313,26 @@ var
   var
     AYear:Word;
   begin
-    AYear:=YearOf(ADate);
+    AYear := YearOf(ADate);
     //FillYear
     if (Year=0) or (AYear<>Year) then
     begin
       Year:=AYear;
       AItem:=TClendarWeekListViewItem(FCalenderView.Items.Add);
-      AItem.Height:=28;
-      AItem.YearItem.Year:=Year;
+      AItem.Height := 28;
+      AItem.YearItem.Year := Year;
     end;
-    AItem:=TClendarWeekListViewItem(FCalenderView.Items.Add);
-    AItem.Text:=TMonths[MonthOf(ADate)];
+    AItem := TClendarWeekListViewItem(FCalenderView.Items.Add);
+    AItem.Text := TMonths[MonthOf(ADate)];
     First := DefineItemIndexOfFirstDayInMonth(ADate);
-    case (First+FFirstDayOfWeekNum) mod 7 of
-      0:AItem.Objects.TextObject.PlaceOffset.X:=AItem.SunDayItem.PlaceOffset.X;
-      1:AItem.Objects.TextObject.PlaceOffset.X:=AItem.MonDayItem.PlaceOffset.X;
-      2:AItem.Objects.TextObject.PlaceOffset.X:=AItem.TurDayItem.PlaceOffset.X;
-      3:AItem.Objects.TextObject.PlaceOffset.X:=AItem.WedDayItem.PlaceOffset.X;
-      4:AItem.Objects.TextObject.PlaceOffset.X:=AItem.ThuDayItem.PlaceOffset.X;
-      5:AItem.Objects.TextObject.PlaceOffset.X:=AItem.RuiDayItem.PlaceOffset.X;
-      6:AItem.Objects.TextObject.PlaceOffset.X:=AItem.SatDayItem.PlaceOffset.X;
+    case (First + FFirstDayOfWeekNum) mod 7 of
+      0: AItem.Objects.TextObject.PlaceOffset.X := AItem.SunDayItem.PlaceOffset.X;
+      1: AItem.Objects.TextObject.PlaceOffset.X := AItem.MonDayItem.PlaceOffset.X;
+      2: AItem.Objects.TextObject.PlaceOffset.X := AItem.TurDayItem.PlaceOffset.X;
+      3: AItem.Objects.TextObject.PlaceOffset.X := AItem.WedDayItem.PlaceOffset.X;
+      4: AItem.Objects.TextObject.PlaceOffset.X := AItem.ThuDayItem.PlaceOffset.X;
+      5: AItem.Objects.TextObject.PlaceOffset.X := AItem.RuiDayItem.PlaceOffset.X;
+      6: AItem.Objects.TextObject.PlaceOffset.X := AItem.SatDayItem.PlaceOffset.X;
     end;
     FillDaysOfMonth(ADate);
   end;
@@ -346,26 +342,20 @@ begin
   try
     Year:=0;
     FDate:=FStartDate;
-    while (FDate<FEndDate) or (Monthof(FDate)<=Monthof(FEndDate)) do
+    while (FDate<FEndDate) or (MonthOf(FDate)<=MonthOf(FEndDate)) do
     begin
       FillMonth(FDate);
-      FDate:=IncMonth(FDate);
+      FDate := IncMonth(FDate);
     end;
   finally
     FCalenderView.EndUpdate;
   end;
 end;
 
-
-function TFMXCalendarControl.GetModel: TCalendarModel;
-begin
-
-end;
-
 function TFMXCalendarControl.GetSelectedDate: TDate;
 begin
   if FSelectedItem = nil then
-    Result:=Trunc(Now)
+    Result :=Trunc(Now)
   else
     Result:=FSelectedItem.Day;
 end;
@@ -375,7 +365,7 @@ begin
   if FNeedFillDays then
   begin
     FillDays;
-    FNeedFillDays:=False;
+    FNeedFillDays := False;
   end;
   inherited;
 end;
@@ -385,34 +375,54 @@ begin
   if CheckDateChnaged(Value, FEndDate, False) then
   begin
     FEndDate := Value;
-    FNeedFillDays:=True;
+    FNeedFillDays := True;
+    Repaint;
+  end;
+end;
+
+procedure TFMXCalendarControl.SetFirstDayOfWeekNum(const Value: Integer);
+begin
+  if FFirstDayOfWeekNum <> Value then
+  begin
+    FFirstDayOfWeekNum := Value;
+    FNeedFillDays := True;
+    Repaint;
   end;
 end;
 
 procedure TFMXCalendarControl.SetSelectedDate(const Value: TDate);
 var
-  i:integer;
-  AItem:TClendarWeekListViewItem;
-  LObject:TClendarDayItem;
+  i: Integer;
+  AItem: TClendarWeekListViewItem;
+  LObject: TClendarDayItem;
   NewDay:Int64;
 begin
   LObject:=nil;
   NewDay:=Trunc(Value);
-  if (FSelectedItem = nil) or (FSelectedItem.Day<>NewDay) then
+  if (FSelectedItem = nil) or (FSelectedItem.Day <> NewDay) then
   begin
-    if FSelectedItem <>nil then
-      FSelectedItem.IsSelected:=False;
-    for i := 0 to FCalenderView.Items.Count-1 do
+    if FSelectedItem <> nil then
+      FSelectedItem.IsSelected := False;
+    for i := 0 to FCalenderView.Items.Count - 1 do
     begin
-      AItem:=TClendarWeekListViewItem(FCalenderView.Items[i]);
-      LObject:=AItem.FindDayItem(NewDay);
-      if LObject<>nil then
+      AItem := TClendarWeekListViewItem(FCalenderView.Items[i]);
+      LObject := AItem.FindDayItem(NewDay);
+      if LObject <> nil then
       begin
-        FSelectedItem:=LObject;
-        FSelectedItem.IsSelected:=True;
+        FSelectedItem := LObject;
+        FSelectedItem.IsSelected := True;
         Break;
       end;
     end;
+  end;
+end;
+
+procedure TFMXCalendarControl.SetIsShowLunarDate(const Value: Boolean);
+begin
+  if FIsShowLunarDate <> Value then
+  begin
+    FIsShowLunarDate := Value;
+    Repaint;
   end;
 end;
 
@@ -421,7 +431,8 @@ begin
   if CheckDateChnaged(Value, FStartDate, True) then
   begin
     FStartDate := Value;
-    FNeedFillDays:=True;
+    FNeedFillDays := True;
+    Repaint;
   end;
 end;
 

@@ -18,7 +18,7 @@ version history
    rename component to TFMXCalendarControl
    
    add  properties Align, Anchors, ClipChildren, ClipParent, Cursor
-   
+                   
                    DragMode, EnableDragHighlight, Enabled, Height, HitTest
                    
                    Locked, Padding, Opacity, Margins, PopupMenu, Position
@@ -27,3 +27,6 @@ version history
                    
    fixed FWeekLayout and FCalenderView stored problem
    
+2017-09-11, v0.2.0.0 :
+
+   add lunar date option

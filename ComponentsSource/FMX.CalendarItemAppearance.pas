@@ -29,6 +29,11 @@
 // limitations under the License.
 //
 // *************************************************************************** }
+// 2017-09-11, v0.1.0.0 :
+//    first release
+// 2017-09-11, v0.2.0.0 :
+//    add lunar date display option
+//    add 24 solar terms
 unit FMX.CalendarItemAppearance;
 
 interface
@@ -64,13 +69,13 @@ type
     FIsPressed: Boolean;
     FIsSelected: Boolean;
     FDayText:String;
-    FDay: Int64;
+    FDay: TDate;
     FBitMap:TBitMap;
     function GetIsMark: Boolean;
-    procedure SetDay(const Value: Int64);
+    procedure SetDay(const Value: TDate);
     procedure SetIsPressed(const Value: Boolean);
     procedure SetIsSelected(const Value: Boolean);
-    procedure DoDrawBitMap(Canvas: TCanvas);
+    procedure DoDrawBitmap(Canvas: TCanvas);
   public
     procedure Render(const Canvas: TCanvas; const DrawItemIndex: Integer;
       const DrawStates: TListItemDrawStates;
@@ -81,7 +86,7 @@ type
   published
     property IsPressed: Boolean read FIsPressed write SetIsPressed;
     property IsSelected: Boolean read FIsSelected write SetIsSelected;
-    property Day: Int64 read FDay write SetDay;
+    property Day: TDate read FDay write SetDay;
   end;
 
   TClendarDayObjectAppearance = class(TCommonObjectAppearance)
@@ -151,7 +156,16 @@ type
 
 implementation
 
+uses
+  qcndate,
+  FMX.CalendarControl;
+
+
 type
+  TMyAppearanceListViewItems = class(TAppearanceListViewItems)
+
+  end;
+
   TClendarDayListItemAppearance = class(TPresetItemObjects)
   public const
     cDefaultHeight = 50;
@@ -197,7 +211,7 @@ type
 constructor TClendarDayItem.Create(const AOwner: TListItem);
 begin
   inherited;
-  FOwner:=TClendarWeekListViewItem(AOwner);
+  FOwner := TClendarWeekListViewItem(AOwner);
   FIsPressed := False;
   FIsSelected := False;
   FDay := 0;
@@ -210,23 +224,23 @@ begin
   inherited;
 end;
 
-procedure TClendarDayItem.DoDrawBitMap(Canvas: TCanvas);
+procedure TClendarDayItem.DoDrawBitmap(Canvas: TCanvas);
 var
   AtPoint1,AtPoint2:TPointF;
   Scale:Single;
 begin
-  if FBitMap=nil then
+  if FBitMap = nil then
   begin
-    Scale:=Canvas.Scale;
-    FBitMap:=TBitMap.Create(Trunc(LocalRect.Width*Scale),Trunc(LocalRect.Height*Scale));
+    Scale := Canvas.Scale;
+    FBitMap := TBitMap.Create(Trunc(LocalRect.Width * Scale), Trunc(LocalRect.Height * Scale));
     FBitMap.Clear(0);
-    AtPoint1:=TPointF.Create(0, 1);
-    AtPoint2:=TPointF.Create(FBitMap.Width, 1);
+    AtPoint1 := TPointF.Create(0, 1);
+    AtPoint2 := TPointF.Create(FBitMap.Width, 1);
 
     FBitMap.Canvas.BeginScene(nil);
-    FBitMap.Canvas.Stroke.Kind:=TBrushKind.Solid;
-    FBitMap.Canvas.Stroke.Color:= TAlphaColors.Cadetblue;
-    FBitMap.Canvas.Stroke.Thickness:=1;
+    FBitMap.Canvas.Stroke.Kind := TBrushKind.Solid;
+    FBitMap.Canvas.Stroke.Color := TAlphaColors.Cadetblue;
+    FBitMap.Canvas.Stroke.Thickness := 1;
     FBitMap.Canvas.DrawLine(AtPoint1, AtPoint2, 1);
     FBitMap.Canvas.EndScene;
   end;
@@ -248,50 +262,78 @@ var
   ARect:TRectF;
   TextColor, BackColor: TAlphaColor;
   AIsMark: Single;
-  CenterX:Single;
-  isNow, isMark:Boolean;
+  CenterX: Single;
+  isNow, isMark: Boolean;
+  LunarDateStr: string;
+  Calendar: TFMXCalendarControl;
+  Items: TAppearanceListViewItems;
+  d: TDate;
 begin
   if (SubPassNo <> 0) or (FDay = 0) then
     Exit;
-  DoDrawBitMap(Canvas);
-  //Draw Background
-  isNow:=False;
+  DoDrawBitmap(Canvas);
+  // Draw Background
+  isNow := False;
 
   if FDay < Trunc(Now) then
-    TextColor:=TAlphaColors.Gainsboro
+    TextColor := TAlphaColors.Gainsboro
   else
-  if FDay = Trunc(Now) then
+    if FDay = Trunc(Now) then
   begin
-    isNow:=True;
-    TextColor:=TAlphaColors.White;
-    BackColor:=TAlphaColors.Red;
+    isNow := True;
+    TextColor := TAlphaColors.White;
+    BackColor := TAlphaColors.Red;
   end
   else
-    TextColor:=TAlphaColors.Black;
+    TextColor := TAlphaColors.Black;
 
   if FIsSelected then
   begin
-    TextColor:=TAlphaColors.White;
+    TextColor := TAlphaColors.White;
     BackColor := TAlphaColors.Blue;
   end;
 
-  CenterX:=LocalRect.CenterPoint.X;
-  ARect:=TRectF.Create(0, 0 , 32, 32);
+  CenterX := LocalRect.CenterPoint.X;
+  ARect := TRectF.Create(0, 0, 32, 32);
   ARect.Offset(CenterX - 16, LocalRect.Top + 2);
-  if isNow or FIsSelected then
+
+  Items := TAppearanceListViewItems(Self.FOwner.Adapter);
+  Calendar := TMyAppearanceListViewItems(Items).OwnerControl.Owner as TFMXCalendarControl;
+
+  if Assigned(Calendar) and Calendar.IsShowLunarDate then
   begin
-    Canvas.Fill.Color:=BackColor;
-    Canvas.FillRect(ARect, 16, 16, AllCorners, 1, TCornerType.Round);
+    if isNow or FIsSelected then
+    begin
+      Canvas.Fill.Color := BackColor;
+      Canvas.FillRect(ARect, 0, 0, AllCorners, 1, TCornerType.Round);
+    end;
+    Canvas.Fill.Color := TextColor;
+    Canvas.FillText(ARect, FDayText, False, 1, [], TTextAlign.Center, TTextAlign.Leading);
+    LunarDateStr := CnSolarTermName(Self.Day);
+    if LunarDateStr.IsEmpty then
+    begin
+      LunarDateStr := CnDayName(Self.Day);
+    end;
+
+    Canvas.FillText(ARect, LunarDateStr, False, 1, [], TTextAlign.Center, TTextAlign.Trailing);
+  end
+  else
+  begin
+      if isNow or FIsSelected then
+    begin
+      Canvas.Fill.Color := BackColor;
+      Canvas.FillRect(ARect, 16, 16, AllCorners, 1, TCornerType.Round);
+    end;
+    Canvas.Fill.Color := TextColor;
+    Canvas.FillText(ARect, FDayText, False, 1, [], TTextAlign.Center, TTextAlign.Center);
   end;
-  Canvas.Fill.Color:=TextColor;
-  Canvas.FillText(ARect, FDayText, False, 1, [], TTextAlign.Center, TTextAlign.Center);
 
 
-  //±ê¼Ç
+  // ±ê¼Ç
   if GetIsMark then
   begin
-    Canvas.Fill.Color:=TAlphaColors.Gainsboro;
-    ARect:=TRectF.Create(0, 0 , 6, 6);
+    Canvas.Fill.Color := TAlphaColors.Gainsboro;
+    ARect := TRectF.Create(0, 0, 6, 6);
     ARect.Offset(CenterX - 3, LocalRect.Top + 40);
     Canvas.FillRect(ARect, 3, 3, AllCorners, 1, TCornerType.Round);
   end;
@@ -317,7 +359,7 @@ begin
 
 end;
 
-procedure TClendarDayItem.SetDay(const Value: Int64);
+procedure TClendarDayItem.SetDay(const Value: TDate);
 begin
   if FDay<>Value then
   begin

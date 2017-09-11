@@ -41,6 +41,7 @@ contains
   FMX.GesturePassword in 'FMX.GesturePassword.pas',
   FMX.RegComponents in 'FMX.RegComponents.pas',
   FMX.CalendarControl in 'FMX.CalendarControl.pas',
-  FMX.CalendarItemAppearance in 'FMX.CalendarItemAppearance.pas';
+  FMX.CalendarItemAppearance in 'FMX.CalendarItemAppearance.pas',
+  qcndate in 'qcndate.pas';
 
 end.
