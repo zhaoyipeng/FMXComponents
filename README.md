@@ -73,3 +73,9 @@ A Guesture Password input Control
 A calendar component like iOS style
 
 类似iOS风格的日期控件
+
+## 8.[百度地图SDK](BaiduMapSDK/README.md)
+
+### 感谢 xubzhlin 的捐献<br>
+BaiduMap SDK for Firemonkey<br>
+百度地图SDK

@@ -11,22 +11,14 @@ A calendar component like iOS style
 
 version history
 
-2017-09-01, v0.1.0.0 :
-
-   first release
+2017-09-01, v0.1.0.0 :<br>
+&nbsp;&nbsp;&nbsp;first release<br>
+&nbsp;&nbsp;&nbsp;rename component to TFMXCalendarControl<br>
+&nbsp;&nbsp;&nbsp;add  properties Align, Anchors, ClipChildren, ClipParent, Cursor<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DragMode, EnableDragHighlight, Enabled, Height, HitTest<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Locked, Padding, Opacity, Margins, PopupMenu, Position<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RotationAngle, RotationCenter, Scale, Size, Visible, Width<br>
+&nbsp;&nbsp;&nbsp;fixed FWeekLayout and FCalenderView stored problem
    
-   rename component to TFMXCalendarControl
-   
-   add  properties Align, Anchors, ClipChildren, ClipParent, Cursor
-                   
-                   DragMode, EnableDragHighlight, Enabled, Height, HitTest
-                   
-                   Locked, Padding, Opacity, Margins, PopupMenu, Position
-                   
-                   RotationAngle, RotationCenter, Scale, Size, Visible, Width
-                   
-   fixed FWeekLayout and FCalenderView stored problem
-   
-2017-09-11, v0.2.0.0 :
-
-   add lunar date option
+2017-09-11, v0.2.0.0 :<br>
+&nbsp;&nbsp;&nbsp;add lunar date option
