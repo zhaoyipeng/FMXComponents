@@ -34,6 +34,8 @@
 // 2017-09-11, v0.2.0.0 :
 //    add lunar date display option
 //    add 24 solar terms
+// 2017-09-11, v0.2.1.0 :
+//    small improve in render method
 unit FMX.CalendarItemAppearance;
 
 interface
@@ -162,10 +164,6 @@ uses
 
 
 type
-  TMyAppearanceListViewItems = class(TAppearanceListViewItems)
-
-  end;
-
   TClendarDayListItemAppearance = class(TPresetItemObjects)
   public const
     cDefaultHeight = 50;
@@ -266,7 +264,7 @@ var
   isNow, isMark: Boolean;
   LunarDateStr: string;
   Calendar: TFMXCalendarControl;
-  Items: TAppearanceListViewItems;
+  cv: TCalenderView;
   d: TDate;
 begin
   if (SubPassNo <> 0) or (FDay = 0) then
@@ -297,8 +295,8 @@ begin
   ARect := TRectF.Create(0, 0, 32, 32);
   ARect.Offset(CenterX - 16, LocalRect.Top + 2);
 
-  Items := TAppearanceListViewItems(Self.FOwner.Adapter);
-  Calendar := TMyAppearanceListViewItems(Items).OwnerControl.Owner as TFMXCalendarControl;
+  cv := Self.FOwner.Controller as TCalenderView;
+  Calendar := cv.Owner as TFMXCalendarControl;
 
   if Assigned(Calendar) and Calendar.IsShowLunarDate then
   begin
