@@ -39,6 +39,8 @@ contains
   FMX.ImageSlider in 'FMX.ImageSlider.pas',
   FMX.SimpleBBCodeText in 'FMX.SimpleBBCodeText.pas',
   FMX.GesturePassword in 'FMX.GesturePassword.pas',
-  FMX.RegComponents in 'FMX.RegComponents.pas';
+  FMX.RegComponents in 'FMX.RegComponents.pas',
+  FMX.CalendarControl in 'FMX.CalendarControl.pas',
+  FMX.CalendarItemAppearance in 'FMX.CalendarItemAppearance.pas';
 
 end.

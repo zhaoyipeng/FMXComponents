@@ -65,3 +65,11 @@ A Simple BBCode Text Display Control
 A Guesture Password input Control 
 
 手势密码输入控件
+
+## 7.[TFMXCalendarControl](Documents/FMXCalendarControl.md)
+
+![TFMXCalendarControl](SnapShots/FMXCalendarControl.gif)  
+
+A calendar component like iOS style
+
+类似iOS风格的日期控件

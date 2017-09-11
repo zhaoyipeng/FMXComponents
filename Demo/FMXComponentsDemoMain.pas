@@ -10,7 +10,7 @@ uses
   FMX.Ani, FMX.CircleScoreIndicator, FMX.TabControl, FMX.ImageSlider,
   FMX.ScrollBox, FMX.Memo, FMX.SimpleBBCodeText, ONE.Objects, Data.Bind.EngExt,
   Fmx.Bind.DBEngExt, System.Rtti, System.Bindings.Outputs, Fmx.Bind.Editors,
-  Data.Bind.Components, FMX.GesturePassword;
+  Data.Bind.Components, FMX.GesturePassword, FMX.CalendarControl;
 
 type
   TFMXComponentsDemoForm = class(TForm)
@@ -39,24 +39,26 @@ type
     FMXScrollableList3: TFMXScrollableList;
     Label3: TLabel;
     TabControl1: TTabControl;
-    Basic: TTabItem;
-    Slider: TTabItem;
+    tabBasic: TTabItem;
+    tabSlider: TTabItem;
     Image1: TImage;
     Image2: TImage;
     Image3: TImage;
     Image4: TImage;
     FMXImageSlider1: TFMXImageSlider;
     FloatAnimation3: TFloatAnimation;
-    BBCode: TTabItem;
+    tabBBCode: TTabItem;
     Memo1: TMemo;
     Layout1: TLayout;
     FMXSimpleBBCodeText1: TFMXSimpleBBCodeText;
     BindingsList1: TBindingsList;
-    TabItem1: TTabItem;
+    tabGesturePassword: TTabItem;
     Layout6: TLayout;
     FMXGesturePassword1: TFMXGesturePassword;
     lbl1: TLabel;
     lblPassword: TLabel;
+    tabCalendarControl: TTabItem;
+    FMXCalendarControl1: TFMXCalendarControl;
     procedure FMXScrollableList2Change(Sender: TObject);
     procedure FMXScrollableList1Change(Sender: TObject);
     procedure btnAnimationClick(Sender: TObject);

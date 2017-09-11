@@ -34,6 +34,7 @@ uses
   , FMX.ScrollableList
   , FMX.SimpleBBCodeText
   , FMX.GesturePassword
+  , FMX.CalendarControl
   ;
 
 procedure Register;
@@ -51,6 +52,7 @@ begin
   RegisterComponents(FMX_COMPONENTS_PALETTE, [TFMXScrollableList]);
   RegisterComponents(FMX_COMPONENTS_PALETTE, [TFMXSimpleBBCodeText]);
   RegisterComponents(FMX_COMPONENTS_PALETTE, [TFMXGesturePassword]);
+  RegisterComponents(FMX_COMPONENTS_PALETTE, [TFMXCalendarControl]);
 end;
 
 end.
