@@ -26,39 +26,39 @@ object FMXComponentsDemoForm: TFMXComponentsDemoForm
   object TabControl1: TTabControl
     Align = Client
     Size.Width = 337.000000000000000000
-    Size.Height = 462.000000000000000000
+    Size.Height = 523.000000000000000000
     Size.PlatformDefault = False
     TabIndex = 4
     TabOrder = 2
     TabPosition = Bottom
     Sizes = (
       337s
-      436s
+      497s
       337s
-      436s
+      497s
       337s
-      436s
+      497s
       337s
-      436s
+      497s
       337s
-      436s)
+      497s)
     object tabBasic: TTabItem
       CustomIcon = <
         item
         end>
       IsSelected = False
-      Size.Width = 64.000000000000000000
+      Size.Width = 47.000000000000000000
       Size.Height = 26.000000000000000000
       Size.PlatformDefault = False
       StyleLookup = ''
       TabOrder = 0
-      Text = 'tabBasic'
+      Text = 'Basic'
       ExplicitSize.cx = 69.000000000000000000
       ExplicitSize.cy = 26.000000000000000000
       object Layout16: TLayout
         Align = Left
         Size.Width = 120.000000000000000000
-        Size.Height = 436.000000000000000000
+        Size.Height = 497.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 3
         object Layout3: TLayout
@@ -135,7 +135,7 @@ object FMXComponentsDemoForm: TFMXComponentsDemoForm
       object Layout4: TLayout
         Align = Client
         Size.Width = 136.000000000000000000
-        Size.Height = 436.000000000000000000
+        Size.Height = 497.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 4
         object Layout5: TLayout
@@ -208,7 +208,7 @@ object FMXComponentsDemoForm: TFMXComponentsDemoForm
         Align = Left
         Position.X = 120.000000000000000000
         Size.Width = 81.000000000000000000
-        Size.Height = 436.000000000000000000
+        Size.Height = 497.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 5
         object Layout2: TLayout
@@ -310,7 +310,7 @@ object FMXComponentsDemoForm: TFMXComponentsDemoForm
           end>
         IsHealthy = False
         object FloatAnimation2: TFloatAnimation
-          Duration = 0.800000011920929000
+          Duration = 0.800000011920928900
           PropertyName = 'Value'
           StartValue = 0.000000000000000000
           StopValue = 75.000000000000000000
@@ -328,7 +328,7 @@ object FMXComponentsDemoForm: TFMXComponentsDemoForm
         Value = 3.500000000000000000
         Maximum = 5.000000000000000000
         object FloatAnimation1: TFloatAnimation
-          Duration = 0.800000011920929000
+          Duration = 0.800000011920928900
           PropertyName = 'Value'
           StartValue = 0.000000000000000000
           StopValue = 3.500000000000000000
@@ -340,12 +340,12 @@ object FMXComponentsDemoForm: TFMXComponentsDemoForm
         item
         end>
       IsSelected = False
-      Size.Width = 67.000000000000000000
+      Size.Width = 50.000000000000000000
       Size.Height = 26.000000000000000000
       Size.PlatformDefault = False
       StyleLookup = ''
       TabOrder = 0
-      Text = 'tabSlider'
+      Text = 'Slider'
       ExplicitSize.cx = 69.000000000000000000
       ExplicitSize.cy = 26.000000000000000000
       object Image1: TImage
@@ -8039,18 +8039,18 @@ object FMXComponentsDemoForm: TFMXComponentsDemoForm
         item
         end>
       IsSelected = False
-      Size.Width = 79.000000000000000000
+      Size.Width = 62.000000000000000000
       Size.Height = 26.000000000000000000
       Size.PlatformDefault = False
       StyleLookup = ''
       TabOrder = 0
-      Text = 'tabBBCode'
+      Text = 'BBCode'
       ExplicitSize.cx = 62.000000000000000000
       ExplicitSize.cy = 26.000000000000000000
       object Layout1: TLayout
         Align = Client
         Size.Width = 337.000000000000000000
-        Size.Height = 336.000000000000000000
+        Size.Height = 397.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 0
         object FMXSimpleBBCodeText1: TFMXSimpleBBCodeText
@@ -8162,57 +8162,94 @@ object FMXComponentsDemoForm: TFMXComponentsDemoForm
       Text = 'Calendar'
       ExplicitSize.cx = 67.000000000000000000
       ExplicitSize.cy = 26.000000000000000000
-      object FMXCalendarControl1: TFMXCalendarControl
+      object Rectangle1: TRectangle
         Align = Client
+        Fill.Color = xFFF0F0F0
         Size.Width = 337.000000000000000000
-        Size.Height = 436.000000000000000000
+        Size.Height = 497.000000000000000000
         Size.PlatformDefault = False
-        StartDate = 42990.383844363420000000
-        EndDate = 43020.422420370370000000
-        FirstDayOfWeek = 7
-        SelectedDate = 42990.000000000000000000
-        IsShowLunarDate = False
+        Stroke.Kind = None
+        object FMXCalendarControl1: TFMXCalendarControl
+          Align = Client
+          Size.Width = 337.000000000000000000
+          Size.Height = 364.000000000000000000
+          Size.PlatformDefault = False
+          StartDate = 42948.000000000000000000
+          EndDate = 43020.422420370370000000
+          FirstDayOfWeek = 7
+          SelectedDate = 42990.000000000000000000
+          IsShowLunarDate = False
+          OnSelectedItem = FMXCalendarControl1SelectedItem
+        end
+        object Layout7: TLayout
+          Align = Top
+          Size.Width = 337.000000000000000000
+          Size.Height = 61.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 1
+          object chkShowLunarDate: TCheckBox
+            Position.X = 24.000000000000000000
+            Position.Y = 24.000000000000000000
+            Size.Width = 97.000000000000000000
+            Size.Height = 19.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 0
+            Text = #26174#31034#20892#21382
+            OnChange = chkShowLunarDateChange
+          end
+          object rbCnMonths: TRadioButton
+            IsChecked = True
+            Position.X = 144.000000000000000000
+            Position.Y = 21.000000000000000000
+            Size.Width = 89.000000000000000000
+            Size.Height = 19.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 2
+            Text = #20013#25991#26376#20221
+            OnChange = rbCnMonthsChange
+          end
+          object rbEnMonths: TRadioButton
+            Tag = 1
+            Position.X = 240.000000000000000000
+            Position.Y = 21.000000000000000000
+            Size.Width = 89.000000000000000000
+            Size.Height = 19.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 1
+            Text = #33521#25991#26376#20221
+            OnChange = rbCnMonthsChange
+          end
+        end
+        object Rectangle2: TRectangle
+          Align = Bottom
+          Fill.Color = claWhite
+          Margins.Top = 8.000000000000000000
+          Position.Y = 433.000000000000000000
+          Size.Width = 337.000000000000000000
+          Size.Height = 64.000000000000000000
+          Size.PlatformDefault = False
+          Stroke.Kind = None
+          object txtCnDate1: TText
+            Position.X = 8.000000000000000000
+            Position.Y = 8.000000000000000000
+            Size.Width = 200.000000000000000000
+            Size.Height = 25.000000000000000000
+            Size.PlatformDefault = False
+            Text = #20892#21382#19971#26376#24319#20108
+            TextSettings.Font.Size = 16.000000000000000000
+            TextSettings.HorzAlign = Leading
+            object txtCnDate2: TText
+              Position.Y = 24.000000000000000000
+              Size.Width = 200.000000000000000000
+              Size.Height = 25.000000000000000000
+              Size.PlatformDefault = False
+              Text = #19969#37193#40481#24180' '#20057#37193#26376' '#22764#23493#26085
+              TextSettings.FontColor = claGray
+              TextSettings.HorzAlign = Leading
+            end
+          end
+        end
       end
-    end
-  end
-  object Layout7: TLayout
-    Align = Top
-    Position.Y = 44.000000000000000000
-    Size.Width = 337.000000000000000000
-    Size.Height = 61.000000000000000000
-    Size.PlatformDefault = False
-    TabOrder = 5
-    object chkShowLunarDate: TCheckBox
-      Position.X = 24.000000000000000000
-      Position.Y = 24.000000000000000000
-      Size.Width = 97.000000000000000000
-      Size.Height = 19.000000000000000000
-      Size.PlatformDefault = False
-      TabOrder = 0
-      Text = #26174#31034#20892#21382
-      OnChange = chkShowLunarDateChange
-    end
-    object rbCnMonths: TRadioButton
-      IsChecked = True
-      Position.X = 144.000000000000000000
-      Position.Y = 21.000000000000000000
-      Size.Width = 89.000000000000000000
-      Size.Height = 19.000000000000000000
-      Size.PlatformDefault = False
-      TabOrder = 2
-      Text = #20013#25991#26376#20221
-      OnChange = rbCnMonthsChange
-    end
-    object rbEnMonths: TRadioButton
-      Tag = 1
-      Position.X = 240.000000000000000000
-      Position.Y = 21.000000000000000000
-      Size.Width = 89.000000000000000000
-      Size.Height = 19.000000000000000000
-      Size.PlatformDefault = False
-      TabOrder = 1
-      Text = #33521#25991#26376#20221
-      OnChange = rbCnMonthsChange
     end
   end
 end

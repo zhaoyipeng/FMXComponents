@@ -42,6 +42,7 @@ contains
   FMX.RegComponents in 'FMX.RegComponents.pas',
   FMX.CalendarControl in 'FMX.CalendarControl.pas',
   FMX.CalendarItemAppearance in 'FMX.CalendarItemAppearance.pas',
-  qcndate in 'qcndate.pas';
+  qcndate in 'qcndate.pas',
+  CnCalendar in 'CnCalendar.pas';
 
 end.

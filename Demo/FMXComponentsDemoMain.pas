@@ -10,7 +10,8 @@ uses
   FMX.Ani, FMX.CircleScoreIndicator, FMX.TabControl, FMX.ImageSlider,
   FMX.ScrollBox, FMX.Memo, FMX.SimpleBBCodeText, ONE.Objects, Data.Bind.EngExt,
   Fmx.Bind.DBEngExt, System.Rtti, System.Bindings.Outputs, Fmx.Bind.Editors,
-  Data.Bind.Components, FMX.GesturePassword, FMX.CalendarControl;
+  Data.Bind.Components, FMX.GesturePassword, FMX.CalendarControl,
+  qcndate, CnCalendar;
 
 type
   TFMXComponentsDemoForm = class(TForm)
@@ -62,6 +63,10 @@ type
     chkShowLunarDate: TCheckBox;
     rbCnMonths: TRadioButton;
     rbEnMonths: TRadioButton;
+    Rectangle1: TRectangle;
+    Rectangle2: TRectangle;
+    txtCnDate1: TText;
+    txtCnDate2: TText;
     procedure FMXScrollableList2Change(Sender: TObject);
     procedure FMXScrollableList1Change(Sender: TObject);
     procedure btnAnimationClick(Sender: TObject);
@@ -74,6 +79,7 @@ type
       const APassword: string);
     procedure chkShowLunarDateChange(Sender: TObject);
     procedure rbCnMonthsChange(Sender: TObject);
+    procedure FMXCalendarControl1SelectedItem(Sender: TObject);
   private
     { Private declarations }
     FSelection1: TOneSelection;
@@ -97,6 +103,22 @@ end;
 procedure TFMXComponentsDemoForm.chkShowLunarDateChange(Sender: TObject);
 begin
   FMXCalendarControl1.IsShowLunarDate := chkShowLunarDate.IsChecked;
+end;
+
+procedure TFMXComponentsDemoForm.FMXCalendarControl1SelectedItem(
+  Sender: TObject);
+var
+  D: TCnDate;
+  Year, Month, Day: Word;
+begin
+  DecodeDate(FMXCalendarControl1.SelectedDate, Year, Month, Day);
+  D := ToCnDate(FMXCalendarControl1.SelectedDate);
+  txtCnDate1.Text := Format('农历%s%s', [CnMonthName(D), CnDayName(D)]);
+  txtCnDate2.Text :=
+    GetGanZhiFromNumber(GetGanZhiFromYear(Year)) +
+    GetShengXiaoFromNumber(D.Year) + '年 ' +
+    GetGanZhiFromNumber(GetGanZhiFromMonth(Year, Month, Day)) + '月 ' +
+    GetGanZhiFromNumber(GetGanZhiFromDay(Year, Month, Day)) + '日';
 end;
 
 procedure TFMXComponentsDemoForm.FMXGesturePassword1EnterCompleteEvent(
@@ -161,6 +183,9 @@ begin
   Layout1.AddObject(FSelection1);
 
   FMXSimpleBBCodeText1Click(FMXSimpleBBCodeText1);
+
+  txtCnDate1.Text := '';
+  txtCnDate2.Text := '';
 end;
 
 procedure TFMXComponentsDemoForm.FormResize(Sender: TObject);

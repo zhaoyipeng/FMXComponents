@@ -696,11 +696,14 @@ begin
 end;
 
 procedure TClendarYearItem.SetYear(const Value: Word);
+var
+  D: TDate;
 begin
   if FYear<>Value then
   begin
     FYear := Value;
-    FYearText:=InttoStr(FYear);
+    D := EncodeDate(FYear, 1, 1);
+    FYearText := InttoStr(FYear);
     Invalidate;
   end;
 end;
