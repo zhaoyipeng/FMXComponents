@@ -41,7 +41,7 @@
 // 2017-09-11, v0.2.0.0 :
 //    add lunar date option
 // 2017-09-11, v0.3.0.0 :
-//    fixed the bug when EndData's month is December
+//    fixed the bug when EndDate's month is December
 //    add set month names method
 
 unit FMX.CalendarControl;
@@ -109,7 +109,6 @@ type
     procedure DoCalenderViewItemClickEx(const Sender: TObject; ItemIndex: Integer; const LocalClickPos: TPointF; const ItemObject: TListItemDrawable);
     procedure DoGetItemIsMark(ADayItem:TClendarDayItem; var AIsMark:Boolean);
     function GetSelectedDate: TDate;
-    function CheckDateChanged(NewValue, OldValue:TDate; IsStartDate:Boolean = True):Boolean;
     procedure SetEndDate(const Value: TDate);
     procedure SetStartDate(const Value: TDate);
     procedure SetIsShowLunarDate(const Value: Boolean);
@@ -142,8 +141,8 @@ type
     property Size;
     property Visible default True;
     property Width;
-    property StartData:TDate read FStartDate write SetStartDate;
-    property EndData:TDate read FEndDate write SetEndDate;
+    property StartDate:TDate read FStartDate write SetStartDate;
+    property EndDate:TDate read FEndDate write SetEndDate;
     property FirstDayOfWeek:Integer read FFirstDayOfWeekNum write SetFirstDayOfWeekNum;
     property SelectedDate:TDate read GetSelectedDate write SetSelectedDate;
     property IsShowLunarDate: Boolean read FIsShowLunarDate write SetIsShowLunarDate default true;
@@ -180,17 +179,6 @@ begin
 end;
 
 { TCalendarControl }
-
-function TFMXCalendarControl.CheckDateChanged(NewValue, OldValue: TDate; IsStartDate:Boolean = True): Boolean;
-begin
-  if (MonthOf(NewValue)<MonthOf(OldValue)) and IsStartDate then
-    Result:=True
-  else
-  if (MonthOf(NewValue)>MonthOf(OldValue)) and (not IsStartDate) then
-    Result:=True
-  else
-    Result:=False;
-end;
 
 constructor TFMXCalendarControl.Create(AOwner: TComponent);
 var
@@ -383,7 +371,7 @@ end;
 
 procedure TFMXCalendarControl.SetEndDate(const Value: TDate);
 begin
-  if CheckDateChanged(Value, FEndDate, False) then
+  if (FEndDate <> Value) and (Value > FStartDate) then
   begin
     FEndDate := Value;
     FNeedFillDays := True;
@@ -455,7 +443,7 @@ end;
 
 procedure TFMXCalendarControl.SetStartDate(const Value: TDate);
 begin
-  if CheckDateChanged(Value, FStartDate, True) then
+  if (FStartDate <> Value) and (Value < FEndDate) then
   begin
     FStartDate := Value;
     FNeedFillDays := True;

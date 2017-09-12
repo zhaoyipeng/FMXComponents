@@ -51,7 +51,6 @@ type
     Memo1: TMemo;
     Layout1: TLayout;
     FMXSimpleBBCodeText1: TFMXSimpleBBCodeText;
-    BindingsList1: TBindingsList;
     tabGesturePassword: TTabItem;
     Layout6: TLayout;
     FMXGesturePassword1: TFMXGesturePassword;
