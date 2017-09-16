@@ -1,6 +1,7 @@
 # FMXComponents
 
-This project includes the components that I and donors have actually used in applications
+This project includes the components that donors and I have actually used in applications.<br> 
+If you have some components want to add into this project, you can send it to zhaoyipeng@hotmail.com
 
 本项目包括本人及捐赠人实际应用中使用的控件
  
