@@ -82,7 +82,7 @@ BaiduMap SDK for Firemonkey<br>
 
 ## 9.TFMXSeg7Shape
 
-Segment 7 Shape Firemonkey Componet
+Segment 7 Shape Firemonkey Componet create by Yamasho
 
 ![Seg7ShapeFmx](SnapShots/FMXSeg7Shape.gif)  
 
