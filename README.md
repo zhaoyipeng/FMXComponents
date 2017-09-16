@@ -79,3 +79,14 @@ A calendar component like iOS style
 ### 感谢 xubzhlin 的捐献<br>
 BaiduMap SDK for Firemonkey<br>
 百度地图SDK
+
+## 9.TFMXSeg7Shape
+
+Segment 7 Shape Firemonkey Componet
+
+![Seg7ShapeFmx](SnapShots/FMXSeg7Shape.gif)  
+
+七段式数字显示控件
+
+原始项目地址为：
+https://github.com/qa65000/Seg7ShapeFmx

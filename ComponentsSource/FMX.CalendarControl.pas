@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 //
-// FMXComponents: Firemonkey Opensource Components Set from China
+// FMXComponents: Firemonkey Opensource Components Set
 //
 // CalendarControl is a calendar component like iOS style, it uses
 // listview component internally

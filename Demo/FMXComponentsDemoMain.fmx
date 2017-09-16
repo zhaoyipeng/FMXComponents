@@ -3,7 +3,7 @@ object FMXComponentsDemoForm: TFMXComponentsDemoForm
   Top = 0
   Caption = 'FMXComponents Demo'
   ClientHeight = 567
-  ClientWidth = 337
+  ClientWidth = 319
   Fill.Kind = Solid
   FormFactor.Width = 320
   FormFactor.Height = 480
@@ -17,7 +17,7 @@ object FMXComponentsDemoForm: TFMXComponentsDemoForm
     Margins.Left = 15.000000000000000000
     Margins.Right = 15.000000000000000000
     Position.X = 15.000000000000000000
-    Size.Width = 307.000000000000000000
+    Size.Width = 289.000000000000000000
     Size.Height = 44.000000000000000000
     Size.PlatformDefault = False
     TextSettings.Font.Size = 14.000000000000000000
@@ -25,22 +25,24 @@ object FMXComponentsDemoForm: TFMXComponentsDemoForm
   end
   object TabControl1: TTabControl
     Align = Client
-    Size.Width = 337.000000000000000000
+    Size.Width = 319.000000000000000000
     Size.Height = 523.000000000000000000
     Size.PlatformDefault = False
-    TabIndex = 4
+    TabIndex = 5
     TabOrder = 2
     TabPosition = Bottom
     Sizes = (
-      337s
+      319s
       497s
-      337s
+      319s
       497s
-      337s
+      319s
       497s
-      337s
+      319s
       497s
-      337s
+      319s
+      497s
+      319s
       497s)
     object tabBasic: TTabItem
       CustomIcon = <
@@ -134,13 +136,13 @@ object FMXComponentsDemoForm: TFMXComponentsDemoForm
       end
       object Layout4: TLayout
         Align = Client
-        Size.Width = 136.000000000000000000
+        Size.Width = 118.000000000000000000
         Size.Height = 497.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 4
         object Layout5: TLayout
           Align = Top
-          Size.Width = 136.000000000000000000
+          Size.Width = 118.000000000000000000
           Size.Height = 162.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 0
@@ -150,7 +152,7 @@ object FMXComponentsDemoForm: TFMXComponentsDemoForm
             Margins.Left = 13.000000000000000000
             Margins.Right = 13.000000000000000000
             Position.X = 13.000000000000000000
-            Size.Width = 110.000000000000000000
+            Size.Width = 92.000000000000000000
             Size.Height = 52.000000000000000000
             Size.PlatformDefault = False
             Stroke.Color = xFF1EB9C1
@@ -162,7 +164,7 @@ object FMXComponentsDemoForm: TFMXComponentsDemoForm
             Margins.Right = 13.000000000000000000
             Position.X = 13.000000000000000000
             Position.Y = 52.000000000000000000
-            Size.Width = 110.000000000000000000
+            Size.Width = 92.000000000000000000
             Size.Height = 58.000000000000000000
             Size.PlatformDefault = False
             Stroke.Color = xFF1EB9C1
@@ -173,7 +175,7 @@ object FMXComponentsDemoForm: TFMXComponentsDemoForm
             HitTest = True
             Margins.Top = 3.000000000000000000
             Margins.Bottom = 3.000000000000000000
-            Size.Width = 136.000000000000000000
+            Size.Width = 118.000000000000000000
             Size.Height = 147.000000000000000000
             Size.PlatformDefault = False
             TabOrder = 2
@@ -196,7 +198,7 @@ object FMXComponentsDemoForm: TFMXComponentsDemoForm
           Align = Top
           StyledSettings = [Family, Style, FontColor]
           Position.Y = 162.000000000000000000
-          Size.Width = 136.000000000000000000
+          Size.Width = 118.000000000000000000
           Size.Height = 41.000000000000000000
           Size.PlatformDefault = False
           TextSettings.Font.Size = 14.000000000000000000
@@ -310,7 +312,7 @@ object FMXComponentsDemoForm: TFMXComponentsDemoForm
           end>
         IsHealthy = False
         object FloatAnimation2: TFloatAnimation
-          Duration = 0.800000011920928900
+          Duration = 0.800000011920929000
           PropertyName = 'Value'
           StartValue = 0.000000000000000000
           StopValue = 75.000000000000000000
@@ -328,7 +330,7 @@ object FMXComponentsDemoForm: TFMXComponentsDemoForm
         Value = 3.500000000000000000
         Maximum = 5.000000000000000000
         object FloatAnimation1: TFloatAnimation
-          Duration = 0.800000011920928900
+          Duration = 0.800000011920929000
           PropertyName = 'Value'
           StartValue = 0.000000000000000000
           StopValue = 3.500000000000000000
@@ -8021,7 +8023,7 @@ object FMXComponentsDemoForm: TFMXComponentsDemoForm
       object FMXImageSlider1: TFMXImageSlider
         Align = Top
         HitTest = True
-        Size.Width = 337.000000000000000000
+        Size.Width = 319.000000000000000000
         Size.Height = 200.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 4
@@ -8049,7 +8051,7 @@ object FMXComponentsDemoForm: TFMXComponentsDemoForm
       ExplicitSize.cy = 26.000000000000000000
       object Layout1: TLayout
         Align = Client
-        Size.Width = 337.000000000000000000
+        Size.Width = 319.000000000000000000
         Size.Height = 397.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 0
@@ -8082,12 +8084,12 @@ object FMXComponentsDemoForm: TFMXComponentsDemoForm
         TextSettings.WordWrap = True
         OnChange = Memo1Change
         Align = Top
-        Size.Width = 337.000000000000000000
+        Size.Width = 319.000000000000000000
         Size.Height = 100.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 1
-        Viewport.Width = 317.000000000000000000
-        Viewport.Height = 96.000000000000000000
+        Viewport.Width = 319.000000000000000000
+        Viewport.Height = 100.000000000000000000
       end
     end
     object tabGesturePassword: TTabItem
@@ -8105,7 +8107,7 @@ object FMXComponentsDemoForm: TFMXComponentsDemoForm
       ExplicitSize.cy = 26.000000000000000000
       object Layout6: TLayout
         Align = Top
-        Size.Width = 337.000000000000000000
+        Size.Width = 319.000000000000000000
         Size.Height = 121.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 1
@@ -8153,7 +8155,7 @@ object FMXComponentsDemoForm: TFMXComponentsDemoForm
       CustomIcon = <
         item
         end>
-      IsSelected = True
+      IsSelected = False
       Size.Width = 67.000000000000000000
       Size.Height = 26.000000000000000000
       Size.PlatformDefault = False
@@ -8165,25 +8167,25 @@ object FMXComponentsDemoForm: TFMXComponentsDemoForm
       object Rectangle1: TRectangle
         Align = Client
         Fill.Color = xFFF0F0F0
-        Size.Width = 337.000000000000000000
+        Size.Width = 319.000000000000000000
         Size.Height = 497.000000000000000000
         Size.PlatformDefault = False
         Stroke.Kind = None
         object FMXCalendarControl1: TFMXCalendarControl
           Align = Client
-          Size.Width = 337.000000000000000000
+          Size.Width = 319.000000000000000000
           Size.Height = 364.000000000000000000
           Size.PlatformDefault = False
           StartDate = 42948.000000000000000000
           EndDate = 43020.422420370370000000
           FirstDayOfWeek = 7
-          SelectedDate = 42990.000000000000000000
+          SelectedDate = 42994.000000000000000000
           IsShowLunarDate = False
           OnSelectedItem = FMXCalendarControl1SelectedItem
         end
         object Layout7: TLayout
           Align = Top
-          Size.Width = 337.000000000000000000
+          Size.Width = 319.000000000000000000
           Size.Height = 61.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 1
@@ -8225,7 +8227,7 @@ object FMXComponentsDemoForm: TFMXComponentsDemoForm
           Fill.Color = claWhite
           Margins.Top = 8.000000000000000000
           Position.Y = 433.000000000000000000
-          Size.Width = 337.000000000000000000
+          Size.Width = 319.000000000000000000
           Size.Height = 64.000000000000000000
           Size.PlatformDefault = False
           Stroke.Kind = None
@@ -8249,6 +8251,53 @@ object FMXComponentsDemoForm: TFMXComponentsDemoForm
             end
           end
         end
+      end
+    end
+    object tabSeg7Shape: TTabItem
+      CustomIcon = <
+        item
+        end>
+      IsSelected = True
+      Size.Width = 79.000000000000000000
+      Size.Height = 26.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = ''
+      TabOrder = 0
+      Text = 'Seg7Shape'
+      ExplicitSize.cx = 79.000000000000000000
+      ExplicitSize.cy = 26.000000000000000000
+      object Button1: TButton
+        Position.X = 64.000000000000000000
+        Position.Y = 192.000000000000000000
+        Size.Width = 177.000000000000000000
+        Size.Height = 49.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        Text = 'Suffle'
+        OnClick = Button1Click
+      end
+      object tmr1: TTimer
+        Enabled = False
+        Interval = 50
+        OnTimer = tmr1Timer
+        Left = 256
+        Top = 128
+      end
+      object Seg7Shape1: TFMXSeg7Shape
+        Data = 127
+        Fill.Color = xFF005EA6
+        Stroke.Color = xFFFAFAFA
+        Stroke.Thickness = 3.000000000000000000
+        Position.X = 56.000000000000000000
+        Position.Y = 24.000000000000000000
+      end
+      object Seg7Shape2: TFMXSeg7Shape
+        Data = 127
+        Fill.Color = xFF005EA6
+        Stroke.Color = xFFFAFAFA
+        Stroke.Thickness = 3.000000000000000000
+        Position.X = 152.000000000000000000
+        Position.Y = 24.000000000000000000
       end
     end
   end

@@ -11,7 +11,7 @@ uses
   FMX.ScrollBox, FMX.Memo, FMX.SimpleBBCodeText, ONE.Objects, Data.Bind.EngExt,
   Fmx.Bind.DBEngExt, System.Rtti, System.Bindings.Outputs, Fmx.Bind.Editors,
   Data.Bind.Components, FMX.GesturePassword, FMX.CalendarControl,
-  qcndate, CnCalendar;
+  qcndate, CnCalendar, FMX.Seg7Shape;
 
 type
   TFMXComponentsDemoForm = class(TForm)
@@ -67,6 +67,11 @@ type
     Rectangle2: TRectangle;
     txtCnDate1: TText;
     txtCnDate2: TText;
+    tabSeg7Shape: TTabItem;
+    Button1: TButton;
+    tmr1: TTimer;
+    Seg7Shape1: TFMXSeg7Shape;
+    Seg7Shape2: TFMXSeg7Shape;
     procedure FMXScrollableList2Change(Sender: TObject);
     procedure FMXScrollableList1Change(Sender: TObject);
     procedure btnAnimationClick(Sender: TObject);
@@ -80,9 +85,14 @@ type
     procedure chkShowLunarDateChange(Sender: TObject);
     procedure rbCnMonthsChange(Sender: TObject);
     procedure FMXCalendarControl1SelectedItem(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure tmr1Timer(Sender: TObject);
   private
     { Private declarations }
     FSelection1: TOneSelection;
+    ShuffleCount : Byte;
+    procedure RollSegment(Sender: TObject ; Data : Byte );
+    procedure RollSegmentSet( Count : Byte);
   public
     { Public declarations }
   end;
@@ -98,6 +108,19 @@ procedure TFMXComponentsDemoForm.btnAnimationClick(Sender: TObject);
 begin
   FloatAnimation1.Start;
   FloatAnimation2.Start;
+end;
+
+procedure TFMXComponentsDemoForm.Button1Click(Sender: TObject);
+begin
+  tmr1.Enabled  := TRUE;
+  Button1.Enabled := False;
+  ShuffleCount     := 17;
+  Seg7Shape1.Num  := $ff;
+  Seg7Shape2.Num  := $ff;
+  Randomize;
+  Seg7Shape1.Fill.Color := Seg7Shape1.Fill.Color + Random($ffffffff);
+  Seg7Shape2.Fill.Color := Seg7Shape1.Fill.Color + Random($ffffffff);
+  RollSegmentSet( ShuffleCount );
 end;
 
 procedure TFMXComponentsDemoForm.chkShowLunarDateChange(Sender: TObject);
@@ -204,6 +227,49 @@ begin
     Self.FMXCalendarControl1.SetMonthNames(TCnMonths)
   else
     Self.FMXCalendarControl1.SetMonthNames(TEnMonths);
+end;
+
+procedure TFMXComponentsDemoForm.RollSegment(Sender: TObject; Data: Byte);
+begin
+  (Sender as TFMXSeg7Shape).Data := Data;
+end;
+
+procedure TFMXComponentsDemoForm.RollSegmentSet(Count: Byte);
+begin
+  case Count of
+     17,9,1 : begin  RollSegment(Seg7Shape1 , $01 );  RollSegment(Seg7Shape2 , $01 ); end;
+     16,8 : begin  RollSegment(Seg7Shape1 , $00 );  RollSegment(Seg7Shape2 , $03 ); end;
+     15,7 : begin  RollSegment(Seg7Shape1 , $00 );  RollSegment(Seg7Shape2 , $06 ); end;
+     14,6 : begin  RollSegment(Seg7Shape1 , $00 );  RollSegment(Seg7Shape2 , $0C ); end;
+     13,5 : begin  RollSegment(Seg7Shape1 , $08 );  RollSegment(Seg7Shape2 , $08 ); end;
+     12,4 : begin  RollSegment(Seg7Shape1 , $18 );  RollSegment(Seg7Shape2 , $00 ); end;
+     11,3 : begin  RollSegment(Seg7Shape1 , $30 );  RollSegment(Seg7Shape2 , $00 ); end;
+     10,2 : begin  RollSegment(Seg7Shape1 , $21 );  RollSegment(Seg7Shape2 , $00 ); end;
+  end;
+
+end;
+
+procedure TFMXComponentsDemoForm.tmr1Timer(Sender: TObject);
+var
+    RandData: Byte;
+begin
+  if (ShuffleCount = 0) then
+  begin
+    RandData := Random(100);
+    Seg7Shape1.Num := RandData mod 10;
+    Seg7Shape2.Num := RandData div 10;
+    tmr1.Enabled := False;
+    Button1.Enabled := TRUE;
+    Seg7Shape1.Fill.Color := TAlphaColorRec.Blue;
+    Seg7Shape2.Fill.Color := TAlphaColorRec.Blue;
+  end
+  else
+  begin
+    Seg7Shape1.Fill.Color := Seg7Shape1.Fill.Color + Random($FFFFFFFF);
+    Seg7Shape2.Fill.Color := Seg7Shape1.Fill.Color + Random($FFFFFFFF);
+    Dec(ShuffleCount);
+    RollSegmentSet(ShuffleCount);
+  end;
 end;
 
 end.

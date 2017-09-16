@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 //
-// FMXComponents: Firemonkey Opensource Components Set from China
+// FMXComponents: Firemonkey Opensource Components Set
 //
 // Copyright 2017 谢顿 (zhaoyipeng@hotmail.com)
 //
@@ -35,6 +35,7 @@ uses
   , FMX.SimpleBBCodeText
   , FMX.GesturePassword
   , FMX.CalendarControl
+  , FMX.Seg7Shape
   ;
 
 procedure Register;
@@ -53,6 +54,7 @@ begin
   RegisterComponents(FMX_COMPONENTS_PALETTE, [TFMXSimpleBBCodeText]);
   RegisterComponents(FMX_COMPONENTS_PALETTE, [TFMXGesturePassword]);
   RegisterComponents(FMX_COMPONENTS_PALETTE, [TFMXCalendarControl]);
+  RegisterComponents(FMX_COMPONENTS_PALETTE, [TFMXSeg7Shape]);
 end;
 
 end.
