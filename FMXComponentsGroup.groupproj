@@ -6,6 +6,9 @@
         <Projects Include="ComponentsSource\FMXComponents.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="ComponentsSource\FMXComponentEd.dproj">
+            <Dependencies/>
+        </Projects>
         <Projects Include="Demo\FMXComponentsDemo.dproj">
             <Dependencies/>
         </Projects>
@@ -26,6 +29,15 @@
     <Target Name="FMXComponents:Make">
         <MSBuild Projects="ComponentsSource\FMXComponents.dproj" Targets="Make"/>
     </Target>
+    <Target Name="FMXComponentEd">
+        <MSBuild Projects="ComponentsSource\FMXComponentEd.dproj"/>
+    </Target>
+    <Target Name="FMXComponentEd:Clean">
+        <MSBuild Projects="ComponentsSource\FMXComponentEd.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="FMXComponentEd:Make">
+        <MSBuild Projects="ComponentsSource\FMXComponentEd.dproj" Targets="Make"/>
+    </Target>
     <Target Name="FMXComponentsDemo">
         <MSBuild Projects="Demo\FMXComponentsDemo.dproj"/>
     </Target>
@@ -36,13 +48,13 @@
         <MSBuild Projects="Demo\FMXComponentsDemo.dproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
-        <CallTarget Targets="FMXComponents;FMXComponentsDemo"/>
+        <CallTarget Targets="FMXComponents;FMXComponentEd;FMXComponentsDemo"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="FMXComponents:Clean;FMXComponentsDemo:Clean"/>
+        <CallTarget Targets="FMXComponents:Clean;FMXComponentEd:Clean;FMXComponentsDemo:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="FMXComponents:Make;FMXComponentsDemo:Make"/>
+        <CallTarget Targets="FMXComponents:Make;FMXComponentEd:Make;FMXComponentsDemo:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

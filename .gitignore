@@ -17,3 +17,7 @@
 /Demo/FMXComponentsDemo.identcache
 /Demo/FMXComponentsDemo.stat
 /Demo/Win32/Release
+/ComponentsSource/FMXComponentEd.dproj.local
+/ComponentsSource/FMXComponentEd.identcache
+/ComponentsSource/*.stat
+/ComponentsSource/FMXComponentEd.res
