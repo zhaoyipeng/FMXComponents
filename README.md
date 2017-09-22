@@ -18,7 +18,9 @@ A Simple Firemonkey Scrolleable List Component
 
 ## 2.TFMXRatingBar  
 
-![TFMXRatingBar](SnapShots/FMXRatingBar.gif)
+![TFMXRatingBar](SnapShots/FMXRatingBar.gif)<br>
+
+![TFMXRatingBarComponentEditor](SnapShots/FMXRatingBarED.gif)<br>
 
 A Simple Rating BarComponent  
 
