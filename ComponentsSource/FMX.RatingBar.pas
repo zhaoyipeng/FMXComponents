@@ -21,6 +21,14 @@
 // limitations under the License.
 //
 // *************************************************************************** }
+// version history
+// 2017-01-20, v0.1.0.0 :
+//  first release
+// 2017-09-22, v0.2.0.0 :
+//  merge Aone's version
+//  add Data(TPathData) property, support user define rating shape
+//  thanks Aone, QQ: 1467948783
+//  http://www.cnblogs.com/onechen
 unit FMX.RatingBar;
 
 interface
@@ -32,6 +40,7 @@ uses
   System.Math.Vectors,
   System.Types,
   System.UITypes,
+  System.UIConsts,
   FMX.Types,
   FMX.Layouts,
   FMX.Graphics,
@@ -42,8 +51,9 @@ uses
 type
 
   [ComponentPlatformsAttribute(TFMXPlatforms)]
-  TFMXRatingBar = class(TShape)
+  TFMXRatingBar = class(TShape, IPathObject)
   private
+    FData: TPathData;
     FCount: Integer;
     FMaximum: Single;
     FValue: Single;
@@ -52,21 +62,25 @@ type
     FInActiveColor: TAlphaColor;
     FActiveBrush: TBrush;
     FInActiveBrush: TBrush;
+    procedure SetPathData(const Value: TPathData);
     procedure SetCount(const Value: Integer);
     procedure SetMaximum(const Value: Single);
     procedure SetValue(const Value: Single);
     procedure SetSpace(const Value: Single);
     procedure SetActiveColor(const Value: TAlphaColor);
     procedure SetInActiveColor(const Value: TAlphaColor);
+    { IPathObject }
+    function GetPath: TPathData;
     procedure CreateBrush;
     procedure FreeBrush;
   protected
     procedure Resize; override;
     procedure Paint; override;
-    procedure DrawStar(ARect: TRectF; AValue: Single);
+    procedure DrawRating(ARect: TRectF; AValue: Single);
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
+    procedure Assign(Source: TPersistent); override;
   published
     property Align;
     property Anchors;
@@ -76,6 +90,7 @@ type
     property DragMode default TDragMode.dmManual;
     property EnableDragHighlight default True;
     property Enabled default True;
+    property Fill;
     property Locked default False;
     property Height;
     property HitTest default True;
@@ -88,6 +103,7 @@ type
     property RotationCenter;
     property Scale;
     property Size;
+    property Stroke;
     property Visible default True;
     property Width;
     { Drag and Drop events }
@@ -110,6 +126,10 @@ type
     property OnPainting;
     property OnPaint;
     property OnResize;
+{$IF (RTLVersion >= 32)} // Tokyo
+    property OnResized;
+{$ENDIF}
+    property Data: TPathData read FData write SetPathData;
     property ActiveColor: TAlphaColor read FActiveColor write SetActiveColor;
     property InActiveColor: TAlphaColor read FInActiveColor write SetInActiveColor;
     property Space: Single read FSpace write SetSpace;
@@ -125,15 +145,26 @@ implementation
 constructor TFMXRatingBar.Create(AOwner: TComponent);
 begin
   inherited;
-  Width := 174;
+  Width := 180;
   Height := 30;
+  HitTest := False;
+  FData := TPathData.Create;
+  FData.Data := 'm 4677,2657 -1004,727 385,1179 -1002,-731 -1002,731 386,-1179 -1005,-727 1240,3 381,-1181 381,1181 z';
+  // 星 (瘦)
   FCount := 5;
   FMaximum := 5;
   FValue := 0;
   FSpace := 6;
-  FActiveColor := $FF0CD19D;
-  FInActiveColor := $230CD19D;
-  CreateBrush;
+  FActiveColor := claRoyalblue;
+  FInActiveColor := $30000000;
+  Stroke.Color := claNull; // 不顯示外框
+end;
+
+destructor TFMXRatingBar.Destroy;
+begin
+  FData.Free;
+  FreeBrush;
+  inherited;
 end;
 
 procedure TFMXRatingBar.CreateBrush;
@@ -144,75 +175,67 @@ begin
     FInActiveBrush := TBrush.Create(TBrushKind.Solid, FInActiveColor);
 end;
 
-destructor TFMXRatingBar.Destroy;
-begin
-  FreeBrush;
-  inherited;
-end;
-
-procedure TFMXRatingBar.DrawStar(ARect: TRectF; AValue: Single);
-var
-  P: TPolygon;
-  fillBrush: TBrush;
-  l, cx, cy: Single;
-  cr: TRectF;
-  State: TCanvasSaveState;
-begin
-  CreateBrush;
-  SetLength(P, 10);
-  l := Min(ARect.Height, ARect.Width);
-  cx := ARect.CenterPoint.X;
-  cy := ARect.CenterPoint.Y;
-
-  P[0].X := cx;
-  P[0].Y := cy - l / 2;
-  P[1].X := cx + (10 * l / 64);
-  P[1].Y := cy - (13 * l / 64);
-  P[2].X := cx + l / 2;
-  P[2].Y := cy - (10 * l / 64);
-  P[3].X := cx + (16 * l / 64);
-  P[3].Y := cy + (6 * l / 64);
-  P[4].X := cx + (20 * l / 64);
-  P[4].Y := cy + l / 2;
-  P[5].X := cx;
-  P[5].Y := cy + (20 * l / 64);
-  P[6].X := cx - (20 * l / 64);
-  P[6].Y := cy + l / 2;
-  P[7].X := cx - (l / 4);
-  P[7].Y := cy + (6 * l / 64);
-  P[8].X := cx - l / 2;
-  P[8].Y := cy - (10 * l / 64);
-  P[9].X := cx - (10 * l / 64);
-  P[9].Y := cy - (13 * l / 64);
-
-  Canvas.BeginScene;
-  if (AValue = 0) or (AValue = 1) then
-  begin
-    if AValue = 1 then
-      fillBrush := FActiveBrush
-    else
-      fillBrush := FInActiveBrush;
-    Canvas.Fill.Assign(fillBrush);
-    Canvas.FillPolygon(P, Opacity);
-  end
-  else
-  begin
-    Canvas.Fill.Assign(FInActiveBrush);
-    Canvas.FillPolygon(P, Opacity);
-    cr := RectF(cx - l / 2, ARect.Top, cx + l * (AValue - 0.5), ARect.Bottom);
-    Canvas.Fill.Assign(FActiveBrush);
-    State := Canvas.SaveState;
-    Canvas.IntersectClipRect(cr);
-    Canvas.FillPolygon(P, Opacity);
-    Canvas.RestoreState(State);
-  end;
-  Canvas.EndScene;
-end;
-
 procedure TFMXRatingBar.FreeBrush;
 begin
   FreeAndNil(FActiveBrush);
   FreeAndNil(FInActiveBrush);
+end;
+
+procedure TFMXRatingBar.Assign(Source: TPersistent);
+var
+  src: TFMXRatingBar;
+begin
+  if Source is TFMXRatingBar then
+  begin
+    src := TFMXRatingBar(Source);
+    Stroke := src.Stroke;
+    FData.Assign(src.FData);
+    FCount := src.FCount;
+    FMaximum := src.FMaximum;
+    FValue := src.FValue;
+    FSpace := src.FSpace;
+    FActiveColor := src.FActiveColor;
+    FInActiveColor := src.FInActiveColor;
+
+    FreeBrush;
+    Repaint;
+  end
+  else
+    inherited;
+end;
+
+procedure TFMXRatingBar.DrawRating(ARect: TRectF; AValue: Single);
+var
+  State: TCanvasSaveState;
+  l: Single;
+  R: TRectF;
+begin
+  FData.FitToRect(ARect);
+  Canvas.BeginScene;
+  if AValue = 0 then
+  begin
+    Canvas.FillPath(FData, Opacity, FInActiveBrush);
+  end
+  else if AValue = 1 then
+  begin
+    Canvas.FillPath(FData, Opacity, FActiveBrush);
+  end
+  else
+  begin
+    Canvas.FillPath(FData, Opacity, FInActiveBrush);
+
+    l := Min(ARect.Height, ARect.Width);
+    R := RectF(ARect.CenterPoint.X - l, ARect.Top, ARect.CenterPoint.X + l * (AValue - 0.5), ARect.Bottom);
+
+    State := Canvas.SaveState;
+    Canvas.IntersectClipRect(R);
+
+    Canvas.FillPath(FData, Opacity, FActiveBrush);
+    Canvas.RestoreState(State);
+  end;
+  // 顯示外框
+  Canvas.DrawPath(FData, Opacity);
+  Canvas.EndScene;
 end;
 
 procedure TFMXRatingBar.Paint;
@@ -223,6 +246,7 @@ var
   DV, V: Single;
 begin
   inherited;
+  CreateBrush;
   w := (Width - FSpace * 4) / Count;
   DV := (FValue / FMaximum) * Count;
   for I := 0 to Count - 1 do
@@ -235,7 +259,7 @@ begin
       V := 0
     else
       V := DV - I;
-    DrawStar(R, V);
+    DrawRating(R, V);
   end;
 end;
 
@@ -243,6 +267,16 @@ procedure TFMXRatingBar.Resize;
 begin
   inherited;
   Repaint;
+end;
+
+function TFMXRatingBar.GetPath: TPathData;
+begin
+  Result := FData;
+end;
+
+procedure TFMXRatingBar.SetPathData(const Value: TPathData);
+begin
+  FData.Assign(Value);
 end;
 
 procedure TFMXRatingBar.SetActiveColor(const Value: TAlphaColor);
@@ -285,7 +319,12 @@ end;
 
 procedure TFMXRatingBar.SetSpace(const Value: Single);
 begin
-  FSpace := Value;
+  if FSpace <> Value then
+  begin
+    FSpace := Value;
+
+    Repaint;
+  end;
 end;
 
 procedure TFMXRatingBar.SetValue(const Value: Single);

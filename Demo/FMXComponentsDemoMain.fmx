@@ -28,7 +28,7 @@ object FMXComponentsDemoForm: TFMXComponentsDemoForm
     Size.Width = 319.000000000000000000
     Size.Height = 523.000000000000000000
     Size.PlatformDefault = False
-    TabIndex = 5
+    TabIndex = 0
     TabOrder = 2
     TabPosition = Bottom
     Sizes = (
@@ -48,7 +48,7 @@ object FMXComponentsDemoForm: TFMXComponentsDemoForm
       CustomIcon = <
         item
         end>
-      IsSelected = False
+      IsSelected = True
       Size.Width = 47.000000000000000000
       Size.Height = 26.000000000000000000
       Size.PlatformDefault = False
@@ -278,8 +278,8 @@ object FMXComponentsDemoForm: TFMXComponentsDemoForm
         end
       end
       object btnAnimation: TButton
-        Position.X = 95.000000000000000000
-        Position.Y = 379.000000000000000000
+        Position.X = 87.000000000000000000
+        Position.Y = 435.000000000000000000
         Size.Width = 121.000000000000000000
         Size.Height = 44.000000000000000000
         Size.PlatformDefault = False
@@ -288,8 +288,8 @@ object FMXComponentsDemoForm: TFMXComponentsDemoForm
         OnClick = btnAnimationClick
       end
       object FMXCircleScoreIndicator1: TFMXCircleScoreIndicator
-        Position.X = 87.000000000000000000
-        Position.Y = 270.000000000000000000
+        Position.X = 91.000000000000000000
+        Position.Y = 324.000000000000000000
         Size.Width = 137.000000000000000000
         Size.Height = 89.000000000000000000
         Size.PlatformDefault = False
@@ -312,25 +312,72 @@ object FMXComponentsDemoForm: TFMXComponentsDemoForm
           end>
         IsHealthy = False
         object FloatAnimation2: TFloatAnimation
-          Duration = 0.800000011920929000
+          Duration = 0.800000011920928900
+          OnProcess = FloatAnimation2Process
           PropertyName = 'Value'
           StartValue = 0.000000000000000000
           StopValue = 75.000000000000000000
         end
+        object txtScore: TLabel
+          StyledSettings = [Family, Style, FontColor]
+          Position.X = 44.000000000000000000
+          Position.Y = 28.000000000000000000
+          Size.Width = 49.000000000000000000
+          Size.Height = 33.000000000000000000
+          Size.PlatformDefault = False
+          TextSettings.Font.Size = 24.000000000000000000
+          TextSettings.HorzAlign = Center
+          Text = '75'
+          TabOrder = 0
+        end
       end
       object FMXRatingBar1: TFMXRatingBar
-        Position.X = 83.000000000000000000
-        Position.Y = 224.000000000000000000
-        Size.Width = 145.000000000000000000
-        Size.Height = 30.000000000000000000
+        HitTest = False
+        Position.X = 71.000000000000000000
+        Position.Y = 264.000000000000000000
+        Size.Width = 177.000000000000000000
+        Size.Height = 41.000000000000000000
         Size.PlatformDefault = False
+        Stroke.Color = claNull
+        Data.Path = {
+          0B0000000000000000003143807081410100000016A026431B78D84101000000
+          A7412C4351180A420100000048B41E430426E041010000003858194343B90E42
+          01000000F2571B431541A64101000000666612430E6B90410100000008302143
+          A796754101000000130521430000C04001000000002928432AD4994103000000
+          CF932843F3BCB342}
+        ActiveColor = claGold
+        InActiveColor = x230CD19D
+        Space = 6.000000000000000000
+        Value = 2.500000000000000000
+        Maximum = 5.000000000000000000
+        object FloatAnimation1: TFloatAnimation
+          Duration = 0.800000011920928900
+          PropertyName = 'Value'
+          StartValue = 0.000000000000000000
+          StopValue = 3.500000000000000000
+        end
+      end
+      object FMXRatingBar2: TFMXRatingBar
+        HitTest = False
+        Position.X = 71.000000000000000000
+        Position.Y = 216.000000000000000000
+        Size.Width = 177.000000000000000000
+        Size.Height = 41.000000000000000000
+        Size.PlatformDefault = False
+        Stroke.Color = claNull
+        Data.Path = {
+          0B000000000000000000314316F38841010000000C86274335D8BF4101000000
+          51282B434F6F0C420100000033B321432EACE14101000000143E18434F6F0C42
+          01000000C4E21B4335D8BF41010000006666124316F3884101000000981A1E43
+          142D89410100000033B321430000C04001000000CE4B2543142D894103000000
+          0028924500102645}
         ActiveColor = xFF0CD19D
         InActiveColor = x230CD19D
         Space = 6.000000000000000000
-        Value = 3.500000000000000000
+        Value = 2.500000000000000000
         Maximum = 5.000000000000000000
-        object FloatAnimation1: TFloatAnimation
-          Duration = 0.800000011920929000
+        object FloatAnimation4: TFloatAnimation
+          Duration = 0.800000011920928900
           PropertyName = 'Value'
           StartValue = 0.000000000000000000
           StopValue = 3.500000000000000000
@@ -8088,8 +8135,8 @@ object FMXComponentsDemoForm: TFMXComponentsDemoForm
         Size.Height = 100.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 1
-        Viewport.Width = 319.000000000000000000
-        Viewport.Height = 100.000000000000000000
+        Viewport.Width = 299.000000000000000000
+        Viewport.Height = 96.000000000000000000
       end
     end
     object tabGesturePassword: TTabItem
@@ -8179,7 +8226,7 @@ object FMXComponentsDemoForm: TFMXComponentsDemoForm
           StartDate = 42948.000000000000000000
           EndDate = 43020.422420370370000000
           FirstDayOfWeek = 7
-          SelectedDate = 42994.000000000000000000
+          SelectedDate = 43000.000000000000000000
           IsShowLunarDate = False
           OnSelectedItem = FMXCalendarControl1SelectedItem
         end
@@ -8257,7 +8304,7 @@ object FMXComponentsDemoForm: TFMXComponentsDemoForm
       CustomIcon = <
         item
         end>
-      IsSelected = True
+      IsSelected = False
       Size.Width = 79.000000000000000000
       Size.Height = 26.000000000000000000
       Size.PlatformDefault = False

@@ -72,6 +72,9 @@ type
     tmr1: TTimer;
     Seg7Shape1: TFMXSeg7Shape;
     Seg7Shape2: TFMXSeg7Shape;
+    FMXRatingBar2: TFMXRatingBar;
+    FloatAnimation4: TFloatAnimation;
+    txtScore: TLabel;
     procedure FMXScrollableList2Change(Sender: TObject);
     procedure FMXScrollableList1Change(Sender: TObject);
     procedure btnAnimationClick(Sender: TObject);
@@ -87,6 +90,7 @@ type
     procedure FMXCalendarControl1SelectedItem(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure tmr1Timer(Sender: TObject);
+    procedure FloatAnimation2Process(Sender: TObject);
   private
     { Private declarations }
     FSelection1: TOneSelection;
@@ -108,6 +112,7 @@ procedure TFMXComponentsDemoForm.btnAnimationClick(Sender: TObject);
 begin
   FloatAnimation1.Start;
   FloatAnimation2.Start;
+  FloatAnimation4.Start;
 end;
 
 procedure TFMXComponentsDemoForm.Button1Click(Sender: TObject);
@@ -126,6 +131,11 @@ end;
 procedure TFMXComponentsDemoForm.chkShowLunarDateChange(Sender: TObject);
 begin
   FMXCalendarControl1.IsShowLunarDate := chkShowLunarDate.IsChecked;
+end;
+
+procedure TFMXComponentsDemoForm.FloatAnimation2Process(Sender: TObject);
+begin
+  txtScore.Text := IntToStr(Round(FMXCircleScoreIndicator1.Value));
 end;
 
 procedure TFMXComponentsDemoForm.FMXCalendarControl1SelectedItem(

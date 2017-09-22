@@ -7,7 +7,7 @@ If you have some components want to add into this project, you can send it to zh
  
 ## 1.TFMXScrollableList
 
-![TFMXScrollYears](SnapShots/FMXScrollableList.png)  
+![TFMXScrollYears](SnapShots/FMXScrollableList.gif)  
 
 A Simple Firemonkey Scrolleable List Component  
 
@@ -18,7 +18,7 @@ A Simple Firemonkey Scrolleable List Component
 
 ## 2.TFMXRatingBar  
 
-![TFMXRatingBar](SnapShots/FMXRatingBar.png)
+![TFMXRatingBar](SnapShots/FMXRatingBar.gif)
 
 A Simple Rating BarComponent  
 
@@ -30,7 +30,7 @@ Rating property is Value
 
 ## 3.TFMXCircleScoreIndicator
 
-![TFMXCircleScoreIndicator](SnapShots/FMXCircleScoreIndicator.png)  
+![TFMXCircleScoreIndicator](SnapShots/FMXCircleScoreIndicator.gif)  
 
 A Simple Circle Score Indicator  
 
