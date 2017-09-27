@@ -93,3 +93,11 @@ Segment 7 Shape Firemonkey Componet create by Yamasho
 
 原始项目地址为：
 https://github.com/qa65000/Seg7ShapeFmx
+
+## 10.TFMXToast
+
+![TFMXToast](SnapShots/FMXToast.gif)  
+
+TFMXToast is a toast component using pure fmx<br>
+使用纯FMX的Toast控件<br>
+参考了Aone的文章：http://www.cnblogs.com/onechen/p/7130227.html <br> 

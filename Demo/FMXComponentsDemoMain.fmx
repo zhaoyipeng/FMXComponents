@@ -28,10 +28,12 @@ object FMXComponentsDemoForm: TFMXComponentsDemoForm
     Size.Width = 319.000000000000000000
     Size.Height = 523.000000000000000000
     Size.PlatformDefault = False
-    TabIndex = 0
+    TabIndex = 6
     TabOrder = 2
     TabPosition = Bottom
     Sizes = (
+      319s
+      497s
       319s
       497s
       319s
@@ -48,7 +50,7 @@ object FMXComponentsDemoForm: TFMXComponentsDemoForm
       CustomIcon = <
         item
         end>
-      IsSelected = True
+      IsSelected = False
       Size.Width = 47.000000000000000000
       Size.Height = 26.000000000000000000
       Size.PlatformDefault = False
@@ -8226,7 +8228,7 @@ object FMXComponentsDemoForm: TFMXComponentsDemoForm
           StartDate = 42948.000000000000000000
           EndDate = 43020.422420370370000000
           FirstDayOfWeek = 7
-          SelectedDate = 43000.000000000000000000
+          SelectedDate = 43005.000000000000000000
           IsShowLunarDate = False
           OnSelectedItem = FMXCalendarControl1SelectedItem
         end
@@ -8247,7 +8249,6 @@ object FMXComponentsDemoForm: TFMXComponentsDemoForm
             OnChange = chkShowLunarDateChange
           end
           object rbCnMonths: TRadioButton
-            IsChecked = True
             Position.X = 144.000000000000000000
             Position.Y = 21.000000000000000000
             Size.Width = 89.000000000000000000
@@ -8347,5 +8348,148 @@ object FMXComponentsDemoForm: TFMXComponentsDemoForm
         Position.Y = 24.000000000000000000
       end
     end
+    object tabToast: TTabItem
+      CustomIcon = <
+        item
+        end>
+      IsSelected = True
+      Size.Width = 49.000000000000000000
+      Size.Height = 26.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = ''
+      TabOrder = 0
+      Text = 'Toast'
+      ExplicitSize.cx = 49.000000000000000000
+      ExplicitSize.cy = 26.000000000000000000
+      object Label4: TLabel
+        Align = Top
+        StyledSettings = [Family, Style, FontColor]
+        Margins.Left = 15.000000000000000000
+        Margins.Right = 15.000000000000000000
+        Position.X = 15.000000000000000000
+        Size.Width = 289.000000000000000000
+        Size.Height = 44.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.Font.Size = 14.000000000000000000
+        TextSettings.HorzAlign = Center
+        Text = 'Toast Demo'
+        TabOrder = 0
+      end
+      object btnShowToast: TButton
+        Position.X = 111.000000000000000000
+        Position.Y = 440.000000000000000000
+        Size.Width = 96.000000000000000000
+        Size.Height = 30.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+        Text = 'Show Toast'
+        OnClick = btnShowToastClick
+      end
+      object chkToastIsBlock: TCheckBox
+        Position.X = 40.000000000000000000
+        Position.Y = 104.000000000000000000
+        TabOrder = 2
+        Text = 'Isblock'
+        OnChange = chkToastIsBlockChange
+      end
+      object edtToastMessage: TEdit
+        Touch.InteractiveGestures = [LongTap, DoubleTap]
+        TabOrder = 3
+        Text = 'Toast'#20449#24687'!'
+        Position.X = 88.000000000000000000
+        Position.Y = 56.000000000000000000
+        Size.Width = 201.000000000000000000
+        Size.Height = 22.000000000000000000
+        Size.PlatformDefault = False
+      end
+      object Label7: TLabel
+        Position.X = 16.000000000000000000
+        Position.Y = 56.000000000000000000
+        Size.Width = 65.000000000000000000
+        Size.Height = 17.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.HorzAlign = Trailing
+        Text = 'Message:'
+        TabOrder = 6
+      end
+      object GroupBox1: TGroupBox
+        Position.X = 40.000000000000000000
+        Position.Y = 312.000000000000000000
+        Size.Width = 233.000000000000000000
+        Size.Height = 105.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'Align'
+        TabOrder = 7
+        object rbToastTop: TRadioButton
+          GroupName = 'ToastAlign'
+          Position.X = 48.000000000000000000
+          Position.Y = 16.000000000000000000
+          TabOrder = 3
+          Text = 'Top'
+          OnChange = rbToastTopChange
+        end
+        object rbToastCenter: TRadioButton
+          GroupName = 'ToastAlign'
+          Position.X = 48.000000000000000000
+          Position.Y = 44.000000000000000000
+          TabOrder = 2
+          Text = 'Center'
+          OnChange = rbToastTopChange
+        end
+        object rbToastBottom: TRadioButton
+          GroupName = 'ToastAlign'
+          IsChecked = True
+          Position.X = 48.000000000000000000
+          Position.Y = 72.000000000000000000
+          TabOrder = 1
+          Text = 'Bottom'
+          OnChange = rbToastTopChange
+        end
+      end
+      object cpFontColor: TColorPanel
+        Color = claWhite
+        Position.X = 9.000000000000000000
+        Position.Y = 150.000000000000000000
+        Size.Width = 150.000000000000000000
+        Size.Height = 150.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 5
+        OnChange = cpFontColorChange
+        object Label5: TLabel
+          Position.X = 5.000000000000000000
+          Position.Y = -30.000000000000000000
+          Size.Width = 150.000000000000000000
+          Size.Height = 32.000000000000000000
+          Size.PlatformDefault = False
+          Text = 'FontColor'
+        end
+      end
+      object cpBackColor: TColorPanel
+        Color = claWhite
+        Position.X = 161.000000000000000000
+        Position.Y = 150.000000000000000000
+        Size.Width = 150.000000000000000000
+        Size.Height = 150.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 4
+        OnChange = cpBackColorChange
+        object Label6: TLabel
+          Position.X = 5.000000000000000000
+          Position.Y = -30.000000000000000000
+          Size.Width = 150.000000000000000000
+          Size.Height = 32.000000000000000000
+          Size.PlatformDefault = False
+          Text = 'BackColor'
+        end
+      end
+    end
+  end
+  object FMXToast1: TFMXToast
+    Align = Trailing
+    FontSize = 16.000000000000000000
+    ToastMessage = 'Toast'
+    Delay = 2.000000000000000000
+    Left = 16
+    Top = 492
   end
 end

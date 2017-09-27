@@ -36,6 +36,7 @@ uses
   , FMX.GesturePassword
   , FMX.CalendarControl
   , FMX.Seg7Shape
+  , FMX.Toast
   ;
 
 procedure Register;
@@ -55,6 +56,7 @@ begin
   RegisterComponents(FMX_COMPONENTS_PALETTE, [TFMXGesturePassword]);
   RegisterComponents(FMX_COMPONENTS_PALETTE, [TFMXCalendarControl]);
   RegisterComponents(FMX_COMPONENTS_PALETTE, [TFMXSeg7Shape]);
+  RegisterComponents(FMX_COMPONENTS_PALETTE, [TFMXToast]);
 end;
 
 end.

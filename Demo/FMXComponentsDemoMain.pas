@@ -11,7 +11,7 @@ uses
   FMX.ScrollBox, FMX.Memo, FMX.SimpleBBCodeText, ONE.Objects, Data.Bind.EngExt,
   Fmx.Bind.DBEngExt, System.Rtti, System.Bindings.Outputs, Fmx.Bind.Editors,
   Data.Bind.Components, FMX.GesturePassword, FMX.CalendarControl,
-  qcndate, CnCalendar, FMX.Seg7Shape;
+  qcndate, CnCalendar, FMX.Seg7Shape, FMX.Toast, FMX.Colors, FMX.Edit;
 
 type
   TFMXComponentsDemoForm = class(TForm)
@@ -75,6 +75,21 @@ type
     FMXRatingBar2: TFMXRatingBar;
     FloatAnimation4: TFloatAnimation;
     txtScore: TLabel;
+    tabToast: TTabItem;
+    Label4: TLabel;
+    FMXToast1: TFMXToast;
+    btnShowToast: TButton;
+    chkToastIsBlock: TCheckBox;
+    edtToastMessage: TEdit;
+    Label7: TLabel;
+    GroupBox1: TGroupBox;
+    rbToastTop: TRadioButton;
+    rbToastCenter: TRadioButton;
+    rbToastBottom: TRadioButton;
+    cpFontColor: TColorPanel;
+    Label5: TLabel;
+    cpBackColor: TColorPanel;
+    Label6: TLabel;
     procedure FMXScrollableList2Change(Sender: TObject);
     procedure FMXScrollableList1Change(Sender: TObject);
     procedure btnAnimationClick(Sender: TObject);
@@ -91,10 +106,16 @@ type
     procedure Button1Click(Sender: TObject);
     procedure tmr1Timer(Sender: TObject);
     procedure FloatAnimation2Process(Sender: TObject);
+    procedure btnShowToastClick(Sender: TObject);
+    procedure chkToastIsBlockChange(Sender: TObject);
+    procedure rbToastTopChange(Sender: TObject);
+    procedure cpFontColorChange(Sender: TObject);
+    procedure cpBackColorChange(Sender: TObject);
   private
     { Private declarations }
     FSelection1: TOneSelection;
     ShuffleCount : Byte;
+    FToastCount: Integer;
     procedure RollSegment(Sender: TObject ; Data : Byte );
     procedure RollSegmentSet( Count : Byte);
   public
@@ -115,6 +136,13 @@ begin
   FloatAnimation4.Start;
 end;
 
+procedure TFMXComponentsDemoForm.btnShowToastClick(Sender: TObject);
+begin
+  FMXToast1.ToastMessage := edtToastMessage.Text + FToastCount.ToString;
+  Inc(FToastCount);
+  FMXToast1.Show(Self);
+end;
+
 procedure TFMXComponentsDemoForm.Button1Click(Sender: TObject);
 begin
   tmr1.Enabled  := TRUE;
@@ -131,6 +159,21 @@ end;
 procedure TFMXComponentsDemoForm.chkShowLunarDateChange(Sender: TObject);
 begin
   FMXCalendarControl1.IsShowLunarDate := chkShowLunarDate.IsChecked;
+end;
+
+procedure TFMXComponentsDemoForm.chkToastIsBlockChange(Sender: TObject);
+begin
+  FMXToast1.IsBlock := chkToastIsBlock.IsChecked;
+end;
+
+procedure TFMXComponentsDemoForm.cpBackColorChange(Sender: TObject);
+begin
+  FMXToast1.BackColor := cpBackColor.Color;
+end;
+
+procedure TFMXComponentsDemoForm.cpFontColorChange(Sender: TObject);
+begin
+  FMXToast1.FontColor := cpFontColor.Color;
 end;
 
 procedure TFMXComponentsDemoForm.FloatAnimation2Process(Sender: TObject);
@@ -219,6 +262,8 @@ begin
 
   txtCnDate1.Text := '';
   txtCnDate2.Text := '';
+
+  FToastCount := 1;
 end;
 
 procedure TFMXComponentsDemoForm.FormResize(Sender: TObject);
@@ -237,6 +282,16 @@ begin
     Self.FMXCalendarControl1.SetMonthNames(TCnMonths)
   else
     Self.FMXCalendarControl1.SetMonthNames(TEnMonths);
+end;
+
+procedure TFMXComponentsDemoForm.rbToastTopChange(Sender: TObject);
+begin
+  if rbToastTop.IsChecked then
+    FMXToast1.Align := TTextAlign.Leading
+  else if rbToastCenter.IsChecked then
+    FMXToast1.Align := TTextAlign.Center
+  else
+    FMXToast1.Align := TTextAlign.Trailing
 end;
 
 procedure TFMXComponentsDemoForm.RollSegment(Sender: TObject; Data: Byte);

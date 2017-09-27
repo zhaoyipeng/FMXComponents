@@ -91,6 +91,7 @@
         <DCCReference Include="qcndate.pas"/>
         <DCCReference Include="CnCalendar.pas"/>
         <DCCReference Include="FMX.Seg7Shape.pas"/>
+        <DCCReference Include="FMX.Toast.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -123,7 +124,7 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="C:\Users\Public\Documents\Embarcadero\Studio\18.0\Bpl\FMXComponents.bpl" Configuration="Debug" Class="ProjectOutput">
+                <DeployFile LocalName="C:\Users\Public\Documents\Embarcadero\Studio\19.0\Bpl\FMXComponents.bpl" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
                         <RemoteName>FMXComponents.bpl</RemoteName>
                         <Overwrite>true</Overwrite>

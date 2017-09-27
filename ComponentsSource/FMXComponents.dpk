@@ -44,6 +44,7 @@ contains
   FMX.CalendarItemAppearance in 'FMX.CalendarItemAppearance.pas',
   qcndate in 'qcndate.pas',
   CnCalendar in 'CnCalendar.pas',
-  FMX.Seg7Shape in 'FMX.Seg7Shape.pas';
+  FMX.Seg7Shape in 'FMX.Seg7Shape.pas',
+  FMX.Toast in 'FMX.Toast.pas';
 
 end.
