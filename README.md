@@ -102,10 +102,10 @@ TFMXToast is a toast component using pure fmx<br>
 使用纯FMX的Toast控件<br>
 参考了Aone的文章：http://www.cnblogs.com/onechen/p/7130227.html <br> 
 
-## 10.TFMXQRCode
+## 11.TFMXQRCode
 
 ![TFMXQRCode](SnapShots/FMXQRCode.gif)  
 
-A QRCode display component
-use DelphiZXingQRCode to generate QRCode image
+A QRCode display component<br>
+use DelphiZXingQRCode to generate QRCode image<br>
 
