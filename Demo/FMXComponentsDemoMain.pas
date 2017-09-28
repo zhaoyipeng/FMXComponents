@@ -11,7 +11,8 @@ uses
   FMX.ScrollBox, FMX.Memo, FMX.SimpleBBCodeText, ONE.Objects, Data.Bind.EngExt,
   Fmx.Bind.DBEngExt, System.Rtti, System.Bindings.Outputs, Fmx.Bind.Editors,
   Data.Bind.Components, FMX.GesturePassword, FMX.CalendarControl,
-  qcndate, CnCalendar, FMX.Seg7Shape, FMX.Toast, FMX.Colors, FMX.Edit;
+  qcndate, CnCalendar, FMX.Seg7Shape, FMX.Toast, FMX.Colors, FMX.Edit,
+  FMX.QRCode, FMX.EditBox, FMX.NumberBox;
 
 type
   TFMXComponentsDemoForm = class(TForm)
@@ -90,6 +91,19 @@ type
     Label5: TLabel;
     cpBackColor: TColorPanel;
     Label6: TLabel;
+    tabQRCode: TTabItem;
+    FMXQRCode1: TFMXQRCode;
+    Label8: TLabel;
+    Memo2: TMemo;
+    BindingsList1: TBindingsList;
+    cpQRCodeForeColor: TColorPanel;
+    Label10: TLabel;
+    cpQRCodeBackColor: TColorPanel;
+    Label9: TLabel;
+    Label11: TLabel;
+    nbQuiteZone: TNumberBox;
+    Label12: TLabel;
+    nbQRCodeSize: TNumberBox;
     procedure FMXScrollableList2Change(Sender: TObject);
     procedure FMXScrollableList1Change(Sender: TObject);
     procedure btnAnimationClick(Sender: TObject);
@@ -111,6 +125,11 @@ type
     procedure rbToastTopChange(Sender: TObject);
     procedure cpFontColorChange(Sender: TObject);
     procedure cpBackColorChange(Sender: TObject);
+    procedure Memo2Change(Sender: TObject);
+    procedure cpQRCodeForeColorChange(Sender: TObject);
+    procedure cpQRCodeBackColorChange(Sender: TObject);
+    procedure nbQuiteZoneChange(Sender: TObject);
+    procedure nbQRCodeSizeChange(Sender: TObject);
   private
     { Private declarations }
     FSelection1: TOneSelection;
@@ -174,6 +193,16 @@ end;
 procedure TFMXComponentsDemoForm.cpFontColorChange(Sender: TObject);
 begin
   FMXToast1.FontColor := cpFontColor.Color;
+end;
+
+procedure TFMXComponentsDemoForm.cpQRCodeBackColorChange(Sender: TObject);
+begin
+  FMXQRCode1.BackGround := cpQRCodeBackColor.Color;
+end;
+
+procedure TFMXComponentsDemoForm.cpQRCodeForeColorChange(Sender: TObject);
+begin
+  FMXQRCode1.ForeGround := cpQRCodeForeColor.Color;
 end;
 
 procedure TFMXComponentsDemoForm.FloatAnimation2Process(Sender: TObject);
@@ -274,6 +303,21 @@ end;
 procedure TFMXComponentsDemoForm.Memo1Change(Sender: TObject);
 begin
   self.FMXSimpleBBCodeText1.Lines.Assign(Memo1.Lines);
+end;
+
+procedure TFMXComponentsDemoForm.Memo2Change(Sender: TObject);
+begin
+  FMXQRCode1.Lines := Memo2.Lines;
+end;
+
+procedure TFMXComponentsDemoForm.nbQRCodeSizeChange(Sender: TObject);
+begin
+  FMXQRCode1.IconSize.Size := TSizeF.Create(nbQRCodeSize.Value, nbQRCodeSize.Value);
+end;
+
+procedure TFMXComponentsDemoForm.nbQuiteZoneChange(Sender: TObject);
+begin
+  FMXQRCode1.QuiteZone := Round(nbQuiteZone.Value);
 end;
 
 procedure TFMXComponentsDemoForm.rbCnMonthsChange(Sender: TObject);

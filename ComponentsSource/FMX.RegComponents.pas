@@ -37,6 +37,7 @@ uses
   , FMX.CalendarControl
   , FMX.Seg7Shape
   , FMX.Toast
+  , FMX.QRCode
   ;
 
 procedure Register;
@@ -57,6 +58,7 @@ begin
   RegisterComponents(FMX_COMPONENTS_PALETTE, [TFMXCalendarControl]);
   RegisterComponents(FMX_COMPONENTS_PALETTE, [TFMXSeg7Shape]);
   RegisterComponents(FMX_COMPONENTS_PALETTE, [TFMXToast]);
+  RegisterComponents(FMX_COMPONENTS_PALETTE, [TFMXQRCode]);
 end;
 
 end.
