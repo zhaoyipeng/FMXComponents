@@ -38,6 +38,7 @@ uses
   , FMX.Seg7Shape
   , FMX.Toast
   , FMX.QRCode
+  , FMX.LoadingIndicator
   ;
 
 procedure Register;
@@ -59,6 +60,7 @@ begin
   RegisterComponents(FMX_COMPONENTS_PALETTE, [TFMXSeg7Shape]);
   RegisterComponents(FMX_COMPONENTS_PALETTE, [TFMXToast]);
   RegisterComponents(FMX_COMPONENTS_PALETTE, [TFMXQRCode]);
+  RegisterComponents(FMX_COMPONENTS_PALETTE, [TFMXLoadingIndicator]);
 end;
 
 end.
