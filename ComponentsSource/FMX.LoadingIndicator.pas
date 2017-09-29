@@ -46,6 +46,7 @@ type
     FColor: TAlphaColor;
     FAnimation: TAnimation;
     FShapes: TArray<TShape>;
+    FChanging: Boolean;
     function GetCellRect(CellWidth, CellHeight: Single;
       const Cell: TCell): TRectF;
     procedure SetKind(const Value: TLoadingIndicatorKind);
@@ -347,13 +348,19 @@ end;
 procedure TFMXLoadingIndicator.Resize;
 begin
   inherited;
-  ConfirmSize;
-  CreateIndicator;
+  if not FChanging then
+  begin
+    FChanging := True;
+    ConfirmSize;
+    CreateIndicator;
+    FChanging := False;
+  end;
 end;
 
 constructor TFMXLoadingIndicator.Create(AOwner: TComponent);
 begin
   inherited;
+  FChanging := False;
   FColor := $FF1282B2;
   FKind := TLoadingIndicatorKind.LoadingPulse;
   Width := 46;
@@ -421,7 +428,7 @@ var
 begin
   for I := ChildrenCount - 1 downto 0 do
   begin
-    RemoveObject(Children[I]);
+    Children[I].DisposeOf;
   end;
   case Kind of
     LoadingArcs:
@@ -441,6 +448,7 @@ begin
     LoadingWave:
       CreateLoadingWave;
   end;
+  FAnimation.Enabled := True;
 end;
 
 procedure TFMXLoadingIndicator.Loaded;
@@ -468,11 +476,13 @@ begin
   if FKind <> Value then
   begin
     FKind := Value;
+    FChanging := True;
     if FKind = TLoadingIndicatorKind.LoadingThreeDots then
     begin
       Size.Size := TSizeF.Create(70, 20);
     end;
     ConfirmSize;
+    FChanging := False;
     CreateIndicator;
   end;
 end;
