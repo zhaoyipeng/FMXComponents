@@ -75,7 +75,27 @@ object LoadingIndicatorDemoForm: TLoadingIndicatorDemoForm
         ControlCollection = <
           item
             Column = 0
-            Control = FMXLoadingIndicator1
+            Control = FMXLoadingIndicator14
+            Row = 2
+          end
+          item
+            Column = 2
+            Control = FMXLoadingIndicator12
+            Row = 1
+          end
+          item
+            Column = 1
+            Control = FMXLoadingIndicator5
+            Row = 1
+          end
+          item
+            Column = 0
+            Control = FMXLoadingIndicator4
+            Row = 1
+          end
+          item
+            Column = 2
+            Control = FMXLoadingIndicator3
             Row = 0
           end
           item
@@ -84,71 +104,59 @@ object LoadingIndicatorDemoForm: TLoadingIndicatorDemoForm
             Row = 0
           end
           item
-            Column = 2
-            Control = FMXLoadingIndicator3
-            Row = 0
-          end
-          item
             Column = 0
-            Control = FMXLoadingIndicator4
-            Row = 1
-          end
-          item
-            Column = 1
-            Control = FMXLoadingIndicator5
-            Row = 1
+            Control = FMXLoadingIndicator1
+            Row = 0
           end>
         RowCollection = <
           item
-            Value = 50.000000000000000000
+            Value = 33.333333333333330000
           end
           item
-            Value = 50.000000000000000000
+            Value = 33.333333333333330000
           end
           item
-            SizeStyle = Auto
+            Value = 33.333333333333330000
           end>
-        object FMXLoadingIndicator1: TFMXLoadingIndicator
+        object FMXLoadingIndicator14: TFMXLoadingIndicator
           Anchors = []
           HitTest = False
           Position.X = 55.666664123535160000
-          Position.Y = 37.000000000000000000
+          Position.Y = 177.000000000000000000
           Size.Width = 46.000000000000000000
           Size.Height = 46.000000000000000000
           Size.PlatformDefault = False
-          TabOrder = 0
+          TabOrder = 6
           Color = claDarkgray
-          Kind = LoadingArcs
         end
-        object FMXLoadingIndicator2: TFMXLoadingIndicator
-          Anchors = []
-          HitTest = False
-          Position.X = 213.000000000000000000
-          Position.Y = 37.000000000000000000
-          Size.Width = 46.000000000000000000
-          Size.Height = 46.000000000000000000
-          Size.PlatformDefault = False
-          TabOrder = 1
-          Color = claDarkgray
-          Kind = LoadingArcsRing
-        end
-        object FMXLoadingIndicator3: TFMXLoadingIndicator
+        object FMXLoadingIndicator12: TFMXLoadingIndicator
           Anchors = []
           HitTest = False
           Position.X = 370.333312988281300000
-          Position.Y = 37.000000000000000000
+          Position.Y = 97.000000000000000000
           Size.Width = 46.000000000000000000
           Size.Height = 46.000000000000000000
           Size.PlatformDefault = False
-          TabOrder = 2
+          TabOrder = 4
           Color = claDarkgray
-          Kind = LoadingDoubleBounce
+          Kind = LoadingRing
+        end
+        object FMXLoadingIndicator5: TFMXLoadingIndicator
+          Anchors = []
+          HitTest = False
+          Position.X = 213.000000000000000000
+          Position.Y = 97.000000000000000000
+          Size.Width = 46.000000000000000000
+          Size.Height = 46.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 5
+          Color = claDarkgray
         end
         object FMXLoadingIndicator4: TFMXLoadingIndicator
           Anchors = []
           HitTest = False
           Position.X = 55.666664123535160000
-          Position.Y = 157.000000000000000000
+          Position.Y = 97.000000000000000000
           Size.Width = 46.000000000000000000
           Size.Height = 46.000000000000000000
           Size.PlatformDefault = False
@@ -156,16 +164,41 @@ object LoadingIndicatorDemoForm: TLoadingIndicatorDemoForm
           Color = claDarkgray
           Kind = LoadingFlipPlane
         end
-        object FMXLoadingIndicator5: TFMXLoadingIndicator
+        object FMXLoadingIndicator3: TFMXLoadingIndicator
           Anchors = []
           HitTest = False
-          Position.X = 213.000000000000000000
-          Position.Y = 157.000000000000000000
+          Position.X = 370.333312988281300000
+          Position.Y = 17.000000000000000000
           Size.Width = 46.000000000000000000
           Size.Height = 46.000000000000000000
           Size.PlatformDefault = False
-          TabOrder = 4
+          TabOrder = 2
           Color = claDarkgray
+          Kind = LoadingDoubleBounce
+        end
+        object FMXLoadingIndicator2: TFMXLoadingIndicator
+          Anchors = []
+          HitTest = False
+          Position.X = 213.000000000000000000
+          Position.Y = 17.000000000000000000
+          Size.Width = 46.000000000000000000
+          Size.Height = 46.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 1
+          Color = claDarkgray
+          Kind = LoadingArcsRing
+        end
+        object FMXLoadingIndicator1: TFMXLoadingIndicator
+          Anchors = []
+          HitTest = False
+          Position.X = 55.666664123535160000
+          Position.Y = 17.000000000000000000
+          Size.Width = 46.000000000000000000
+          Size.Height = 46.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 0
+          Color = claDarkgray
+          Kind = LoadingArcs
         end
       end
     end
@@ -220,22 +253,32 @@ object LoadingIndicatorDemoForm: TLoadingIndicatorDemoForm
             Column = 1
             Control = FMXLoadingIndicator10
             Row = 1
+          end
+          item
+            Column = 2
+            Control = FMXLoadingIndicator11
+            Row = 1
+          end
+          item
+            Column = 0
+            Control = FMXLoadingIndicator13
+            Row = 2
           end>
         RowCollection = <
           item
-            Value = 50.000000000000000000
+            Value = 33.333333333333330000
           end
           item
-            Value = 50.000000000000000000
+            Value = 33.333333333333330000
           end
           item
-            SizeStyle = Auto
+            Value = 33.333333333333330000
           end>
         object FMXLoadingIndicator6: TFMXLoadingIndicator
           Anchors = []
           HitTest = False
           Position.X = 55.666664123535160000
-          Position.Y = 37.000000000000000000
+          Position.Y = 17.000000000000000000
           Size.Width = 46.000000000000000000
           Size.Height = 46.000000000000000000
           Size.PlatformDefault = False
@@ -247,7 +290,7 @@ object LoadingIndicatorDemoForm: TLoadingIndicatorDemoForm
           Anchors = []
           HitTest = False
           Position.X = 213.000000000000000000
-          Position.Y = 37.000000000000000000
+          Position.Y = 17.000000000000000000
           Size.Width = 46.000000000000000000
           Size.Height = 46.000000000000000000
           Size.PlatformDefault = False
@@ -259,7 +302,7 @@ object LoadingIndicatorDemoForm: TLoadingIndicatorDemoForm
           Anchors = []
           HitTest = False
           Position.X = 370.333312988281300000
-          Position.Y = 37.000000000000000000
+          Position.Y = 17.000000000000000000
           Size.Width = 46.000000000000000000
           Size.Height = 46.000000000000000000
           Size.PlatformDefault = False
@@ -271,7 +314,7 @@ object LoadingIndicatorDemoForm: TLoadingIndicatorDemoForm
           Anchors = []
           HitTest = False
           Position.X = 55.666664123535160000
-          Position.Y = 157.000000000000000000
+          Position.Y = 97.000000000000000000
           Size.Width = 46.000000000000000000
           Size.Height = 46.000000000000000000
           Size.PlatformDefault = False
@@ -283,11 +326,34 @@ object LoadingIndicatorDemoForm: TLoadingIndicatorDemoForm
           Anchors = []
           HitTest = False
           Position.X = 213.000000000000000000
-          Position.Y = 157.000000000000000000
+          Position.Y = 97.000000000000000000
+          Size.Width = 46.000000000000000000
+          Size.Height = 46.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 5
+          Color = xFF1282B2
+        end
+        object FMXLoadingIndicator11: TFMXLoadingIndicator
+          Anchors = []
+          HitTest = False
+          Position.X = 370.333312988281300000
+          Position.Y = 97.000000000000000000
           Size.Width = 46.000000000000000000
           Size.Height = 46.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 4
+          Color = xFF1282B2
+          Kind = LoadingRing
+        end
+        object FMXLoadingIndicator13: TFMXLoadingIndicator
+          Anchors = []
+          HitTest = False
+          Position.X = 55.666664123535160000
+          Position.Y = 177.000000000000000000
+          Size.Width = 46.000000000000000000
+          Size.Height = 46.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 6
           Color = xFF1282B2
         end
       end

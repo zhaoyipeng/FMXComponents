@@ -11,11 +11,6 @@ uses
 type
   TLoadingIndicatorDemoForm = class(TForm)
     GridPanelLayout1: TGridPanelLayout;
-    FMXLoadingIndicator1: TFMXLoadingIndicator;
-    FMXLoadingIndicator2: TFMXLoadingIndicator;
-    FMXLoadingIndicator3: TFMXLoadingIndicator;
-    FMXLoadingIndicator4: TFMXLoadingIndicator;
-    FMXLoadingIndicator5: TFMXLoadingIndicator;
     Layout1: TLayout;
     Rectangle1: TRectangle;
     Rectangle3: TRectangle;
@@ -31,6 +26,15 @@ type
     FMXLoadingIndicator8: TFMXLoadingIndicator;
     FMXLoadingIndicator9: TFMXLoadingIndicator;
     FMXLoadingIndicator10: TFMXLoadingIndicator;
+    FMXLoadingIndicator11: TFMXLoadingIndicator;
+    FMXLoadingIndicator13: TFMXLoadingIndicator;
+    FMXLoadingIndicator14: TFMXLoadingIndicator;
+    FMXLoadingIndicator12: TFMXLoadingIndicator;
+    FMXLoadingIndicator5: TFMXLoadingIndicator;
+    FMXLoadingIndicator4: TFMXLoadingIndicator;
+    FMXLoadingIndicator3: TFMXLoadingIndicator;
+    FMXLoadingIndicator2: TFMXLoadingIndicator;
+    FMXLoadingIndicator1: TFMXLoadingIndicator;
   private
     { Private declarations }
   public
