@@ -7,7 +7,7 @@ object LoadingIndicatorDemoForm: TLoadingIndicatorDemoForm
   FormFactor.Width = 320
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
-  DesignerMasterStyle = 3
+  DesignerMasterStyle = 0
   object Rectangle1: TRectangle
     Align = Client
     Fill.Color = claWhite
@@ -32,7 +32,6 @@ object LoadingIndicatorDemoForm: TLoadingIndicatorDemoForm
         StyleLookup = 'lbl5Style1'
         TextSettings.Font.Size = 16.000000000000000000
         Text = 'Loading Indicators'
-        TabOrder = 0
       end
     end
     object Rectangle2: TRectangle
@@ -64,13 +63,13 @@ object LoadingIndicatorDemoForm: TLoadingIndicatorDemoForm
         TabOrder = 0
         ColumnCollection = <
           item
-            Value = 33.333333333333330000
+            Value = 33.333333333333340000
           end
           item
-            Value = 33.333333333333330000
+            Value = 33.333333333333340000
           end
           item
-            Value = 33.333333333333330000
+            Value = 33.333333333333340000
           end>
         ControlCollection = <
           item
@@ -115,13 +114,13 @@ object LoadingIndicatorDemoForm: TLoadingIndicatorDemoForm
           end>
         RowCollection = <
           item
-            Value = 33.333333333333330000
+            Value = 33.333333333333340000
           end
           item
-            Value = 33.333333333333330000
+            Value = 33.333333333333340000
           end
           item
-            Value = 33.333333333333330000
+            Value = 33.333333333333340000
           end>
         object FMXLoadingIndicator14: TFMXLoadingIndicator
           Anchors = []
@@ -210,9 +209,9 @@ object LoadingIndicatorDemoForm: TLoadingIndicatorDemoForm
           Anchors = []
           HitTest = False
           Position.X = 211.000000000000000000
-          Position.Y = 187.500000000000000000
+          Position.Y = 177.000000000000000000
           Size.Width = 50.000000000000000000
-          Size.Height = 25.000000000000000000
+          Size.Height = 46.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 6
           Color = claDarkgray
@@ -238,13 +237,13 @@ object LoadingIndicatorDemoForm: TLoadingIndicatorDemoForm
         TabOrder = 0
         ColumnCollection = <
           item
-            Value = 33.333333333333330000
+            Value = 33.333333333333340000
           end
           item
-            Value = 33.333333333333330000
+            Value = 33.333333333333340000
           end
           item
-            Value = 33.333333333333330000
+            Value = 33.333333333333340000
           end>
         ControlCollection = <
           item
@@ -289,13 +288,13 @@ object LoadingIndicatorDemoForm: TLoadingIndicatorDemoForm
           end>
         RowCollection = <
           item
-            Value = 33.333333333333330000
+            Value = 33.333333333333340000
           end
           item
-            Value = 33.333333333333330000
+            Value = 33.333333333333340000
           end
           item
-            Value = 33.333333333333330000
+            Value = 33.333333333333340000
           end>
         object FMXLoadingIndicator6: TFMXLoadingIndicator
           Anchors = []
@@ -384,9 +383,9 @@ object LoadingIndicatorDemoForm: TLoadingIndicatorDemoForm
           Anchors = []
           HitTest = False
           Position.X = 211.000000000000000000
-          Position.Y = 187.500000000000000000
+          Position.Y = 177.000000000000000000
           Size.Width = 50.000000000000000000
-          Size.Height = 25.000000000000000000
+          Size.Height = 46.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 6
           Color = xFF1282B2
