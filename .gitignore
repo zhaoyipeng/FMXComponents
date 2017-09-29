@@ -21,3 +21,5 @@
 /ComponentsSource/FMXComponentEd.identcache
 /ComponentsSource/*.stat
 /ComponentsSource/FMXComponentEd.res
+/Demo/LoadingIndicatorDemo.dproj.local
+/Demo/LoadingIndicatorDemo.res

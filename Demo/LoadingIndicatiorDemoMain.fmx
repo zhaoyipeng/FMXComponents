@@ -1,0 +1,328 @@
+object LoadingIndicatorDemoForm: TLoadingIndicatorDemoForm
+  Left = 0
+  Top = 0
+  Caption = 'Firemonkey Loading Indicator Demo'
+  ClientHeight = 657
+  ClientWidth = 472
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  DesignerMasterStyle = 3
+  object Rectangle1: TRectangle
+    Align = Client
+    Fill.Color = claWhite
+    Size.Width = 472.000000000000000000
+    Size.Height = 612.000000000000000000
+    Size.PlatformDefault = False
+    Stroke.Kind = None
+    object Layout1: TLayout
+      Align = Top
+      Size.Width = 472.000000000000000000
+      Size.Height = 50.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      object Label1: TLabel
+        Align = Contents
+        StyledSettings = [Family, Style]
+        Margins.Left = 20.000000000000000000
+        Margins.Right = 20.000000000000000000
+        Size.Width = 432.000000000000000000
+        Size.Height = 50.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = 'lbl5Style1'
+        TextSettings.Font.Size = 16.000000000000000000
+        Text = 'Loading Indicators'
+        TabOrder = 0
+      end
+    end
+    object Rectangle2: TRectangle
+      Align = Top
+      Fill.Color = xFFE7F4F5
+      HitTest = False
+      Position.Y = 290.000000000000000000
+      Sides = [Bottom]
+      Size.Width = 472.000000000000000000
+      Size.Height = 16.000000000000000000
+      Size.PlatformDefault = False
+      Stroke.Color = xFFD9D9D9
+    end
+    object Rectangle4: TRectangle
+      Align = Top
+      Fill.Color = claWhite
+      HitTest = False
+      Position.Y = 306.000000000000000000
+      Sides = [Bottom]
+      Size.Width = 472.000000000000000000
+      Size.Height = 240.000000000000000000
+      Size.PlatformDefault = False
+      Stroke.Color = xFFD9D9D9
+      object GridPanelLayout1: TGridPanelLayout
+        Align = Top
+        Size.Width = 472.000000000000000000
+        Size.Height = 240.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        ColumnCollection = <
+          item
+            Value = 33.333333333333330000
+          end
+          item
+            Value = 33.333333333333330000
+          end
+          item
+            Value = 33.333333333333330000
+          end>
+        ControlCollection = <
+          item
+            Column = 0
+            Control = FMXLoadingIndicator1
+            Row = 0
+          end
+          item
+            Column = 1
+            Control = FMXLoadingIndicator2
+            Row = 0
+          end
+          item
+            Column = 2
+            Control = FMXLoadingIndicator3
+            Row = 0
+          end
+          item
+            Column = 0
+            Control = FMXLoadingIndicator4
+            Row = 1
+          end
+          item
+            Column = 1
+            Control = FMXLoadingIndicator5
+            Row = 1
+          end>
+        RowCollection = <
+          item
+            Value = 50.000000000000000000
+          end
+          item
+            Value = 50.000000000000000000
+          end
+          item
+            SizeStyle = Auto
+          end>
+        object FMXLoadingIndicator1: TFMXLoadingIndicator
+          Anchors = []
+          HitTest = False
+          Position.X = 55.666664123535160000
+          Position.Y = 37.000000000000000000
+          Size.Width = 46.000000000000000000
+          Size.Height = 46.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 0
+          Color = claDarkgray
+          Kind = LoadingArcs
+        end
+        object FMXLoadingIndicator2: TFMXLoadingIndicator
+          Anchors = []
+          HitTest = False
+          Position.X = 213.000000000000000000
+          Position.Y = 37.000000000000000000
+          Size.Width = 46.000000000000000000
+          Size.Height = 46.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 1
+          Color = claDarkgray
+          Kind = LoadingArcsRing
+        end
+        object FMXLoadingIndicator3: TFMXLoadingIndicator
+          Anchors = []
+          HitTest = False
+          Position.X = 370.333312988281300000
+          Position.Y = 37.000000000000000000
+          Size.Width = 46.000000000000000000
+          Size.Height = 46.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 2
+          Color = claDarkgray
+          Kind = LoadingDoubleBounce
+        end
+        object FMXLoadingIndicator4: TFMXLoadingIndicator
+          Anchors = []
+          HitTest = False
+          Position.X = 55.666664123535160000
+          Position.Y = 157.000000000000000000
+          Size.Width = 46.000000000000000000
+          Size.Height = 46.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 3
+          Color = claDarkgray
+          Kind = LoadingFlipPlane
+        end
+        object FMXLoadingIndicator5: TFMXLoadingIndicator
+          Anchors = []
+          HitTest = False
+          Position.X = 213.000000000000000000
+          Position.Y = 157.000000000000000000
+          Size.Width = 46.000000000000000000
+          Size.Height = 46.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 4
+          Color = claDarkgray
+        end
+      end
+    end
+    object Rectangle5: TRectangle
+      Align = Top
+      Fill.Color = claBlack
+      HitTest = False
+      Position.Y = 50.000000000000000000
+      Sides = [Bottom]
+      Size.Width = 472.000000000000000000
+      Size.Height = 240.000000000000000000
+      Size.PlatformDefault = False
+      Stroke.Color = xFFD9D9D9
+      object GridPanelLayout2: TGridPanelLayout
+        Align = Top
+        Size.Width = 472.000000000000000000
+        Size.Height = 240.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        ColumnCollection = <
+          item
+            Value = 33.333333333333330000
+          end
+          item
+            Value = 33.333333333333330000
+          end
+          item
+            Value = 33.333333333333330000
+          end>
+        ControlCollection = <
+          item
+            Column = 0
+            Control = FMXLoadingIndicator6
+            Row = 0
+          end
+          item
+            Column = 1
+            Control = FMXLoadingIndicator7
+            Row = 0
+          end
+          item
+            Column = 2
+            Control = FMXLoadingIndicator8
+            Row = 0
+          end
+          item
+            Column = 0
+            Control = FMXLoadingIndicator9
+            Row = 1
+          end
+          item
+            Column = 1
+            Control = FMXLoadingIndicator10
+            Row = 1
+          end>
+        RowCollection = <
+          item
+            Value = 50.000000000000000000
+          end
+          item
+            Value = 50.000000000000000000
+          end
+          item
+            SizeStyle = Auto
+          end>
+        object FMXLoadingIndicator6: TFMXLoadingIndicator
+          Anchors = []
+          HitTest = False
+          Position.X = 55.666664123535160000
+          Position.Y = 37.000000000000000000
+          Size.Width = 46.000000000000000000
+          Size.Height = 46.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 0
+          Color = xFF1282B2
+          Kind = LoadingArcs
+        end
+        object FMXLoadingIndicator7: TFMXLoadingIndicator
+          Anchors = []
+          HitTest = False
+          Position.X = 213.000000000000000000
+          Position.Y = 37.000000000000000000
+          Size.Width = 46.000000000000000000
+          Size.Height = 46.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 1
+          Color = xFF1282B2
+          Kind = LoadingArcsRing
+        end
+        object FMXLoadingIndicator8: TFMXLoadingIndicator
+          Anchors = []
+          HitTest = False
+          Position.X = 370.333312988281300000
+          Position.Y = 37.000000000000000000
+          Size.Width = 46.000000000000000000
+          Size.Height = 46.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 2
+          Color = xFF1282B2
+          Kind = LoadingDoubleBounce
+        end
+        object FMXLoadingIndicator9: TFMXLoadingIndicator
+          Anchors = []
+          HitTest = False
+          Position.X = 55.666664123535160000
+          Position.Y = 157.000000000000000000
+          Size.Width = 46.000000000000000000
+          Size.Height = 46.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 3
+          Color = xFF1282B2
+          Kind = LoadingFlipPlane
+        end
+        object FMXLoadingIndicator10: TFMXLoadingIndicator
+          Anchors = []
+          HitTest = False
+          Position.X = 213.000000000000000000
+          Position.Y = 157.000000000000000000
+          Size.Width = 46.000000000000000000
+          Size.Height = 46.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 4
+          Color = xFF1282B2
+        end
+      end
+    end
+  end
+  object Rectangle3: TRectangle
+    Align = MostTop
+    Fill.Color = xFF1EB9C1
+    Size.Width = 472.000000000000000000
+    Size.Height = 44.000000000000000000
+    Size.PlatformDefault = False
+    Stroke.Color = xFFE7F4F5
+    Stroke.Thickness = 0.000000000000000000
+    object Label13: TLabel
+      Align = Contents
+      StyledSettings = [Family, Style]
+      Size.Width = 472.000000000000000000
+      Size.Height = 44.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = 'lbl5Style1'
+      TextSettings.Font.Size = 16.000000000000000000
+      TextSettings.FontColor = claWhite
+      TextSettings.HorzAlign = Center
+      Text = 'FMXComponents Demo Application'
+    end
+  end
+  object rect1: TRectangle
+    Align = Top
+    Fill.Color = claLightgray
+    HitTest = False
+    Position.Y = 44.000000000000000000
+    Sides = [Bottom]
+    Size.Width = 472.000000000000000000
+    Size.Height = 1.000000000000000000
+    Size.PlatformDefault = False
+    Stroke.Color = xFFD9D9D9
+  end
+end

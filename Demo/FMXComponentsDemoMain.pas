@@ -29,7 +29,6 @@ type
     FMXScrollableList1: TFMXScrollableList;
     Label2: TLabel;
     FMXRatingBar1: TFMXRatingBar;
-    lblHeader: TLabel;
     btnAnimation: TButton;
     FloatAnimation1: TFloatAnimation;
     FMXCircleScoreIndicator1: TFMXCircleScoreIndicator;
@@ -104,6 +103,8 @@ type
     nbQuiteZone: TNumberBox;
     Label12: TLabel;
     nbQRCodeSize: TNumberBox;
+    Rectangle3: TRectangle;
+    Label13: TLabel;
     procedure FMXScrollableList2Change(Sender: TObject);
     procedure FMXScrollableList1Change(Sender: TObject);
     procedure btnAnimationClick(Sender: TObject);
