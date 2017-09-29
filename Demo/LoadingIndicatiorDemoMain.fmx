@@ -209,9 +209,9 @@ object LoadingIndicatorDemoForm: TLoadingIndicatorDemoForm
           Anchors = []
           HitTest = False
           Position.X = 211.000000000000000000
-          Position.Y = 177.000000000000000000
+          Position.Y = 180.000000000000000000
           Size.Width = 50.000000000000000000
-          Size.Height = 46.000000000000000000
+          Size.Height = 40.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 6
           Color = claDarkgray
@@ -383,9 +383,9 @@ object LoadingIndicatorDemoForm: TLoadingIndicatorDemoForm
           Anchors = []
           HitTest = False
           Position.X = 211.000000000000000000
-          Position.Y = 177.000000000000000000
+          Position.Y = 180.000000000000000000
           Size.Width = 50.000000000000000000
-          Size.Height = 46.000000000000000000
+          Size.Height = 40.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 6
           Color = xFF1282B2
