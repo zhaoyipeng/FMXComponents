@@ -17,7 +17,7 @@ uses
 
 type
   TLoadingIndicatorKind = (LoadingArcs, LoadingDoubleBounce, LoadingFlipPlane,
-    LoadingPulse, LoadingArcsRing, LoadingRing, LoadingThreeDots);
+    LoadingPulse, LoadingArcsRing, LoadingRing, LoadingThreeDots, LoadingWave);
 
   [ComponentPlatformsAttribute(TFMXPlatforms)]
   TFMXLoadingIndicator = class(TLayout)
@@ -29,7 +29,7 @@ type
       RowSpan: Integer;
     end;
   private const
-    RING_CELLS: array [0..7] of TCell = (
+    RING_CELLS: array [0 .. 7] of TCell = (
       (Col: 2; Row: 0; ColSpan: 1; RowSpan: 1),
       (Col: 3; Row: 0; ColSpan: 2; RowSpan: 2),
       (Col: 4; Row: 2; ColSpan: 1; RowSpan: 1),
@@ -38,7 +38,7 @@ type
       (Col: 0; Row: 3; ColSpan: 2; RowSpan: 2),
       (Col: 0; Row: 2; ColSpan: 1; RowSpan: 1),
       (Col: 0; Row: 0; ColSpan: 2; RowSpan: 2)
-    );
+      );
     RING_CIRCLE_SIZE = 6;
     procedure ConfirmSize;
   private
@@ -56,6 +56,8 @@ type
     procedure LoadingArcsAnimationProcess(Sender: TObject);
     procedure LoadingArcsRingAnimationProcess(Sender: TObject);
     procedure LoadingRingAnimationProcess(Sender: TObject);
+    procedure LoadingThreeDotsAnimationProcess(Sender: TObject);
+    procedure LoadingWaveAnimationProcess(Sender: TObject);
     procedure CreateAnimation;
     procedure CreateIndicator;
     procedure CreateLoadingArcs;
@@ -64,6 +66,8 @@ type
     procedure CreateLoadingFlipPlane;
     procedure CreateLoadingPulse;
     procedure CreateLoadingRing;
+    procedure CreateLoadingThreeDots;
+    procedure CreateLoadingWave;
   public
     constructor Create(AOwner: TComponent); override;
     procedure Loaded; override;
@@ -140,8 +144,8 @@ begin
   Arc2 := FShapes[1] as TPath;
   T := FAnimation.NormalizedTime;
   A := InterpolateSingle(0, 360, T);
-  Arc1.RotationAngle := 360 - A;
-  Arc2.RotationAngle := A;
+  Arc1.RotationAngle := A;
+  Arc2.RotationAngle := 360 - A;
 end;
 
 procedure TFMXLoadingIndicator.LoadingArcsRingAnimationProcess(Sender: TObject);
@@ -189,13 +193,14 @@ procedure TFMXLoadingIndicator.LoadingFlipPlaneAnimationProcess(
   Sender: TObject);
   function CalcScale(T: Single): Single;
   begin
-    if T < 0.4 then
-      Result := InterpolateSingle(1, 0, T / 0.4)
-    else if T < 0.8 then
-      Result := InterpolateSingle(0, 1, (T - 0.4) / 0.4)
+    if T < 0.25 then
+      Result := InterpolateSingle(1, 0, T / 0.25)
+    else if T < 0.5 then
+      Result := InterpolateSingle(0, 1, (T - 0.25) / 0.25)
     else
       Result := 1;
   end;
+
 var
   SX, SY: Single;
   T: Single;
@@ -233,7 +238,7 @@ procedure TFMXLoadingIndicator.LoadingRingAnimationProcess(Sender: TObject);
 var
   T: Single;
   I: Integer;
-  S: Single;
+  s: Single;
   Circle: TCircle;
   R: TRectF;
   C: TPointF;
@@ -242,22 +247,100 @@ begin
   for I := Low(FShapes) to High(FShapes) do
   begin
     if T < 0.4 then
-      S := InterpolateSingle(0, 1, T /0.4)
+      s := InterpolateSingle(0, 1, T / 0.4)
     else if T < 0.8 then
-      S := InterpolateSingle(1, 0, (T-0.4) / 0.4)
+      s := InterpolateSingle(1, 0, (T - 0.4) / 0.4)
     else
-      S := 0;
+      s := 0;
     Circle := FShapes[I] as TCircle;
-    Circle.Scale.Point := PointF(S, S);
-    R := GetCellRect(Width/5,Height/5,RING_CELLS[I]);
+    Circle.Scale.Point := PointF(s, s);
+    R := GetCellRect(Width / 5, Height / 5, RING_CELLS[I]);
     C := R.CenterPoint;
     Circle.Position.Point := PointF(
-      C.X - Circle.Width * S / 2,
-      C.Y - Circle.Height * S / 2
-    );
+      C.X - Circle.Width * s / 2,
+      C.Y - Circle.Height * s / 2
+      );
     T := T - 0.125;
     if T < 0 then
       T := T + 1;
+  end;
+end;
+
+procedure TFMXLoadingIndicator.LoadingThreeDotsAnimationProcess(
+  Sender: TObject);
+var
+  T: Single;
+  I: Integer;
+  s: Single;
+  Circle: TCircle;
+  R: TRectF;
+  C: TPointF;
+  W, H, Space: Single;
+begin
+  T := FAnimation.CurrentTime;
+  W := (Width - 10) / 3;
+  H := Height;
+  Space := 0;
+  for I := Low(FShapes) to High(FShapes) do
+  begin
+    if T < 0.5 then
+      s := InterpolateSingle(0, 1, T / 0.5)
+    else if T < 0.6 then
+      s := 1
+    else if T < 1.1 then
+      s := InterpolateSingle(1, 0, (T - 0.6) / 0.5)
+    else
+      s := 0;
+    T := T - 0.25;
+    if T < 0 then
+      T := T + 1.9;
+    R := RectF(0, 0, W, H);
+    R.Offset(I * W + Space, 0);
+    Space := Space + 5;
+    Circle := FShapes[I] as TCircle;
+    Circle.Scale.Point := PointF(s, s);
+    C := R.CenterPoint;
+    Circle.Position.Point := PointF(
+      C.X - Circle.Width * s / 2,
+      C.Y - Circle.Height * s / 2
+      );
+  end;
+end;
+
+procedure TFMXLoadingIndicator.LoadingWaveAnimationProcess(Sender: TObject);
+var
+  T: Single;
+  I: Integer;
+  s: Single;
+  Rectangle: TRectangle;
+  R: TRectF;
+  C: TPointF;
+  W, H, Space: Single;
+begin
+  T := FAnimation.NormalizedTime;
+  W := (Width - 20) / 5;
+  H := Height;
+  Space := 0;
+  for I := Low(FShapes) to High(FShapes) do
+  begin
+    if T < 0.1 then
+      s := InterpolateSingle(1, 1.6, T / 0.1)
+    else if (T < 0.15) then
+      s := 1.6
+    else if T < 0.35 then
+      s := InterpolateSingle(1.6, 1, (T - 0.15) / 0.2)
+    else
+      s := 1;
+    T := T - 0.05;
+    if T < 0 then
+      T := T + 1;
+    R := RectF(0, 0, W, H);
+    R.Offset(I * W + Space, 0);
+    Space := Space + 5;
+    Rectangle := FShapes[I] as TRectangle;
+    Rectangle.Scale.Y := s;
+    C := R.CenterPoint;
+    Rectangle.Position.Y := C.Y - Rectangle.Height * s / 2;
   end;
 end;
 
@@ -353,6 +436,10 @@ begin
       CreateLoadingArcsRing;
     LoadingRing:
       CreateLoadingRing;
+    LoadingThreeDots:
+      CreateLoadingThreeDots;
+    LoadingWave:
+      CreateLoadingWave;
   end;
 end;
 
@@ -381,6 +468,10 @@ begin
   if FKind <> Value then
   begin
     FKind := Value;
+    if FKind = TLoadingIndicatorKind.LoadingThreeDots then
+    begin
+      Size.Size := TSizeF.Create(70, 20);
+    end;
     ConfirmSize;
     CreateIndicator;
   end;
@@ -400,7 +491,15 @@ begin
     if Width < 70 then
       Width := 70;
   end
-  else begin
+  else if Kind = LoadingWave then
+  begin
+    if Height < 25 then
+      Height := 25;
+    if Width < 50 then
+      Width := 50;
+  end
+  else
+  begin
     if Height < 46 then
       Height := 46;
     if Width < 46 then
@@ -510,7 +609,6 @@ var
   Circle: TCircle;
   W, H: Single;
   I: Integer;
-  C: TPointF;
   R, R2: TRectF;
 begin
   SetLength(FShapes, 8);
@@ -534,6 +632,70 @@ begin
   CreateAnimation;
   FAnimation.Duration := 0.8;
   FAnimation.OnProcess := LoadingRingAnimationProcess;
+end;
+
+procedure TFMXLoadingIndicator.CreateLoadingThreeDots;
+var
+  Circle: TCircle;
+  W, H: Single;
+  I: Integer;
+  R: TRectF;
+  Space: Single;
+begin
+  SetLength(FShapes, 3);
+  W := (Width - 10) / 3;
+  H := Height;
+  Space := 0;
+  for I := 0 to 2 do
+  begin
+    R := RectF(0, 0, W, H);
+    R.Offset(I * W + Space, 0);
+    Space := Space + 5;
+
+    Circle := TCircle.Create(Self);
+    Circle.Stored := False;
+    Circle.Fill.Kind := TBrushKind.Solid;
+    Circle.Fill.Color := Color;
+    Circle.Stroke.Kind := TBrushKind.None;
+    Circle.BoundsRect := R;
+    FShapes[I] := Circle;
+    AddObject(Circle);
+  end;
+  CreateAnimation;
+  FAnimation.Duration := 1.9;
+  FAnimation.OnProcess := LoadingThreeDotsAnimationProcess;
+end;
+
+procedure TFMXLoadingIndicator.CreateLoadingWave;
+var
+  Rectangle: TRectangle;
+  W, H: Single;
+  I: Integer;
+  R: TRectF;
+  Space: Single;
+begin
+  SetLength(FShapes, 5);
+  W := (Width - 20) / 5;
+  H := Height;
+  Space := 0;
+  for I := 0 to 4 do
+  begin
+    R := RectF(0, 0, W, H);
+    R.Offset(I * W + Space, 0);
+    Space := Space + 5;
+
+    Rectangle := TRectangle.Create(Self);
+    Rectangle.Stored := False;
+    Rectangle.Fill.Kind := TBrushKind.Solid;
+    Rectangle.Fill.Color := Color;
+    Rectangle.Stroke.Kind := TBrushKind.None;
+    Rectangle.BoundsRect := R;
+    FShapes[I] := Rectangle;
+    AddObject(Rectangle);
+  end;
+  CreateAnimation;
+  FAnimation.Duration := 1;
+  FAnimation.OnProcess := LoadingWaveAnimationProcess;
 end;
 
 function TFMXLoadingIndicator.GetCellRect(CellWidth, CellHeight: Single;

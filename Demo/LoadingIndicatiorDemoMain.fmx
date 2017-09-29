@@ -107,6 +107,11 @@ object LoadingIndicatorDemoForm: TLoadingIndicatorDemoForm
             Column = 0
             Control = FMXLoadingIndicator1
             Row = 0
+          end
+          item
+            Column = 1
+            Control = FMXLoadingIndicator15
+            Row = 2
           end>
         RowCollection = <
           item
@@ -121,13 +126,14 @@ object LoadingIndicatorDemoForm: TLoadingIndicatorDemoForm
         object FMXLoadingIndicator14: TFMXLoadingIndicator
           Anchors = []
           HitTest = False
-          Position.X = 55.666664123535160000
-          Position.Y = 177.000000000000000000
-          Size.Width = 46.000000000000000000
-          Size.Height = 46.000000000000000000
+          Position.X = 43.666664123535160000
+          Position.Y = 190.000000000000000000
+          Size.Width = 70.000000000000000000
+          Size.Height = 20.000000000000000000
           Size.PlatformDefault = False
-          TabOrder = 6
+          TabOrder = 7
           Color = claDarkgray
+          Kind = LoadingThreeDots
         end
         object FMXLoadingIndicator12: TFMXLoadingIndicator
           Anchors = []
@@ -200,6 +206,18 @@ object LoadingIndicatorDemoForm: TLoadingIndicatorDemoForm
           Color = claDarkgray
           Kind = LoadingArcs
         end
+        object FMXLoadingIndicator15: TFMXLoadingIndicator
+          Anchors = []
+          HitTest = False
+          Position.X = 211.000000000000000000
+          Position.Y = 187.500000000000000000
+          Size.Width = 50.000000000000000000
+          Size.Height = 25.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 6
+          Color = claDarkgray
+          Kind = LoadingWave
+        end
       end
     end
     object Rectangle5: TRectangle
@@ -262,6 +280,11 @@ object LoadingIndicatorDemoForm: TLoadingIndicatorDemoForm
           item
             Column = 0
             Control = FMXLoadingIndicator13
+            Row = 2
+          end
+          item
+            Column = 1
+            Control = FMXLoadingIndicator16
             Row = 2
           end>
         RowCollection = <
@@ -348,13 +371,26 @@ object LoadingIndicatorDemoForm: TLoadingIndicatorDemoForm
         object FMXLoadingIndicator13: TFMXLoadingIndicator
           Anchors = []
           HitTest = False
-          Position.X = 55.666664123535160000
-          Position.Y = 177.000000000000000000
-          Size.Width = 46.000000000000000000
-          Size.Height = 46.000000000000000000
+          Position.X = 43.666664123535160000
+          Position.Y = 190.000000000000000000
+          Size.Width = 70.000000000000000000
+          Size.Height = 20.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 7
+          Color = xFF1282B2
+          Kind = LoadingThreeDots
+        end
+        object FMXLoadingIndicator16: TFMXLoadingIndicator
+          Anchors = []
+          HitTest = False
+          Position.X = 211.000000000000000000
+          Position.Y = 187.500000000000000000
+          Size.Width = 50.000000000000000000
+          Size.Height = 25.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 6
           Color = xFF1282B2
+          Kind = LoadingWave
         end
       end
     end

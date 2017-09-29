@@ -35,6 +35,8 @@ type
     FMXLoadingIndicator3: TFMXLoadingIndicator;
     FMXLoadingIndicator2: TFMXLoadingIndicator;
     FMXLoadingIndicator1: TFMXLoadingIndicator;
+    FMXLoadingIndicator15: TFMXLoadingIndicator;
+    FMXLoadingIndicator16: TFMXLoadingIndicator;
   private
     { Private declarations }
   public

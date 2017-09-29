@@ -109,3 +109,9 @@ TFMXToast is a toast component using pure fmx<br>
 A QRCode display component<br>
 use DelphiZXingQRCode to generate QRCode image<br>
 
+## 12.TFMXLoadingIndicator
+
+![TFMXLoadingIndicator](SnapShots/FMXLoadingIndicator.gif)  
+
+Loading indicator port from [LoadingIndicators.WPF](https://github.com/100GPing100/LoadingIndicators.WPF)
+
