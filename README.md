@@ -4,6 +4,14 @@ This project includes the components that donors and I have actually used in app
 If you have some components want to add into this project, you can send it to zhaoyipeng@hotmail.com
 
 本项目包括本人及捐赠人实际应用中使用的控件
+
+## 12.TFMXLoadingIndicator
+#New
+
+![TFMXLoadingIndicator](SnapShots/FMXLoadingIndicator.gif)  
+
+Loading indicator port from [LoadingIndicators.WPF](https://github.com/100GPing100/LoadingIndicators.WPF)
+
  
 ## 1.TFMXScrollableList
 
@@ -109,9 +117,4 @@ TFMXToast is a toast component using pure fmx<br>
 A QRCode display component<br>
 use DelphiZXingQRCode to generate QRCode image<br>
 
-## 12.TFMXLoadingIndicator
-
-![TFMXLoadingIndicator](SnapShots/FMXLoadingIndicator.gif)  
-
-Loading indicator port from [LoadingIndicators.WPF](https://github.com/100GPing100/LoadingIndicators.WPF)
 
