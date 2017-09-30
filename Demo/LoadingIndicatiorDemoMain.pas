@@ -44,10 +44,8 @@ type
     Rectangle7: TRectangle;
     Button1: TButton;
     FloatAnimation1: TFloatAnimation;
-    Rectangle8: TRectangle;
-    PaintBox1: TPaintBox;
+    FMXLoadingIndicator20: TFMXLoadingIndicator;
     procedure Button1Click(Sender: TObject);
-    procedure FloatAnimation1Finish(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FloatAnimation1Process(Sender: TObject);
@@ -71,17 +69,12 @@ begin
   FloatAnimation1.Start;
 end;
 
-procedure TLoadingIndicatorDemoForm.FloatAnimation1Finish(Sender: TObject);
-begin
-  FloatAnimation1.Inverse := not FloatAnimation1.Inverse;
-end;
-
 procedure TLoadingIndicatorDemoForm.FloatAnimation1Process(Sender: TObject);
 var
   T, T1: Single;
 begin
   T := FloatAnimation1.NormalizedTime;
-  T1 := FBezier.GetValue(T);
+  T1 := FBezier.Solve(T, 1.0E-5);
   Rectangle6.Position.X := InterpolateSingle(
     FloatAnimation1.StartValue, FloatAnimation1.StopValue, T1);
 end;
@@ -98,26 +91,26 @@ end;
 
 procedure TLoadingIndicatorDemoForm.PaintBox1Paint(Sender: TObject;
   Canvas: TCanvas);
-var
-  p: TPathData;
-  P0, P1, P2, P3: TPointF;
+//var
+//  p: TPathData;
+//  P0, P1, P2, P3: TPointF;
 begin
-  p := TPathData.Create;
-  P0 := PointF(0,0);
-  P1 := PointF(9, 57);
-  P2 := PointF(49,90);
-  P3 := PointF(100,100);
-  p.MoveTo(P0);
-  P.CurveTo(P1, P2, P3);
-  PaintBox1.Scale.Y := -1;
-  Canvas.Stroke.Kind := TBrushKind.Solid;
-  Canvas.Stroke.Color := TAlphaColors.Black;
-  Canvas.DrawRect(PaintBox1.LocalRect, 0,0,allcorners,  1, TCornerType.Round);
-  Canvas.DrawPath(p, 1);
-  Canvas.DrawLine(P0, P3, 1);
-  Canvas.DrawLine(P0, P1, 1);
-  Canvas.DrawLine(P2, P3, 1);
-  p.Free;
+//  p := TPathData.Create;
+//  P0 := PointF(0,0);
+//  P1 := PointF(9, 57);
+//  P2 := PointF(49,90);
+//  P3 := PointF(100,100);
+//  p.MoveTo(P0);
+//  P.CurveTo(P1, P2, P3);
+//  PaintBox1.Scale.Y := -1;
+//  Canvas.Stroke.Kind := TBrushKind.Solid;
+//  Canvas.Stroke.Color := TAlphaColors.Black;
+//  Canvas.DrawRect(PaintBox1.LocalRect, 0,0,allcorners,  1, TCornerType.Round);
+//  Canvas.DrawPath(p, 1);
+//  Canvas.DrawLine(P0, P3, 1);
+//  Canvas.DrawLine(P0, P1, 1);
+//  Canvas.DrawLine(P2, P3, 1);
+//  p.Free;
 end;
 
 end.

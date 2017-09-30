@@ -17,14 +17,6 @@ object LoadingIndicatorDemoForm: TLoadingIndicatorDemoForm
     Size.Height = 612.000000000000000000
     Size.PlatformDefault = False
     Stroke.Kind = None
-    object Rectangle8: TRectangle
-      Fill.Color = claBlueviolet
-      Position.X = 20.000000000000000000
-      Position.Y = 547.000000000000000000
-      Size.Width = 400.000000000000000000
-      Size.Height = 65.000000000000000000
-      Size.PlatformDefault = False
-    end
     object Layout1: TLayout
       Align = Top
       Size.Width = 472.000000000000000000
@@ -51,10 +43,9 @@ object LoadingIndicatorDemoForm: TLoadingIndicatorDemoForm
         Size.PlatformDefault = False
         object FloatAnimation1: TFloatAnimation
           AutoReverse = True
-          Duration = 10.000000000000000000
+          Duration = 2.000000000000000000
           Loop = True
           OnProcess = FloatAnimation1Process
-          OnFinish = FloatAnimation1Finish
           PropertyName = 'Position.X'
           StartValue = 20.000000000000000000
           StopValue = 420.000000000000000000
@@ -145,6 +136,11 @@ object LoadingIndicatorDemoForm: TLoadingIndicatorDemoForm
           item
             Column = 0
             Control = FMXLoadingIndicator18
+            Row = 2
+          end
+          item
+            Column = 1
+            Control = FMXLoadingIndicator20
             Row = 2
           end>
         RowCollection = <
@@ -263,9 +259,21 @@ object LoadingIndicatorDemoForm: TLoadingIndicatorDemoForm
           Size.Width = 34.000000000000000000
           Size.Height = 34.000000000000000000
           Size.PlatformDefault = False
-          TabOrder = 8
+          TabOrder = 9
           Color = claDarkgray
           Kind = LoadingBallClipRotate
+        end
+        object FMXLoadingIndicator20: TFMXLoadingIndicator
+          Anchors = []
+          HitTest = False
+          Position.X = 160.000000000000000000
+          Position.Y = 183.000000000000000000
+          Size.Width = 34.000000000000000000
+          Size.Height = 34.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 8
+          Color = claDarkgray
+          Kind = LoadingBallClipRotatePulse
         end
       end
     end
@@ -529,14 +537,5 @@ object LoadingIndicatorDemoForm: TLoadingIndicatorDemoForm
     TabOrder = 0
     Text = 'Test'
     OnClick = Button1Click
-  end
-  object PaintBox1: TPaintBox
-    Anchors = []
-    Position.X = 239.000000000000000000
-    Position.Y = 484.000000000000000000
-    Size.Width = 100.000000000000000000
-    Size.Height = 100.000000000000000000
-    Size.PlatformDefault = False
-    OnPaint = PaintBox1Paint
   end
 end
