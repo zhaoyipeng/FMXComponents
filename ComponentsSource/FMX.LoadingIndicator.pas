@@ -7,6 +7,7 @@ uses
   System.Types,
   System.UITypes,
   System.Math,
+  System.Math.Vectors,
   FMX.Types,
   FMX.Controls,
   FMX.Graphics,
@@ -18,7 +19,8 @@ uses
 
 type
   TLoadingIndicatorKind = (LoadingArcs, LoadingDoubleBounce, LoadingFlipPlane,
-    LoadingPulse, LoadingArcsRing, LoadingRing, LoadingThreeDots, LoadingWave);
+    LoadingPulse, LoadingArcsRing, LoadingRing, LoadingThreeDots, LoadingWave,
+    LoadingBallClipRotate, LoadingBallClipRotatePulse);
 
   [ComponentPlatformsAttribute(TFMXPlatforms)]
   TFMXLoadingIndicator = class(TLayout)
@@ -31,10 +33,11 @@ type
     end;
   private const
     INDICATOR_DURING: array [TLoadingIndicatorKind] of Single = (
-      3, 1, 1.6, 1.5, 0.8, 0.8, 1.9, 1
+      3, 1, 1.6, 1.5, 0.8, 0.8, 1.9, 1, 0.75, 1
       );
     INDICATOR_AUTOREVERSE: array [TLoadingIndicatorKind] of Boolean = (
-      False, True, False, True, False, False, False, False
+      False, True, False, True, False, False, False, False,
+      False, False
       );
     INDICATOR_MINSIZE: array [TLoadingIndicatorKind] of TSizeF = (
       (cx: 45; cy: 45),
@@ -44,7 +47,9 @@ type
       (cx: 45; cy: 45),
       (cx: 45; cy: 45),
       (cx: 70; cy: 20),
-      (cx: 50; cy: 40)
+      (cx: 50; cy: 40),
+      (cx: 34; cy: 34),
+      (cx: 34; cy: 34)
       );
     RING_CELLS: array [0 .. 7] of TCell = (
       (Col: 2; Row: 0; ColSpan: 1; RowSpan: 1),
@@ -77,6 +82,8 @@ type
     procedure DrawLoadingRing;
     procedure DrawLodingThreeDots;
     procedure DrawLoadingWave;
+    procedure DrawLoadingBallClipRotate;
+    procedure DrawLoadingBallClipRotatePulse;
   protected
     procedure Resize; override;
     procedure Paint; override;
@@ -136,6 +143,17 @@ type
 {$ENDIF}
   end;
 
+  TBezier = class
+  private
+    AX, BX, CX, AY, BY, CY: Single;
+    Bezier: TCubicBezier;
+    function PointOnBezier(const StartPoint: TPointF; const AX, BX, CX, AY, BY, CY, T: Single): TPointF;
+    procedure CalculateBezierCoefficients(const Bezier: TCubicBezier; out AX, BX, CX, AY, BY, CY: Single);
+  public
+    constructor Create(X1, Y1, X2, Y2: Single);
+    function GetValue(T: Single): Single;
+  end;
+
 implementation
 
 
@@ -144,6 +162,40 @@ type
   protected
     procedure ProcessAnimation; override;
   end;
+
+function InterpolateCubicBezier(t, B, C, D, X1, Y1, X2, Y2: Single; AType: TAnimationType): Single;
+var
+  Bezier: TCubicBezier;
+begin
+  Bezier[0] := PointF(0,0);
+  Bezier[1] := PointF(X1,Y1);
+  Bezier[2] := PointF(X2,Y2);
+  Bezier[3] := PointF(1,1);
+//  t := t / D;
+//        Result := C * t * t * t + B;
+//      end;
+//    TAnimationType.Out:
+//      begin
+//        t := 1 - t / D;
+//        Result := C * t * t * t + B;
+//      end;
+//    TAnimationType.InOut:
+//      begin
+//        t := t / (D / 2);
+//        if t < 1 then
+//          Result := C / 2 * t * t * t + B
+//        else
+//        begin
+//          t := 2 - t;
+//          Result := C * t * t * t + B;
+////          t := t - 2;
+////          Result := C / 2 * (t * t * t + 2) + B;
+//        end;
+//      end;
+//  else
+//    Result := 0;
+//  end;
+end;
 
   { TFMXLoadingIndicator }
 procedure TFMXLoadingIndicator.OnAnimation(Sender: TObject);
@@ -191,6 +243,7 @@ begin
   if FBrush.Color <> Value then
   begin
     FBrush.Color := Value;
+    Repaint;
   end;
 end;
 
@@ -216,6 +269,10 @@ begin
         FDrawProc := DrawLodingThreeDots;
       LoadingWave:
         FDrawProc := DrawLoadingWave;
+      LoadingBallClipRotate:
+        FDrawProc := DrawLoadingBallClipRotate;
+      LoadingBallClipRotatePulse:
+        FDrawProc := DrawLoadingBallClipRotatePulse;
     end;
     FAnimation.Duration := INDICATOR_DURING[Kind];
     FAnimation.AutoReverse := INDICATOR_AUTOREVERSE[Kind];
@@ -327,6 +384,66 @@ begin
     end;
   finally
     path.Free;
+  end;
+end;
+
+procedure TFMXLoadingIndicator.DrawLoadingBallClipRotate;
+var
+  Arc: TPathData;
+  P: TPointF;
+  R, S: Single;
+  T, A: Single;
+begin
+  T := FAnimation.NormalizedTime;
+  A := InterpolateSingle(0, 360, T);
+  if T < 0.5 then
+    S := InterpolateSingle(1, 0.6, T/0.5)
+  else
+    S := InterpolateSingle(0.6, 1, (T-0.5)/0.5);
+  P := PointF(Width / 2, Height / 2);
+  R := Min(P.X, P.Y) * S;
+  Arc := TPathData.Create;
+  try
+    Arc.AddArc(P, PointF(R, R), A+135, 270);
+    Arc.AddArc(P, PointF(R - 2, R - 2), A + 45, -270);
+    Arc.ClosePath;
+    Canvas.FillPath(Arc, 1, FBrush);
+  finally
+    Arc.Free;
+  end;
+end;
+
+procedure TFMXLoadingIndicator.DrawLoadingBallClipRotatePulse;
+var
+  Arc: TPathData;
+  P: TPointF;
+  R, S: Single;
+  T, A: Single;
+begin
+  T := FAnimation.NormalizedTime;
+  A := InterpolateSingle(0, 360, T);
+  T := InterpolateCubic(T, 0, 1, 1, TAnimationType.InOut);
+//  if T < 0.5 then
+//    S := InterpolateSingle(1, 0.6, T/0.5)
+//  else
+//    S := InterpolateSingle(0.6, 1, (T-0.5)/0.5);
+  S := InterpolateSingle(1, 0.6, T);
+  P := PointF(Width / 2, Height / 2);
+  R := Min(P.X, P.Y) * S;
+  Arc := TPathData.Create;
+  try
+    Arc.AddArc(P, PointF(R, R), A+45, 90);
+    Arc.AddArc(P, PointF(R - 2, R - 2), A + 135, -90);
+    Arc.ClosePath;
+    Canvas.FillPath(Arc, 1, FBrush);
+
+    Arc.Clear;
+    Arc.AddArc(P, PointF(R, R), A-45, -90);
+    Arc.AddArc(P, PointF(R - 2, R - 2), A - 135, +90);
+    Arc.ClosePath;
+    Canvas.FillPath(Arc, 1, FBrush);
+  finally
+    Arc.Free;
   end;
 end;
 
@@ -506,6 +623,47 @@ end;
 procedure TMyAnimation.ProcessAnimation;
 begin
 
+end;
+
+{ TBezier }
+
+procedure TBezier.CalculateBezierCoefficients(const Bezier: TCubicBezier;
+  out AX, BX, CX, AY, BY, CY: Single);
+begin
+  CX := 3 * (Bezier[1].X - Bezier[0].X);
+  CY := 3 * (Bezier[1].Y - Bezier[0].Y);
+  BX := 3 * (Bezier[2].X - Bezier[1].X) - CX;
+  BY := 3 * (Bezier[2].Y - Bezier[1].Y) - CY;
+  AX := Bezier[3].X - Bezier[0].X - CX - BX;
+  AY := Bezier[3].Y - Bezier[0].Y - CY - BY;
+end;
+
+constructor TBezier.Create(X1, Y1, X2, Y2: Single);
+begin
+  Bezier[0] := PointF(0,0);
+  Bezier[1] := PointF(X1,Y1);
+  Bezier[2] := PointF(X2,Y2);
+  Bezier[3] := PointF(1,1);
+  CalculateBezierCoefficients(Bezier, AX, BX, CX, AY, BY, CY);
+end;
+
+function TBezier.GetValue(T: Single): Single;
+var
+  P: TPointF;
+begin
+  P := PointOnBezier(Bezier[0], AX, BX, CX, AY, BY, CY, T);
+  Result := P.Y;
+end;
+
+function TBezier.PointOnBezier(const StartPoint: TPointF; const AX, BX, CX, AY,
+  BY, CY, T: Single): TPointF;
+var
+  SquareT, CubeT: Single;
+begin
+  SquareT := T * T;
+  CubeT := SquareT * T;
+  Result.X := (AX * CubeT) + (BX * SquareT) + (CX * T) + StartPoint.X;
+  Result.Y := (AY * CubeT) + (BY * SquareT) + (CY * T) + StartPoint.Y;
 end;
 
 end.
