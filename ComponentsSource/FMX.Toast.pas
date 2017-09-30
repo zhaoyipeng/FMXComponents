@@ -74,6 +74,8 @@ type
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
     procedure Show(AOwner: TFmxObject);
+    procedure Close;
+    property IsShowing: Boolean read FIsShowing;
   published
     property Align: TTextAlign read FAlign write SetAlign default TTextAlign.Trailing;
     property FontSize: Single read FFontSize write SetFontSize;
@@ -87,6 +89,14 @@ type
 implementation
 
 { TFMXToast }
+
+procedure TFMXToast.Close;
+begin
+  if FIsShowing then
+  begin
+    FToastAnimation.Stop;
+  end;
+end;
 
 constructor TFMXToast.Create(AOwner: TComponent);
 begin
