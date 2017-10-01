@@ -160,6 +160,16 @@ object LoadingIndicatorDemoForm: TLoadingIndicatorDemoForm
             Column = 2
             Control = FMXLoadingIndicator26
             Row = 2
+          end
+          item
+            Column = 3
+            Control = FMXLoadingIndicator28
+            Row = 2
+          end
+          item
+            Column = 4
+            Control = FMXLoadingIndicator29
+            Row = 2
           end>
         RowCollection = <
           item
@@ -277,7 +287,7 @@ object LoadingIndicatorDemoForm: TLoadingIndicatorDemoForm
           Size.Width = 34.000000000000000000
           Size.Height = 34.000000000000000000
           Size.PlatformDefault = False
-          TabOrder = 11
+          TabOrder = 13
           Color = claWhite
           Kind = BallClipRotate
         end
@@ -289,7 +299,7 @@ object LoadingIndicatorDemoForm: TLoadingIndicatorDemoForm
           Size.Width = 34.000000000000000000
           Size.Height = 34.000000000000000000
           Size.PlatformDefault = False
-          TabOrder = 10
+          TabOrder = 12
           Color = claWhite
           Kind = BallClipRotatePulse
         end
@@ -301,7 +311,7 @@ object LoadingIndicatorDemoForm: TLoadingIndicatorDemoForm
           Size.Width = 40.000000000000000000
           Size.Height = 40.000000000000000000
           Size.PlatformDefault = False
-          TabOrder = 12
+          TabOrder = 14
           Color = claWhite
           Kind = BallClipRotateMultiple
         end
@@ -313,7 +323,7 @@ object LoadingIndicatorDemoForm: TLoadingIndicatorDemoForm
           Size.Width = 54.000000000000000000
           Size.Height = 54.000000000000000000
           Size.PlatformDefault = False
-          TabOrder = 9
+          TabOrder = 11
           Color = claWhite
           Kind = BallScaleRipple
         end
@@ -325,9 +335,33 @@ object LoadingIndicatorDemoForm: TLoadingIndicatorDemoForm
           Size.Width = 54.000000000000000000
           Size.Height = 54.000000000000000000
           Size.PlatformDefault = False
-          TabOrder = 8
+          TabOrder = 10
           Color = claWhite
           Kind = InnerLineSpinFade
+        end
+        object FMXLoadingIndicator28: TFMXLoadingIndicator
+          Anchors = []
+          HitTest = False
+          Position.X = 303.400024414062500000
+          Position.Y = 180.000000000000000000
+          Size.Width = 54.000000000000000000
+          Size.Height = 40.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 9
+          Color = claWhite
+          Kind = LineScalePulseOut
+        end
+        object FMXLoadingIndicator29: TFMXLoadingIndicator
+          Anchors = []
+          HitTest = False
+          Position.X = 397.800018310546900000
+          Position.Y = 180.000000000000000000
+          Size.Width = 54.000000000000000000
+          Size.Height = 40.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 8
+          Color = claWhite
+          Kind = LineScalePulseOutRapid
         end
       end
     end
