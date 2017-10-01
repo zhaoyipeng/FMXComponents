@@ -3,9 +3,9 @@ program LoadingIndicatorDemo;
 uses
   System.StartUpCopy,
   FMX.Forms,
-  LoadingIndicatiorDemoMain in 'LoadingIndicatiorDemoMain.pas' {LoadingIndicatorDemoForm},
+  FMX.BezierAnimation in '..\ComponentsSource\FMX.BezierAnimation.pas',
   FMX.LoadingIndicator in '..\ComponentsSource\FMX.LoadingIndicator.pas',
-  FMX.BezierAnimation in '..\ComponentsSource\FMX.BezierAnimation.pas';
+  LoadingIndicatiorDemoMain in 'LoadingIndicatiorDemoMain.pas' {LoadingIndicatorDemoForm};
 
 {$R *.res}
 
