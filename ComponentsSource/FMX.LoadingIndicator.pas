@@ -19,10 +19,11 @@ uses
   FMX.BezierAnimation;
 
 type
-  TLoadingIndicatorKind = (LoadingArcs, LoadingDoubleBounce, LoadingFlipPlane,
-    LoadingPulse, LoadingArcsRing, LoadingRing, LoadingThreeDots, LoadingWave,
-    LoadingBallClipRotate, LoadingBallClipRotatePulse,
-    LoadingBallClipRotateMultiple);
+  TLoadingIndicatorKind = (Arcs, DoubleBounce, FlipPlane,
+    Pulse, ArcsRing, Ring, ThreeDots, Wave,
+    BallClipRotate, BallClipRotatePulse,
+    BallClipRotateMultiple, BallScaleRipple,
+    InnerLineSpinFade);
 
   [ComponentPlatformsAttribute(TFMXPlatforms)]
   TFMXLoadingIndicator = class(TLayout)
@@ -35,11 +36,11 @@ type
     end;
   private const
     INDICATOR_DURING: array [TLoadingIndicatorKind] of Single = (
-      3, 1, 1.6, 1.5, 0.8, 0.8, 1.9, 1, 0.75, 1, 1
+      3, 1, 1.6, 1.5, 0.8, 0.8, 1.9, 1, 0.75, 1, 1, 1, 1.2
       );
     INDICATOR_AUTOREVERSE: array [TLoadingIndicatorKind] of Boolean = (
       False, True, False, True, False, False, False, False,
-      False, False, False
+      False, False, False, False, False
       );
     INDICATOR_MINSIZE: array [TLoadingIndicatorKind] of TSizeF = (
       (cx: 45; cy: 45),
@@ -52,7 +53,9 @@ type
       (cx: 50; cy: 40),
       (cx: 34; cy: 34),
       (cx: 34; cy: 34),
-      (cx: 39; cy: 39)
+      (cx: 39; cy: 39),
+      (cx: 45; cy: 45),
+      (cx: 54; cy: 54)
       );
     RING_CELLS: array [0 .. 7] of TCell = (
       (Col: 2; Row: 0; ColSpan: 1; RowSpan: 1),
@@ -78,17 +81,19 @@ type
     procedure SetKind(const Value: TLoadingIndicatorKind);
     procedure SetColor(const Value: TAlphaColor);
     procedure CreateAnimation;
-    procedure DrawLoadingArcs;
-    procedure DrawLoadingArcsRing;
-    procedure DrawLoadingDoubleBounce;
-    procedure DrawLoadingFlipPlane;
-    procedure DrawLoadingPulse;
-    procedure DrawLoadingRing;
+    procedure DrawArcs;
+    procedure DrawArcsRing;
+    procedure DrawDoubleBounce;
+    procedure DrawFlipPlane;
+    procedure DrawPulse;
+    procedure DrawRing;
     procedure DrawLodingThreeDots;
-    procedure DrawLoadingWave;
-    procedure DrawLoadingBallClipRotate;
-    procedure DrawLoadingBallClipRotatePulse;
-    procedure DrawLoadingBallClipRotateMultiple;
+    procedure DrawWave;
+    procedure DrawBallClipRotate;
+    procedure DrawBallClipRotatePulse;
+    procedure DrawBallClipRotateMultiple;
+    procedure DrawBallScaleRipple;
+    procedure DrawInnerLineSpinFade;
     procedure FillArc(Arc: TPathData; Center: TPointF; const Riduas, Thickness,
       AngleStart, AngleEnd, AOpacity: Single; const ABrush: TBrush);
   protected
@@ -102,7 +107,7 @@ type
   published
     property Color: TAlphaColor read GetColor write SetColor;
     property Kind: TLoadingIndicatorKind read FKind write SetKind
-      default TLoadingIndicatorKind.LoadingPulse;
+      default TLoadingIndicatorKind.Pulse;
     property Align;
     property Anchors;
     property ClipChildren default False;
@@ -185,13 +190,13 @@ begin
   inherited;
   FBezier := TBezier.Create(0.09,0.57,0.49,0.9);
   FBrush := TBrush.Create(TBrushKind.Solid, $FF1282B2);
-  FKind := TLoadingIndicatorKind.LoadingPulse;
+  FKind := TLoadingIndicatorKind.Pulse;
   Width := 45;
   Height := 45;
   CreateAnimation;
   FAnimation.Duration := INDICATOR_DURING[FKind];
   FAnimation.AutoReverse := INDICATOR_AUTOREVERSE[FKind];
-  FDrawProc := DrawLoadingPulse;
+  FDrawProc := DrawPulse;
 end;
 
 procedure TFMXLoadingIndicator.Loaded;
@@ -215,28 +220,38 @@ begin
   begin
     FKind := Value;
     case Kind of
-      LoadingArcs:
-        FDrawProc := DrawLoadingArcs;
-      LoadingDoubleBounce:
-        FDrawProc := DrawLoadingDoubleBounce;
-      LoadingFlipPlane:
-        FDrawProc := DrawLoadingFlipPlane;
-      LoadingPulse:
-        FDrawProc := DrawLoadingPulse;
-      LoadingArcsRing:
-        FDrawProc := DrawLoadingArcsRing;
-      LoadingRing:
-        FDrawProc := DrawLoadingRing;
-      LoadingThreeDots:
+      Arcs:
+        FDrawProc := DrawArcs;
+      DoubleBounce:
+        FDrawProc := DrawDoubleBounce;
+      FlipPlane:
+        FDrawProc := DrawFlipPlane;
+      Pulse:
+        FDrawProc := DrawPulse;
+      ArcsRing:
+        FDrawProc := DrawArcsRing;
+      Ring:
+        FDrawProc := DrawRing;
+      ThreeDots:
         FDrawProc := DrawLodingThreeDots;
-      LoadingWave:
-        FDrawProc := DrawLoadingWave;
-      LoadingBallClipRotate:
-        FDrawProc := DrawLoadingBallClipRotate;
-      LoadingBallClipRotatePulse:
-        FDrawProc := DrawLoadingBallClipRotatePulse;
-      LoadingBallClipRotateMultiple:
-        FDrawProc := DrawLoadingBallClipRotateMultiple;
+      Wave:
+        FDrawProc := DrawWave;
+      BallClipRotate:
+        FDrawProc := DrawBallClipRotate;
+      BallClipRotatePulse:
+      begin
+        FDrawProc := DrawBallClipRotatePulse;
+        FBezier.SetData(0.09,0.57,0.49,0.9);
+      end;
+      BallClipRotateMultiple:
+        FDrawProc := DrawBallClipRotateMultiple;
+      BallScaleRipple:
+      begin
+        FDrawProc := DrawBallScaleRipple;
+        FBezier.SetData(0.21, 0.53, 0.56, 0.8);
+      end;
+      InnerLineSpinFade:
+        FDrawProc := DrawInnerLineSpinFade;
     end;
     FAnimation.Duration := INDICATOR_DURING[Kind];
     FAnimation.AutoReverse := INDICATOR_AUTOREVERSE[Kind];
@@ -284,7 +299,59 @@ begin
   inherited;
 end;
 
-procedure TFMXLoadingIndicator.DrawLoadingArcs;
+procedure TFMXLoadingIndicator.DrawInnerLineSpinFade;
+var
+  P: TPointF;
+  R, T, TI, Angle, O: Single;
+  Path: TPathData;
+  I: Integer;
+  DR: TRectF;
+  M, M1, M2: TMatrix;
+  Ani: TBezier;
+begin
+  P := LocalRect.CenterPoint;
+  R := Min(P.X, P.Y) - 2;
+  Path := TPathData.Create;
+  try
+    T := FAnimation.NormalizedTime;
+    Ani := GetEaseInOut;
+    for I := 0 to 7 do
+    begin
+      TI := T + (I - 7) * 0.1;
+      if TI < 0 then
+        TI := TI + 1;
+
+      if TI < 0.5 then
+      begin
+        TI := Ani.Solve(TI * 2, TBezier.epsilon);
+        O := InterpolateSingle(1, 0.3, TI);
+      end
+      else
+      begin
+        TI := Ani.Solve((TI-0.5) * 2, TBezier.epsilon);
+        O := InterpolateSingle(0.3, 1, TI);
+      end;
+//      O := 1;
+      Angle := -I * 45;
+      Path.Clear;
+      DR := TRectF.Create(PointF(P.X-2, P.Y + 11), 5, 16);
+      M1 := TMatrix.Identity;
+      M1.m31 := -P.X;
+      M1.m32 := -P.Y;
+      M2 := TMatrix.Identity;
+      M2.m31 := P.X;
+      M2.m32 := P.Y;
+      M :=  M1 * (TMatrix.CreateRotation(DegToRad(Angle)) * M2);
+      Path.AddRectangle(DR, 2, 2, AllCorners);
+      Path.ApplyMatrix(M);
+      Canvas.FillPath(Path, O, FBrush);
+    end;
+  finally
+
+  end;
+end;
+
+procedure TFMXLoadingIndicator.DrawArcs;
 var
   Arc: TPathData;
   P: TPointF;
@@ -294,7 +361,7 @@ begin
   T := FAnimation.NormalizedTime;
   A := InterpolateSingle(0, 360, T);
 
-  P := PointF(Width / 2, Height / 2);
+  P := LocalRect.CenterPoint;
   R := Min(P.X, P.Y);
   Arc := TPathData.Create;
   try
@@ -315,7 +382,7 @@ begin
   end;
 end;
 
-procedure TFMXLoadingIndicator.DrawLoadingArcsRing;
+procedure TFMXLoadingIndicator.DrawArcsRing;
 var
   P: TPointF;
   R: Single;
@@ -326,7 +393,7 @@ var
   O: Single;
 begin
   T := FAnimation.NormalizedTime;
-  P := PointF(Width / 2, Height / 2);
+  P := LocalRect.CenterPoint;
   R := Min(P.X, P.Y);
   StartAngle := -15;
   path := TPathData.Create;
@@ -352,7 +419,7 @@ begin
   end;
 end;
 
-procedure TFMXLoadingIndicator.DrawLoadingBallClipRotate;
+procedure TFMXLoadingIndicator.DrawBallClipRotate;
 var
   Arc: TPathData;
   P: TPointF;
@@ -365,7 +432,7 @@ begin
     S := InterpolateSingle(1, 0.6, T/0.5)
   else
     S := InterpolateSingle(0.6, 1, (T-0.5)/0.5);
-  P := PointF(Width / 2, Height / 2);
+  P := LocalRect.CenterPoint;
   R := Min(P.X, P.Y) * S;
   Arc := TPathData.Create;
   try
@@ -389,7 +456,7 @@ begin
   Canvas.FillPath(Arc, AOpacity, ABrush);
 end;
 
-procedure TFMXLoadingIndicator.DrawLoadingBallClipRotateMultiple;
+procedure TFMXLoadingIndicator.DrawBallClipRotateMultiple;
   procedure CalcAS(Ani: TBezier; T: Single; out A, S: Single);
   begin
     if T < 0.5 then
@@ -409,10 +476,10 @@ var
   Arc: TPathData;
   P: TPointF;
   R, S1, S2: Single;
-  T, T1, T2, A1, A2: Single;
-  DR: TRectF;
+  T, A1, A2: Single;
   Ani: TBezier;
 begin
+  P := LocalRect.CenterPoint;
   Ani := GetEaseInOut;
   T := FAnimation.NormalizedTime;
   CalcAS(Ani, T, A1, S1);
@@ -420,7 +487,6 @@ begin
   CalcAS(Ani, T, A2, S2);
   Arc := TPathData.Create;
   try
-    P := PointF(Width / 2, Height / 2);
     R := (Min(P.X, P.Y) - 2) * S1;
     FillArc(Arc, P, R+1, 2, A1-45, 90, AbsoluteOpacity, FBrush);
     FillArc(Arc, P, R+1, 2, A1-135, -90, AbsoluteOpacity, FBrush);
@@ -434,7 +500,7 @@ begin
   end;
 end;
 
-procedure TFMXLoadingIndicator.DrawLoadingBallClipRotatePulse;
+procedure TFMXLoadingIndicator.DrawBallClipRotatePulse;
 var
   Arc: TPathData;
   P: TPointF;
@@ -454,7 +520,7 @@ begin
     T := FBezier.Solve(1 - (T-0.5) * 2, TBezier.epsilon);
   end;
   S := InterpolateSingle(1, 0.6, T);
-  P := PointF(Width / 2, Height / 2);
+  P := LocalRect.CenterPoint;
   R := Min(P.X, P.Y) * S;
   Arc := TPathData.Create;
   try
@@ -478,7 +544,46 @@ begin
   end;
 end;
 
-procedure TFMXLoadingIndicator.DrawLoadingDoubleBounce;
+procedure TFMXLoadingIndicator.DrawBallScaleRipple;
+var
+  Circle: TPathData;
+  P: TPointF;
+  R: Single;
+  T, S, O: Single;
+  Ani: TBezier;
+  DR: TRectF;
+begin
+  P := LocalRect.CenterPoint;
+  R := Min(P.X, P.Y) - 2;
+  Ani := FBezier;
+  T := FAnimation.NormalizedTime;
+  if T<0.7 then
+  begin
+    T := Ani.Solve(T/0.7, TBezier.epsilon);
+    S := InterpolateSingle(0.1, 1, T);
+    O := InterpolateSingle(1, 0.7, T);
+  end
+  else
+  begin
+    T := Ani.Solve((T-0.7)/0.3, TBezier.epsilon);
+    S := 1;
+    O := InterpolateSingle(0.7, 0, T);
+  end;
+
+  Circle := TPathData.Create;
+  try
+    R := R * S;
+    DR := TRectF.Create(PointF(P.X - R - 2, P.Y - R - 2), R * 2 + 4, R * 2 + 4);
+    Circle.AddEllipse(DR);
+    DR.Inflate(-2, -2);
+    Circle.AddEllipse(DR);
+    Canvas.FillPath(Circle, O, FBrush);
+  finally
+    Circle.Free;
+  end;
+end;
+
+procedure TFMXLoadingIndicator.DrawDoubleBounce;
 var
   T, S: Single;
   P: TPointF;
@@ -487,7 +592,7 @@ var
 begin
   T := FAnimation.NormalizedTime;
   S := InterpolateSingle(1, 0, T);
-  P := PointF(Width / 2, Height / 2);
+  P := LocalRect.CenterPoint;
   R := Min(P.X, P.Y);
   R1 := R * S;
   R2 := R * (1 - S);
@@ -497,7 +602,7 @@ begin
   Canvas.FillEllipse(DR, 0.3, FBrush);
 end;
 
-procedure TFMXLoadingIndicator.DrawLoadingFlipPlane;
+procedure TFMXLoadingIndicator.DrawFlipPlane;
   function CalcScale(T: Single): Single;
   begin
     if T < 0.25 then
@@ -524,7 +629,7 @@ begin
   Canvas.FillRect(R, 0, 0, AllCorners, 1, FBrush);
 end;
 
-procedure TFMXLoadingIndicator.DrawLoadingPulse;
+procedure TFMXLoadingIndicator.DrawPulse;
 var
   T, S: Single;
   P: TPointF;
@@ -533,13 +638,13 @@ var
 begin
   T := FAnimation.NormalizedTime;
   S := InterpolateSingle(0, 1, T);
-  P := PointF(Width / 2, Height / 2);
+  P := LocalRect.CenterPoint;
   R := Min(P.X, P.Y) * S;
   DR := RectF(P.X - R, P.Y - R, P.X + R, P.Y + R);
   Canvas.FillEllipse(DR, 1 - S, FBrush);
 end;
 
-procedure TFMXLoadingIndicator.DrawLoadingRing;
+procedure TFMXLoadingIndicator.DrawRing;
 var
   T: Single;
   I: Integer;
@@ -565,7 +670,7 @@ begin
   end;
 end;
 
-procedure TFMXLoadingIndicator.DrawLoadingWave;
+procedure TFMXLoadingIndicator.DrawWave;
 var
   T: Single;
   I: Integer;

@@ -9,6 +9,7 @@ type
     ax, bx, cx, ay, by, cy: Double;
   public
     constructor Create(p1x, p1y, p2x, p2y: Double);
+    procedure SetData(p1x, p1y, p2x, p2y: Double);
     function SampleCurveX(t: Double): Double;
     function SampleCurveY(t: Double): Double;
     function SampleCurveDerivativeX(t: Double): Double;
@@ -34,14 +35,7 @@ end;
 
 constructor TBezier.Create(p1x, p1y, p2x, p2y: Double);
 begin
-  // Calculate the polynomial coefficients, implicit first and last control points are (0,0) and (1,1).
-	cx := 3.0 * p1x;
-	bx := 3.0 * (p2x - p1x) - cx;
-  ax := 1.0 - cx -bx;
-
-  cy := 3.0 * p1y;
-  by := 3.0 * (p2y - p1y) - cy;
-  ay := 1.0 - cy - by;
+  SetData(p1x, p1y, p2x, p2y);
 end;
 
 function TBezier.SampleCurveDerivativeX(t: Double): Double;
@@ -58,6 +52,18 @@ end;
 function TBezier.SampleCurveY(t: Double): Double;
 begin
    Result := ((ay * t + by) * t + cy) * t;
+end;
+
+procedure TBezier.SetData(p1x, p1y, p2x, p2y: Double);
+begin
+  // Calculate the polynomial coefficients, implicit first and last control points are (0,0) and (1,1).
+	cx := 3.0 * p1x;
+	bx := 3.0 * (p2x - p1x) - cx;
+  ax := 1.0 - cx -bx;
+
+  cy := 3.0 * p1y;
+  by := 3.0 * (p2y - p1y) - cy;
+  ay := 1.0 - cy - by;
 end;
 
 // Given an x value, find a parametric value it came from.

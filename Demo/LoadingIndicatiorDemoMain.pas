@@ -28,25 +28,29 @@ type
     FMXLoadingIndicator2: TFMXLoadingIndicator;
     FMXLoadingIndicator1: TFMXLoadingIndicator;
     FMXLoadingIndicator4: TFMXLoadingIndicator;
-    FMXLoadingIndicator5: TFMXLoadingIndicator;
-    FMXLoadingIndicator12: TFMXLoadingIndicator;
-    FMXLoadingIndicator14: TFMXLoadingIndicator;
-    FMXLoadingIndicator15: TFMXLoadingIndicator;
-    FMXLoadingIndicator18: TFMXLoadingIndicator;
     FMXLoadingIndicator9: TFMXLoadingIndicator;
+    Rectangle6: TRectangle;
+    Rectangle7: TRectangle;
+    Button1: TButton;
+    FloatAnimation1: TFloatAnimation;
     FMXLoadingIndicator10: TFMXLoadingIndicator;
     FMXLoadingIndicator11: TFMXLoadingIndicator;
     FMXLoadingIndicator13: TFMXLoadingIndicator;
     FMXLoadingIndicator16: TFMXLoadingIndicator;
     FMXLoadingIndicator17: TFMXLoadingIndicator;
     FMXLoadingIndicator19: TFMXLoadingIndicator;
-    Rectangle6: TRectangle;
-    Rectangle7: TRectangle;
-    Button1: TButton;
-    FloatAnimation1: TFloatAnimation;
-    FMXLoadingIndicator20: TFMXLoadingIndicator;
     FMXLoadingIndicator21: TFMXLoadingIndicator;
+    FMXLoadingIndicator23: TFMXLoadingIndicator;
+    FMXLoadingIndicator5: TFMXLoadingIndicator;
+    FMXLoadingIndicator12: TFMXLoadingIndicator;
+    FMXLoadingIndicator14: TFMXLoadingIndicator;
+    FMXLoadingIndicator15: TFMXLoadingIndicator;
+    FMXLoadingIndicator18: TFMXLoadingIndicator;
+    FMXLoadingIndicator20: TFMXLoadingIndicator;
     FMXLoadingIndicator22: TFMXLoadingIndicator;
+    FMXLoadingIndicator24: TFMXLoadingIndicator;
+    FMXLoadingIndicator25: TFMXLoadingIndicator;
+    FMXLoadingIndicator26: TFMXLoadingIndicator;
     procedure Button1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -68,7 +72,7 @@ implementation
 
 procedure TLoadingIndicatorDemoForm.Button1Click(Sender: TObject);
 begin
-  FloatAnimation1.Start;
+  FloatAnimation1.Enabled := not FloatAnimation1.Enabled;
 end;
 
 procedure TLoadingIndicatorDemoForm.FloatAnimation1Process(Sender: TObject);
