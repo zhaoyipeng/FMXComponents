@@ -51,6 +51,7 @@ type
     FMXLoadingIndicator24: TFMXLoadingIndicator;
     FMXLoadingIndicator25: TFMXLoadingIndicator;
     FMXLoadingIndicator26: TFMXLoadingIndicator;
+    FMXLoadingIndicator27: TFMXLoadingIndicator;
     procedure Button1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);

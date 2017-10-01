@@ -7,7 +7,7 @@
         <DeviceId Condition="'$(Platform)'=='Android'"/>
         <DeviceId Condition="'$(Platform)'=='iOSDevice32'"/>
         <DeviceId Condition="'$(Platform)'=='iOSDevice64'"/>
-        <DeviceId Condition="'$(Platform)'=='iOSSimulator'"/>
+        <DeviceId Condition="'$(Platform)'=='iOSSimulator'">iPhone5</DeviceId>
     </PropertyGroup>
     <ItemGroup Condition="'$(Platform)'=='iOSDevice64'"/>
     <ItemGroup Condition="'$(Platform)'=='Win64'"/>

@@ -23,7 +23,7 @@ type
     Pulse, ArcsRing, Ring, ThreeDots, Wave,
     BallClipRotate, BallClipRotatePulse,
     BallClipRotateMultiple, BallScaleRipple,
-    InnerLineSpinFade);
+    InnerLineSpinFade, LineScalePulseOut);
 
   [ComponentPlatformsAttribute(TFMXPlatforms)]
   TFMXLoadingIndicator = class(TLayout)
@@ -36,11 +36,12 @@ type
     end;
   private const
     INDICATOR_DURING: array [TLoadingIndicatorKind] of Single = (
-      3, 1, 1.6, 1.5, 0.8, 0.8, 1.9, 1, 0.75, 1, 1, 1, 1.2
+      3, 1, 1.6, 1.5, 0.8, 0.8, 1.9, 1, 0.75, 1, 1, 1, 1.2, 0.9
+
       );
     INDICATOR_AUTOREVERSE: array [TLoadingIndicatorKind] of Boolean = (
       False, True, False, True, False, False, False, False,
-      False, False, False, False, False
+      False, False, False, False, False, False
       );
     INDICATOR_MINSIZE: array [TLoadingIndicatorKind] of TSizeF = (
       (cx: 45; cy: 45),
@@ -55,7 +56,8 @@ type
       (cx: 34; cy: 34),
       (cx: 39; cy: 39),
       (cx: 45; cy: 45),
-      (cx: 54; cy: 54)
+      (cx: 54; cy: 54),
+      (cx: 50; cy: 40)
       );
     RING_CELLS: array [0 .. 7] of TCell = (
       (Col: 2; Row: 0; ColSpan: 1; RowSpan: 1),
@@ -94,6 +96,7 @@ type
     procedure DrawBallClipRotateMultiple;
     procedure DrawBallScaleRipple;
     procedure DrawInnerLineSpinFade;
+    procedure DrawLineScalePulseOut;
     procedure FillArc(Arc: TPathData; Center: TPointF; const Riduas, Thickness,
       AngleStart, AngleEnd, AOpacity: Single; const ABrush: TBrush);
   protected
@@ -252,6 +255,11 @@ begin
       end;
       InnerLineSpinFade:
         FDrawProc := DrawInnerLineSpinFade;
+      LineScalePulseOut:
+      begin
+        FDrawProc := DrawLineScalePulseOut;
+        FBezier.SetData(0.85, 0.25, 0.37, 0.85);
+      end;
     end;
     FAnimation.Duration := INDICATOR_DURING[Kind];
     FAnimation.AutoReverse := INDICATOR_AUTOREVERSE[Kind];
@@ -317,9 +325,9 @@ begin
     Ani := GetEaseInOut;
     for I := 0 to 7 do
     begin
-      TI := T + (I - 7) * 0.1;
-      if TI < 0 then
-        TI := TI + 1;
+      TI := T + (7 - I) * 0.1;
+      if TI > 1 then
+        TI := TI - 1;
 
       if TI < 0.5 then
       begin
@@ -365,18 +373,11 @@ begin
   R := Min(P.X, P.Y);
   Arc := TPathData.Create;
   try
-    Arc.AddArc(P, PointF(R, R), A, 270);
-    Arc.AddArc(P, PointF(R - 5, R - 5), A + 270, -270);
-    Arc.ClosePath;
-    Canvas.FillPath(Arc, 1, FBrush);
-
+    FillArc(Arc, P, R, 5, A, 270, AbsoluteOpacity, FBrush);
     R := R - 5;
     A := 360 - A;
-    Arc.Clear;
-    Arc.AddArc(P, PointF(R, R), A + 45, -210);
-    Arc.AddArc(P, PointF(R - 5, R - 5), A + 45 - 210, 210);
-    Arc.ClosePath;
-    Canvas.FillPath(Arc, 0.3, FBrush);
+
+    FillArc(Arc, P, R, 5, A-165, 210, 0.3, FBrush);
   finally
     Arc.Free;
   end;
@@ -552,6 +553,7 @@ var
   T, S, O: Single;
   Ani: TBezier;
   DR: TRectF;
+  Stroke: TStrokeBrush;
 begin
   P := LocalRect.CenterPoint;
   R := Min(P.X, P.Y) - 2;
@@ -569,17 +571,20 @@ begin
     S := 1;
     O := InterpolateSingle(0.7, 0, T);
   end;
-
-  Circle := TPathData.Create;
+  Stroke := TStrokeBrush.Create(TBrushKind.Solid, Color);
+//  Circle := TPathData.Create;
   try
+    Stroke.Thickness := 2;
     R := R * S;
-    DR := TRectF.Create(PointF(P.X - R - 2, P.Y - R - 2), R * 2 + 4, R * 2 + 4);
-    Circle.AddEllipse(DR);
-    DR.Inflate(-2, -2);
-    Circle.AddEllipse(DR);
-    Canvas.FillPath(Circle, O, FBrush);
+    DR := TRectF.Create(PointF(P.X - R - 1, P.Y - R - 1), R * 2 + 2, R * 2 + 2);
+    Canvas.DrawEllipse(DR, O, Stroke);
+//    Circle.AddEllipse(DR);
+//    DR.Inflate(-2, -2);
+//    Circle.AddEllipse(DR);
+//    Canvas.FillPath(Circle, O, FBrush);
   finally
-    Circle.Free;
+//    Circle.Free;
+    Stroke.Free;
   end;
 end;
 
@@ -699,6 +704,48 @@ begin
     R.Offset(I * W + Space, (Height - R.Height) / 2);
     Space := Space + 5;
     Canvas.FillRect(R, 0, 0, AllCorners, 1, FBrush);
+  end;
+end;
+
+procedure TFMXLoadingIndicator.DrawLineScalePulseOut;
+var
+  T, TI: Single;
+  I: Integer;
+  S: Single;
+  R: TRectF;
+  W, H, Space: Single;
+  Ani: TBezier;
+begin
+  T := FAnimation.NormalizedTime;
+  W := (Width - 20) / 5;
+  H := Height;
+  Space := 0;
+  Ani := GetEaseInOut;
+  for I := 0 to 4 do
+  begin
+    case I of
+      1,3: TI := T + 0.4/0.9;
+      0,4: TI := T + 0.2/0.9;
+      else
+        TI := T + 0.6/0.9;
+    end;
+    if TI > 1 then
+      TI := TI - 1;
+    if TI < 0.5 then
+    begin
+      TI := Ani.Solve(TI * 2, TBezier.epsilon);
+      S := InterpolateSingle(1, 0.4, TI);
+    end
+    else
+    begin
+      TI := Ani.Solve((TI-0.5) * 2, TBezier.epsilon);
+      S := InterpolateSingle(0.4, 1, TI);
+    end;
+
+    R := RectF(0, 0, 4, H * S);
+    R.Offset(I * W + Space, (Height - R.Height) / 2);
+    Space := Space + 5;
+    Canvas.FillRect(R, 2, 2, AllCorners, 1, FBrush);
   end;
 end;
 
