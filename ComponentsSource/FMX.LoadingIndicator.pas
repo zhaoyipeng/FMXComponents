@@ -15,28 +15,14 @@ uses
   FMX.Layouts,
   FMX.Ani,
   FMX.Utils,
-  FMX.ComponentsCommon;
+  FMX.ComponentsCommon,
+  FMX.BezierAnimation;
 
 type
   TLoadingIndicatorKind = (LoadingArcs, LoadingDoubleBounce, LoadingFlipPlane,
     LoadingPulse, LoadingArcsRing, LoadingRing, LoadingThreeDots, LoadingWave,
-    LoadingBallClipRotate, LoadingBallClipRotatePulse);
-
-  TBezier = class
-  public const
-    epsilon = 1.0E-5;
-  private
-    ax, bx, cx, ay, by, cy: Double;
-    function PointOnBezier(const StartPoint: TPointF; const AX, BX, CX, AY, BY, CY, T: Single): TPointF;
-    procedure CalculateBezierCoefficients(const Bezier: TCubicBezier; out AX, BX, CX, AY, BY, CY: Single);
-  public
-    constructor Create(p1x, p1y, p2x, p2y: Double);
-    function SampleCurveX(t: Double): Double;
-    function SampleCurveY(t: Double): Double;
-    function SampleCurveDerivativeX(t: Double): Double;
-    function SolveCurveX(x, epsilon: Double): Double;
-    function Solve(x, epsilon: Double): Double;
-  end;
+    LoadingBallClipRotate, LoadingBallClipRotatePulse,
+    LoadingBallClipRotateMultiple);
 
   [ComponentPlatformsAttribute(TFMXPlatforms)]
   TFMXLoadingIndicator = class(TLayout)
@@ -49,11 +35,11 @@ type
     end;
   private const
     INDICATOR_DURING: array [TLoadingIndicatorKind] of Single = (
-      3, 1, 1.6, 1.5, 0.8, 0.8, 1.9, 1, 0.75, 1
+      3, 1, 1.6, 1.5, 0.8, 0.8, 1.9, 1, 0.75, 1, 1
       );
     INDICATOR_AUTOREVERSE: array [TLoadingIndicatorKind] of Boolean = (
       False, True, False, True, False, False, False, False,
-      False, False
+      False, False, False
       );
     INDICATOR_MINSIZE: array [TLoadingIndicatorKind] of TSizeF = (
       (cx: 45; cy: 45),
@@ -65,7 +51,8 @@ type
       (cx: 70; cy: 20),
       (cx: 50; cy: 40),
       (cx: 34; cy: 34),
-      (cx: 34; cy: 34)
+      (cx: 34; cy: 34),
+      (cx: 39; cy: 39)
       );
     RING_CELLS: array [0 .. 7] of TCell = (
       (Col: 2; Row: 0; ColSpan: 1; RowSpan: 1),
@@ -101,6 +88,9 @@ type
     procedure DrawLoadingWave;
     procedure DrawLoadingBallClipRotate;
     procedure DrawLoadingBallClipRotatePulse;
+    procedure DrawLoadingBallClipRotateMultiple;
+    procedure FillArc(Arc: TPathData; Center: TPointF; const Riduas, Thickness,
+      AngleStart, AngleEnd, AOpacity: Single; const ABrush: TBrush);
   protected
     procedure Resize; override;
     procedure Paint; override;
@@ -160,50 +150,13 @@ type
 {$ENDIF}
   end;
 
-
-
 implementation
-
 
 type
   TMyAnimation = class(TAnimation)
   protected
     procedure ProcessAnimation; override;
   end;
-
-function InterpolateCubicBezier(t, B, C, D, X1, Y1, X2, Y2: Single; AType: TAnimationType): Single;
-var
-  Bezier: TCubicBezier;
-begin
-  Bezier[0] := PointF(0,0);
-  Bezier[1] := PointF(X1,Y1);
-  Bezier[2] := PointF(X2,Y2);
-  Bezier[3] := PointF(1,1);
-//  t := t / D;
-//        Result := C * t * t * t + B;
-//      end;
-//    TAnimationType.Out:
-//      begin
-//        t := 1 - t / D;
-//        Result := C * t * t * t + B;
-//      end;
-//    TAnimationType.InOut:
-//      begin
-//        t := t / (D / 2);
-//        if t < 1 then
-//          Result := C / 2 * t * t * t + B
-//        else
-//        begin
-//          t := 2 - t;
-//          Result := C * t * t * t + B;
-////          t := t - 2;
-////          Result := C / 2 * (t * t * t + 2) + B;
-//        end;
-//      end;
-//  else
-//    Result := 0;
-//  end;
-end;
 
   { TFMXLoadingIndicator }
 procedure TFMXLoadingIndicator.OnAnimation(Sender: TObject);
@@ -282,6 +235,8 @@ begin
         FDrawProc := DrawLoadingBallClipRotate;
       LoadingBallClipRotatePulse:
         FDrawProc := DrawLoadingBallClipRotatePulse;
+      LoadingBallClipRotateMultiple:
+        FDrawProc := DrawLoadingBallClipRotateMultiple;
     end;
     FAnimation.Duration := INDICATOR_DURING[Kind];
     FAnimation.AutoReverse := INDICATOR_AUTOREVERSE[Kind];
@@ -418,6 +373,62 @@ begin
     Arc.AddArc(P, PointF(R - 2, R - 2), A + 45, -270);
     Arc.ClosePath;
     Canvas.FillPath(Arc, 1, FBrush);
+  finally
+    Arc.Free;
+  end;
+end;
+
+procedure TFMXLoadingIndicator.FillArc(Arc: TPathData; Center: TPointF; const Riduas, Thickness,
+  AngleStart, AngleEnd, AOpacity: Single; const ABrush: TBrush);
+begin
+  Arc.Clear;
+  Arc.AddArc(Center, PointF(Riduas, Riduas), AngleStart, AngleEnd);
+  Arc.AddArc(Center, PointF(Riduas-Thickness, Riduas-Thickness),
+    AngleStart + AngleEnd, -AngleEnd);
+  Arc.ClosePath;
+  Canvas.FillPath(Arc, AOpacity, ABrush);
+end;
+
+procedure TFMXLoadingIndicator.DrawLoadingBallClipRotateMultiple;
+  procedure CalcAS(Ani: TBezier; T: Single; out A, S: Single);
+  begin
+    if T < 0.5 then
+    begin
+      T := Ani.Solve(T * 2, TBezier.epsilon);
+      A := InterpolateSingle(0, 180, T);
+      S := InterpolateSingle(1, 0.6, T)
+    end
+    else
+    begin
+      T := Ani.Solve((T-0.5) * 2, TBezier.epsilon);
+      A := InterpolateSingle(0, 180, T);
+      S := InterpolateSingle(0.6, 1, T);
+    end;
+  end;
+var
+  Arc: TPathData;
+  P: TPointF;
+  R, S1, S2: Single;
+  T, T1, T2, A1, A2: Single;
+  DR: TRectF;
+  Ani: TBezier;
+begin
+  Ani := GetEaseInOut;
+  T := FAnimation.NormalizedTime;
+  CalcAS(Ani, T, A1, S1);
+  T := T * 2 - Trunc(T * 2);
+  CalcAS(Ani, T, A2, S2);
+  Arc := TPathData.Create;
+  try
+    P := PointF(Width / 2, Height / 2);
+    R := (Min(P.X, P.Y) - 2) * S1;
+    FillArc(Arc, P, R+1, 2, A1-45, 90, AbsoluteOpacity, FBrush);
+    FillArc(Arc, P, R+1, 2, A1-135, -90, AbsoluteOpacity, FBrush);
+
+    R := (Min(P.X, P.Y) - 12) * S2;
+    A2 := 360 - A2;
+    FillArc(Arc, P, R+1, 2, A2+45, 90, AbsoluteOpacity, FBrush);
+    FillArc(Arc, P, R+1, 2, A2-45, -90, AbsoluteOpacity, FBrush);
   finally
     Arc.Free;
   end;
@@ -645,106 +656,5 @@ begin
 
 end;
 
-{ TBezier }
-
-procedure TBezier.CalculateBezierCoefficients(const Bezier: TCubicBezier;
-  out AX, BX, CX, AY, BY, CY: Single);
-begin
-  CX := 3 * (Bezier[1].X - Bezier[0].X);
-  CY := 3 * (Bezier[1].Y - Bezier[0].Y);
-  BX := 3 * (Bezier[2].X - Bezier[1].X) - CX;
-  BY := 3 * (Bezier[2].Y - Bezier[1].Y) - CY;
-  AX := Bezier[3].X - Bezier[0].X - CX - BX;
-  AY := Bezier[3].Y - Bezier[0].Y - CY - BY;
-end;
-
-constructor TBezier.Create(p1x, p1y, p2x, p2y: Double);
-begin
-  // Calculate the polynomial coefficients, implicit first and last control points are (0,0) and (1,1).
-	cx := 3.0 * p1x;
-	bx := 3.0 * (p2x - p1x) - cx;
-  ax := 1.0 - cx -bx;
-
-  cy := 3.0 * p1y;
-  by := 3.0 * (p2y - p1y) - cy;
-  ay := 1.0 - cy - by;
-end;
-
-function TBezier.PointOnBezier(const StartPoint: TPointF; const AX, BX, CX, AY,
-  BY, CY, T: Single): TPointF;
-var
-  SquareT, CubeT: Single;
-begin
-  SquareT := T * T;
-  CubeT := SquareT * T;
-  Result.X := (AX * CubeT) + (BX * SquareT) + (CX * T) + StartPoint.X;
-  Result.Y := (AY * CubeT) + (BY * SquareT) + (CY * T) + StartPoint.Y;
-end;
-
-function TBezier.SampleCurveDerivativeX(t: Double): Double;
-begin
-  Result := (3.0 * ax * t + 2.0 * bx) * t + cx;
-end;
-
-function TBezier.SampleCurveX(t: Double): Double;
-begin
-  // `ax t^3 + bx t^2 + cx t' expanded using Horner's rule.
-  Result := ((ax * t + bx) * t + cx) * t;
-end;
-
-function TBezier.SampleCurveY(t: Double): Double;
-begin
-   Result := ((ay * t + by) * t + cy) * t;
-end;
-
-// Given an x value, find a parametric value it came from.
-function TBezier.Solve(x, epsilon: Double): Double;
-begin
-   Result := SampleCurveY(SolveCurveX(x, epsilon));
-end;
-
-function TBezier.SolveCurveX(x, epsilon: Double): Double;
-var
-  t0, t1, t2, x2, d2: Double;
-  i: Integer;
-begin
-  // First try a few iterations of Newton's method -- normally very fast.
-  t2 := x;
-  for i := 0 to 7 do
-  begin
-    x2 := sampleCurveX(t2) - x;
-    if (Abs(x2) < epsilon) then
-      Exit(t2);
-    d2 := SampleCurveDerivativeX(t2);
-    if (Abs(d2) < 1e-6) then
-      break;
-    t2 := t2 - x2 / d2;
-  end;
-
-  // Fall back to the bisection method for reliability.
-  t0 := 0.0;
-  t1 := 1.0;
-  t2 := x;
-
-  if (t2 < t0) then
-    Exit(t0);
-  if (t2 > t1) then
-    Exit(t1);
-
-  while (t0 < t1) do
-  begin
-    x2 := SampleCurveX(t2);
-    if (Abs(x2 - x) < epsilon) then
-      Exit(t2);
-    if (x > x2) then
-      t0 := t2
-    else
-      t1 := t2;
-    t2 := (t1 - t0) * 0.5 + t0;
-  end;
-
-  // Failure.
-  Exit(t2);
-end;
 
 end.

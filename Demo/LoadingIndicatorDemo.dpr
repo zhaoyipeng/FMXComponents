@@ -4,7 +4,8 @@ uses
   System.StartUpCopy,
   FMX.Forms,
   LoadingIndicatiorDemoMain in 'LoadingIndicatiorDemoMain.pas' {LoadingIndicatorDemoForm},
-  FMX.LoadingIndicator in '..\ComponentsSource\FMX.LoadingIndicator.pas';
+  FMX.LoadingIndicator in '..\ComponentsSource\FMX.LoadingIndicator.pas',
+  FMX.BezierAnimation in '..\ComponentsSource\FMX.BezierAnimation.pas';
 
 {$R *.res}
 

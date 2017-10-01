@@ -6,7 +6,7 @@ uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs,
   FMX.Controls.Presentation, FMX.StdCtrls, FMX.Layouts, FMX.LoadingIndicator,
-  FMX.Objects, FMX.Ani, FMX.Utils;
+  FMX.Objects, FMX.Ani, FMX.Utils, FMX.BezierAnimation;
 
 type
   TLoadingIndicatorDemoForm = class(TForm)
@@ -45,6 +45,8 @@ type
     Button1: TButton;
     FloatAnimation1: TFloatAnimation;
     FMXLoadingIndicator20: TFMXLoadingIndicator;
+    FMXLoadingIndicator21: TFMXLoadingIndicator;
+    FMXLoadingIndicator22: TFMXLoadingIndicator;
     procedure Button1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -74,14 +76,15 @@ var
   T, T1: Single;
 begin
   T := FloatAnimation1.NormalizedTime;
-  T1 := FBezier.Solve(T, 1.0E-5);
+  T1 := GetEaseInOut.Solve(T, 1.0E-5);
   Rectangle6.Position.X := InterpolateSingle(
     FloatAnimation1.StartValue, FloatAnimation1.StopValue, T1);
 end;
 
 procedure TLoadingIndicatorDemoForm.FormCreate(Sender: TObject);
 begin
-  FBezier := TBezier.Create(0.09,0.57,0.49,0.9);
+//  FBezier := TBezier.Create(0.09,0.57,0.49,0.9);
+  FBezier := TBezier.Create(0.42,0,0.58,1);
 end;
 
 procedure TLoadingIndicatorDemoForm.FormDestroy(Sender: TObject);

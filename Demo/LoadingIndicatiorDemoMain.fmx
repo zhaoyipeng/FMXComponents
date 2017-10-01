@@ -37,13 +37,12 @@ object LoadingIndicatorDemoForm: TLoadingIndicatorDemoForm
       end
       object Rectangle7: TRectangle
         Position.X = 20.000000000000000000
-        Position.Y = 585.000000000000000000
-        Size.Width = 65.000000000000000000
-        Size.Height = 25.000000000000000000
+        Position.Y = 583.000000000000000000
+        Size.Width = 30.000000000000000000
+        Size.Height = 30.000000000000000000
         Size.PlatformDefault = False
         object FloatAnimation1: TFloatAnimation
-          AutoReverse = True
-          Duration = 2.000000000000000000
+          Duration = 4.000000000000000000
           Loop = True
           OnProcess = FloatAnimation1Process
           PropertyName = 'Position.X'
@@ -141,6 +140,11 @@ object LoadingIndicatorDemoForm: TLoadingIndicatorDemoForm
           item
             Column = 1
             Control = FMXLoadingIndicator20
+            Row = 2
+          end
+          item
+            Column = 2
+            Control = FMXLoadingIndicator22
             Row = 2
           end>
         RowCollection = <
@@ -275,6 +279,18 @@ object LoadingIndicatorDemoForm: TLoadingIndicatorDemoForm
           Color = claDarkgray
           Kind = LoadingBallClipRotatePulse
         end
+        object FMXLoadingIndicator22: TFMXLoadingIndicator
+          Anchors = []
+          HitTest = False
+          Position.X = 275.500000000000000000
+          Position.Y = 180.000000000000000000
+          Size.Width = 39.000000000000000000
+          Size.Height = 40.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 10
+          Color = claDarkgray
+          Kind = LoadingBallClipRotateMultiple
+        end
       end
     end
     object Rectangle5: TRectangle
@@ -355,6 +371,11 @@ object LoadingIndicatorDemoForm: TLoadingIndicatorDemoForm
           item
             Column = 1
             Control = FMXLoadingIndicator19
+            Row = 2
+          end
+          item
+            Column = 2
+            Control = FMXLoadingIndicator21
             Row = 2
           end>
         RowCollection = <
@@ -473,7 +494,7 @@ object LoadingIndicatorDemoForm: TLoadingIndicatorDemoForm
           Size.Width = 34.000000000000000000
           Size.Height = 34.000000000000000000
           Size.PlatformDefault = False
-          TabOrder = 9
+          TabOrder = 10
           Color = xFF1282B2
           Kind = LoadingBallClipRotate
         end
@@ -485,17 +506,29 @@ object LoadingIndicatorDemoForm: TLoadingIndicatorDemoForm
           Size.Width = 34.000000000000000000
           Size.Height = 34.000000000000000000
           Size.PlatformDefault = False
-          TabOrder = 8
+          TabOrder = 9
           Color = xFF1282B2
           Kind = LoadingBallClipRotatePulse
+        end
+        object FMXLoadingIndicator21: TFMXLoadingIndicator
+          Anchors = []
+          HitTest = False
+          Position.X = 275.500000000000000000
+          Position.Y = 180.500000000000000000
+          Size.Width = 39.000000000000000000
+          Size.Height = 39.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 8
+          Color = xFF1282B2
+          Kind = LoadingBallClipRotateMultiple
         end
       end
     end
     object Rectangle6: TRectangle
       Position.X = 20.000000000000000000
-      Position.Y = 555.000000000000000000
-      Size.Width = 65.000000000000000000
-      Size.Height = 25.000000000000000000
+      Position.Y = 551.000000000000000000
+      Size.Width = 30.000000000000000000
+      Size.Height = 30.000000000000000000
       Size.PlatformDefault = False
     end
   end
@@ -532,8 +565,8 @@ object LoadingIndicatorDemoForm: TLoadingIndicatorDemoForm
     Stroke.Color = xFFD9D9D9
   end
   object Button1: TButton
-    Position.X = 376.000000000000000000
-    Position.Y = 544.000000000000000000
+    Position.X = 112.000000000000000000
+    Position.Y = 624.000000000000000000
     TabOrder = 0
     Text = 'Test'
     OnClick = Button1Click
