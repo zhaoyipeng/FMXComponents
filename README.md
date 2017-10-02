@@ -5,7 +5,7 @@ If you have some components want to add into this project, you can send it to zh
 
 本项目包括本人及捐赠人实际应用中使用的控件
 
-## 12.TFMXLoadingIndicator  <font color=red size=12>New</font>
+## 12.TFMXLoadingIndicator  <font color=red size=12>(New)</font>
 
 
 ![TFMXLoadingIndicator](SnapShots/FMXLoadingIndicator.gif)  
