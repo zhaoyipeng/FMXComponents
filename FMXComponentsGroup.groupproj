@@ -3,10 +3,10 @@
         <ProjectGuid>{78B8492E-97DC-4DC9-90F3-CB93823FB4CB}</ProjectGuid>
     </PropertyGroup>
     <ItemGroup>
-        <Projects Include="ComponentsSource\FMXComponents.dproj">
+        <Projects Include="ComponentsSource\FMXComponentEd.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="ComponentsSource\FMXComponentEd.dproj">
+        <Projects Include="ComponentsSource\FMXComponents.dproj">
             <Dependencies/>
         </Projects>
         <Projects Include="Demo\FMXComponentsDemo.dproj">
@@ -23,15 +23,6 @@
             <Default.Personality/>
         </BorlandProject>
     </ProjectExtensions>
-    <Target Name="FMXComponents">
-        <MSBuild Projects="ComponentsSource\FMXComponents.dproj"/>
-    </Target>
-    <Target Name="FMXComponents:Clean">
-        <MSBuild Projects="ComponentsSource\FMXComponents.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="FMXComponents:Make">
-        <MSBuild Projects="ComponentsSource\FMXComponents.dproj" Targets="Make"/>
-    </Target>
     <Target Name="FMXComponentEd">
         <MSBuild Projects="ComponentsSource\FMXComponentEd.dproj"/>
     </Target>
@@ -40,6 +31,15 @@
     </Target>
     <Target Name="FMXComponentEd:Make">
         <MSBuild Projects="ComponentsSource\FMXComponentEd.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="FMXComponents">
+        <MSBuild Projects="ComponentsSource\FMXComponents.dproj"/>
+    </Target>
+    <Target Name="FMXComponents:Clean">
+        <MSBuild Projects="ComponentsSource\FMXComponents.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="FMXComponents:Make">
+        <MSBuild Projects="ComponentsSource\FMXComponents.dproj" Targets="Make"/>
     </Target>
     <Target Name="FMXComponentsDemo">
         <MSBuild Projects="Demo\FMXComponentsDemo.dproj"/>
@@ -60,13 +60,13 @@
         <MSBuild Projects="Demo\LoadingIndicatorDemo.dproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
-        <CallTarget Targets="FMXComponents;FMXComponentEd;FMXComponentsDemo;LoadingIndicatorDemo"/>
+        <CallTarget Targets="FMXComponentEd;FMXComponents;FMXComponentsDemo;LoadingIndicatorDemo"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="FMXComponents:Clean;FMXComponentEd:Clean;FMXComponentsDemo:Clean;LoadingIndicatorDemo:Clean"/>
+        <CallTarget Targets="FMXComponentEd:Clean;FMXComponents:Clean;FMXComponentsDemo:Clean;LoadingIndicatorDemo:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="FMXComponents:Make;FMXComponentEd:Make;FMXComponentsDemo:Make;LoadingIndicatorDemo:Make"/>
+        <CallTarget Targets="FMXComponentEd:Make;FMXComponents:Make;FMXComponentsDemo:Make;LoadingIndicatorDemo:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

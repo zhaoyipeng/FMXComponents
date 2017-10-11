@@ -49,10 +49,20 @@ unit FMX.CalendarControl;
 interface
 
 uses
-  System.Classes, System.SysUtils, System.Types, System.UITypes,
-  System.DateUtils, FMX.Platform, FMX.Controls, FMX.Layouts,
-  FMX.Types, FMX.Calendar, FMX.ListView, FMX.ListView.Types,
-  FMX.CalendarItemAppearance;
+  System.Classes,
+  System.SysUtils,
+  System.Types,
+  System.UITypes,
+  System.DateUtils,
+  FMX.Platform,
+  FMX.Controls,
+  FMX.Layouts,
+  FMX.Types,
+  FMX.Calendar,
+  FMX.ListView,
+  FMX.ListView.Types,
+  FMX.CalendarItemAppearance,
+  FMX.ComponentsCommon;
 
 type
   TMonthNames = array [1..12] of string;
@@ -83,6 +93,8 @@ type
   protected
     procedure Paint; override;
   end;
+
+  [ComponentPlatformsAttribute(TFMXPlatforms)]
   TFMXCalendarControl = class(TControl)
   private
     FFirstDayOfWeekNum:Integer;

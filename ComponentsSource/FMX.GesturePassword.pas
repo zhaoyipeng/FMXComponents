@@ -37,10 +37,21 @@ unit FMX.GesturePassword;
 interface
 
 uses
-  System.Classes, System.UITypes, System.Types, System.UIConsts,
-  FMX.Graphics, FMX.Layouts, System.Math, FMX.Controls,
-  FMX.Dialogs, FMX.MultiResBitmap,
-  System.SysUtils, FMX.Types, FMX.Objects, System.Generics.Collections;
+  System.Types,
+  System.UITypes,
+  System.Classes,
+  System.SysUtils,
+  System.Generics.Collections,
+  System.Math,
+  System.UIConsts,
+  FMX.Graphics,
+  FMX.Layouts,
+  FMX.Controls,
+  FMX.Dialogs,
+  FMX.MultiResBitmap,
+  FMX.Types,
+  FMX.Objects,
+  FMX.ComponentsCommon;
 
 type
   TOnEnterCompleteEvent = procedure(Sender: TObject; const APassword: string)
@@ -78,6 +89,7 @@ type
     function GetDefaultSize: TSize; override;
   end;
 
+  [ComponentPlatformsAttribute(TFMXPlatforms)]
   TFMXGesturePassword = class(TControl)
   private const
     cDefaultPadding = 10;
