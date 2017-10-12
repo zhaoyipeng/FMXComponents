@@ -5,13 +5,6 @@ If you have some components want to add into this project, you can send it to zh
 
 本项目包括本人及捐赠人实际应用中使用的控件
 
-## 12.TFMXLoadingIndicator  <font color=red size=12>(New)</font>
-
-
-![TFMXLoadingIndicator](SnapShots/FMXLoadingIndicator.gif)  
-
-Loading indicator port from [LoadingIndicators.WPF](https://github.com/100GPing100/LoadingIndicators.WPF)
-
 ## 13.graphics32 forFiremonkey
 
 ![FMXGR32Demo](SnapShots/FMXGR32Demo.gif)  
@@ -22,6 +15,12 @@ Firemonkey version of Graphics32 [graphics32-for-Firemonkey](https://github.com/
 
 You must download the graphics32-for-Firemonkey source code to compile demo project.
 
+
+## 12.TFMXLoadingIndicator  <font color=red size=12>(New)</font>
+
+![TFMXLoadingIndicator](SnapShots/FMXLoadingIndicator.gif)  
+
+Loading indicator port from [LoadingIndicators.WPF](https://github.com/100GPing100/LoadingIndicators.WPF)
  
 ## 1.TFMXScrollableList
 
