@@ -4,6 +4,12 @@ This project includes the components that donors and I have actually used in app
 If you have some components want to add into this project, you can send it to zhaoyipeng@hotmail.com
 
 本项目包括本人及捐赠人实际应用中使用的控件
+
+技术支持QQ群: 513799640
+Support QQ Group: 513799640
+
+![FMXComponents](SnapShots/group_qrcode.jpg)  
+
  
 ## 1.TFMXScrollableList
 
