@@ -39,7 +39,8 @@ uses
   FMX.TextLayout,
   FMX.Graphics,
   FMX.Controls,
-  FMX.Objects;
+  FMX.Objects,
+  FMX.ComponentsCommon;
 
 type
   TTextBlock = class
@@ -66,6 +67,7 @@ type
     property Text: string read FText write SetText;
   end;
 
+  [ComponentPlatformsAttribute(TFMXPlatforms)]
   TFMXSimpleBBCodeText = class(TControl)
   private
     FLineSpacing: Single;

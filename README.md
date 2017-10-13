@@ -10,6 +10,22 @@ Support QQ Group: 513799640
 
 ![FMXComponents](SnapShots/group_qrcode.jpg)  
 
+## 13.graphics32 forFiremonkey
+
+![FMXGR32Demo](SnapShots/FMXGR32Demo.gif)  
+
+![FMXGR32Demo2](SnapShots/FMXGR32Demo2.gif)  
+
+Firemonkey version of Graphics32 [graphics32-for-Firemonkey](https://github.com/zhaoyipeng/graphics32-for-Firemonkey)
+
+You must download the graphics32-for-Firemonkey source code to compile demo project.
+
+
+## 12.TFMXLoadingIndicator  <font color=red size=12>(New)</font>
+
+![TFMXLoadingIndicator](SnapShots/FMXLoadingIndicator.gif)  
+
+Loading indicator port from [LoadingIndicators.WPF](https://github.com/100GPing100/LoadingIndicators.WPF)
  
 ## 1.TFMXScrollableList
 
@@ -115,9 +131,4 @@ TFMXToast is a toast component using pure fmx<br>
 A QRCode display component<br>
 use DelphiZXingQRCode to generate QRCode image<br>
 
-## 12.TFMXLoadingIndicator
-
-![TFMXLoadingIndicator](SnapShots/FMXLoadingIndicator.gif)  
-
-Loading indicator port from [LoadingIndicators.WPF](https://github.com/100GPing100/LoadingIndicators.WPF)
 

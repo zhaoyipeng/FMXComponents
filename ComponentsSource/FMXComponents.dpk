@@ -48,6 +48,7 @@ contains
   FMX.Toast in 'FMX.Toast.pas',
   FMX.QRCode in 'FMX.QRCode.pas',
   DelphiZXIngQRCode in 'DelphiZXIngQRCode.pas',
-  FMX.LoadingIndicator in 'FMX.LoadingIndicator.pas';
+  FMX.LoadingIndicator in 'FMX.LoadingIndicator.pas',
+  FMX.BezierAnimation in 'FMX.BezierAnimation.pas';
 
 end.

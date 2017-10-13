@@ -23,10 +23,19 @@ interface
 
 uses
   System.SysUtils,
-  System.Classes, System.Types, System.Rtti, System.UITypes, System.UIConsts,
-  FMX.Types, FMX.Controls, FMX.Objects, System.Math.Vectors;
+  System.Classes,
+  System.Types,
+  System.Rtti,
+  System.UITypes,
+  System.UIConsts,
+  System.Math.Vectors,
+  FMX.Types,
+  FMX.Controls,
+  FMX.Objects,
+  FMX.ComponentsCommon;
 
 type
+  [ComponentPlatformsAttribute(TFMXPlatforms)]
   TFMXSeg7Shape = class(TShape)
   const
     NUM_DATA: array [0..15] of Byte = (
@@ -44,7 +53,7 @@ type
     procedure SetSeg_f(const Value: Boolean);
     procedure SetSeg_g(const Value: Boolean);
     procedure SetNum(const Value: Byte);
-    procedure SetData(const Value: Byte);
+    procedure SetSegmentData(const Value: Byte);
     function GetSEG_A: Boolean;
     function GetSEG_B: Boolean;
     function GetSEG_C: Boolean;
@@ -62,7 +71,7 @@ type
     destructor Destroy; override;
   published
     { Published 宣言 }
-    property Data: Byte read FData write SetData;
+    property Data: Byte read FData write SetSegmentData;
     property Num: Byte read FNum write SetNum stored False;
     property SEG_A: Boolean read GetSEG_A write SetSeg_a stored False;
     property SEG_B: Boolean read GetSEG_B write SetSeg_b stored False;
@@ -211,7 +220,7 @@ begin
   Data := newData;
 end;
 
-procedure TFMXSeg7Shape.SetData(const Value: Byte);
+procedure TFMXSeg7Shape.SetSegmentData(const Value: Byte);
 var
   I: Integer;
 begin
