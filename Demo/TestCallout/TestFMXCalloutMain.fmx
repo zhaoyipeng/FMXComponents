@@ -1,0 +1,288 @@
+object Form1: TForm1
+  Left = 0
+  Top = 0
+  Caption = 'TOneCallout by Aone (2017/10/14)'
+  ClientHeight = 694
+  ClientWidth = 613
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  OnShow = FormShow
+  DesignerMasterStyle = 3
+  object Selection1: TSelection
+    GripSize = 10.000000000000000000
+    HideSelection = False
+    Padding.Left = 5.000000000000000000
+    Padding.Top = 5.000000000000000000
+    Padding.Right = 5.000000000000000000
+    Padding.Bottom = 5.000000000000000000
+    Proportional = False
+    Position.X = 265.000000000000000000
+    Position.Y = 40.000000000000000000
+    Size.Width = 300.000000000000000000
+    Size.Height = 300.000000000000000000
+    Size.PlatformDefault = False
+    ShowHandles = True
+  end
+  object Layout2: TLayout
+    Align = Left
+    Size.Width = 226.000000000000000000
+    Size.Height = 694.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+    object XRadiusSpinBox: TSpinBox
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      TabOrder = 5
+      Cursor = crIBeam
+      Max = 300.000000000000000000
+      Position.X = 135.000000000000000000
+      Position.Y = 300.000000000000000000
+      Size.Width = 86.000000000000000000
+      Size.Height = 32.000000000000000000
+      Size.PlatformDefault = False
+      OnChangeTracking = XRadiusSpinBoxChangeTracking
+      object XRadiusLabel: TLabel
+        Position.X = -130.000000000000000000
+        Size.Width = 125.000000000000000000
+        Size.Height = 25.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.HorzAlign = Trailing
+        Text = 'XRadius'
+      end
+    end
+    object YRadiusSpinBox: TSpinBox
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      TabOrder = 4
+      Cursor = crIBeam
+      Max = 300.000000000000000000
+      Position.X = 135.000000000000000000
+      Position.Y = 340.000000000000000000
+      Size.Width = 86.000000000000000000
+      Size.Height = 32.000000000000000000
+      Size.PlatformDefault = False
+      OnChangeTracking = YRadiusSpinBoxChangeTracking
+      object YRadiusLabel: TLabel
+        Position.X = -130.000000000000000000
+        Size.Width = 125.000000000000000000
+        Size.Height = 25.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.HorzAlign = Trailing
+        Text = 'YRadius'
+      end
+    end
+    object CalloutWidthSpinBox: TSpinBox
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      TabOrder = 3
+      Cursor = crIBeam
+      Max = 300.000000000000000000
+      Position.X = 135.000000000000000000
+      Position.Y = 130.000000000000000000
+      Size.Width = 86.000000000000000000
+      Size.Height = 32.000000000000000000
+      Size.PlatformDefault = False
+      OnChangeTracking = CalloutWidthSpinBoxChangeTracking
+      object CalloutWidthLabel: TLabel
+        Position.X = -130.000000000000000000
+        Size.Width = 125.000000000000000000
+        Size.Height = 25.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.HorzAlign = Trailing
+        Text = 'CalloutWidth'
+      end
+    end
+    object CalloutLengthSpinBox: TSpinBox
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      TabOrder = 2
+      Cursor = crIBeam
+      Max = 300.000000000000000000
+      Position.X = 135.000000000000000000
+      Position.Y = 170.000000000000000000
+      Size.Width = 86.000000000000000000
+      Size.Height = 32.000000000000000000
+      Size.PlatformDefault = False
+      OnChangeTracking = CalloutLengthSpinBoxChangeTracking
+      object CalloutLengthLabel: TLabel
+        Position.X = -130.000000000000000000
+        Size.Width = 125.000000000000000000
+        Size.Height = 25.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.HorzAlign = Trailing
+        Text = 'CalloutLength'
+      end
+    end
+    object CalloutOffsetSpinBox: TSpinBox
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      TabOrder = 1
+      Cursor = crIBeam
+      Min = -300.000000000000000000
+      Max = 300.000000000000000000
+      Position.X = 135.000000000000000000
+      Position.Y = 210.000000000000000000
+      Size.Width = 86.000000000000000000
+      Size.Height = 32.000000000000000000
+      Size.PlatformDefault = False
+      OnChangeTracking = CalloutOffsetSpinBoxChangeTracking
+      object CalloutOffsetLabel: TLabel
+        Position.X = -130.000000000000000000
+        Size.Width = 125.000000000000000000
+        Size.Height = 25.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.HorzAlign = Trailing
+        Text = 'CalloutOffset'
+      end
+    end
+    object CalloutPeakOffsetSpinBox: TSpinBox
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      TabOrder = 0
+      Cursor = crIBeam
+      Min = -300.000000000000000000
+      Max = 300.000000000000000000
+      Position.X = 135.000000000000000000
+      Position.Y = 250.000000000000000000
+      Size.Width = 86.000000000000000000
+      Size.Height = 32.000000000000000000
+      Size.PlatformDefault = False
+      OnChangeTracking = CalloutPeakOffsetSpinBoxChangeTracking
+      object CalloutPeakOffsetLabel: TLabel
+        Position.X = -130.000000000000000000
+        Size.Width = 125.000000000000000000
+        Size.Height = 25.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.HorzAlign = Trailing
+        Text = 'PeakOffset'
+      end
+    end
+    object BottomSB: TSpeedButton
+      StaysPressed = True
+      GroupName = 'Position'
+      Position.X = 90.000000000000000000
+      Position.Y = 504.000000000000000000
+      Size.Width = 48.000000000000000000
+      Size.Height = 48.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = 'arrowdowntoolbutton'
+      OnClick = TopSBClick
+    end
+    object LeftSB: TSpeedButton
+      StaysPressed = True
+      GroupName = 'Position'
+      Position.X = 45.000000000000000000
+      Position.Y = 459.000000000000000000
+      Size.Width = 48.000000000000000000
+      Size.Height = 48.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = 'arrowlefttoolbutton'
+      OnClick = TopSBClick
+    end
+    object RightSB: TSpeedButton
+      StaysPressed = True
+      GroupName = 'Position'
+      Position.X = 135.000000000000000000
+      Position.Y = 459.000000000000000000
+      Size.Width = 48.000000000000000000
+      Size.Height = 48.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = 'arrowrighttoolbutton'
+      OnClick = TopSBClick
+    end
+    object TopSB: TSpeedButton
+      StaysPressed = True
+      GroupName = 'Position'
+      Position.X = 90.000000000000000000
+      Position.Y = 414.000000000000000000
+      Size.Width = 48.000000000000000000
+      Size.Height = 48.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = 'arrowuptoolbutton'
+      OnClick = TopSBClick
+    end
+    object FillColorCB: TComboColorBox
+      Color = claWhite
+      Position.X = 135.000000000000000000
+      Position.Y = 10.000000000000000000
+      Size.Width = 86.000000000000000000
+      Size.Height = 32.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 10
+      OnChange = FillColorCBChange
+      object FillColorLabel: TLabel
+        Position.X = -130.000000000000000000
+        Size.Width = 125.000000000000000000
+        Size.Height = 25.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.HorzAlign = Trailing
+        Text = 'Fill'
+      end
+    end
+    object StrokeColorCB: TComboColorBox
+      Color = claWhite
+      Position.X = 135.000000000000000000
+      Position.Y = 45.000000000000000000
+      Size.Width = 86.000000000000000000
+      Size.Height = 32.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 11
+      OnChange = StrokeColorCBChange
+      object StrokeLabel: TLabel
+        Position.X = -130.000000000000000000
+        Size.Width = 125.000000000000000000
+        Size.Height = 25.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.HorzAlign = Trailing
+        Text = 'Stroke'
+      end
+    end
+    object ThicknessSpinBox: TSpinBox
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      TabOrder = 12
+      Cursor = crIBeam
+      ValueType = Float
+      Position.X = 135.000000000000000000
+      Position.Y = 80.000000000000000000
+      Size.Width = 86.000000000000000000
+      Size.Height = 32.000000000000000000
+      Size.PlatformDefault = False
+      OnChangeTracking = ThicknessSpinBoxChangeTracking
+      object Thickness0Label: TLabel
+        Position.X = -130.000000000000000000
+        Size.Width = 125.000000000000000000
+        Size.Height = 25.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.HorzAlign = Trailing
+        TextSettings.WordWrap = False
+        Text = 'Thickness'
+      end
+    end
+    object NativeDrawSwitch: TSwitch
+      IsChecked = True
+      Position.X = 135.000000000000000000
+      Position.Y = 376.000000000000000000
+      Size.Width = 44.000000000000000000
+      Size.Height = 26.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 13
+      OnClick = NativeDrawSwitchClick
+      object Label2: TLabel
+        Position.X = -130.000000000000000000
+        Position.Y = 1.000000000000000000
+        Size.Width = 125.000000000000000000
+        Size.Height = 25.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.HorzAlign = Trailing
+        Text = 'NativeDraw'
+        TabOrder = 0
+      end
+    end
+    object Label1: TLabel
+      Position.X = -122.000000000000000000
+      Position.Y = 8.000000000000000000
+      Size.Width = 125.000000000000000000
+      Size.Height = 25.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.HorzAlign = Trailing
+      Text = 'YRadius'
+      TabOrder = 14
+    end
+  end
+end

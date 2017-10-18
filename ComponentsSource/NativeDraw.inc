@@ -1,0 +1,9 @@
+﻿{$SCOPEDENUMS ON}
+
+{$IFDEF MACOS}
+  {$IFNDEF IOS}
+    {$DEFINE MACOSONLY}
+  {$ENDIF}
+{$ENDIF}
+
+
