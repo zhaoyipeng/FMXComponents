@@ -27,7 +27,6 @@ var
   Canvas: INativeCanvas;
   Method: TDrawMethod;
 begin
-  Log.d('Enter TOneCallout.Paint');
   if Self.NativeDraw then
     Method := TDrawMethod.Native
   else
