@@ -3,10 +3,7 @@ program TestFMXCallout;
 uses
   System.StartUpCopy,
   FMX.Forms,
-  Main in 'Main.pas' {Form1},
-  FMX.Graphics.NativeCanvas in 'FMX.Graphics.NativeCanvas.pas',
-  FMX.TextLayout.Native in 'FMX.TextLayout.Native.pas',
-  FMX.Graphics.INativeCanvas in 'FMX.Graphics.INativeCanvas.pas';
+  TestFMXCalloutMain in 'TestFMXCalloutMain.pas' {Form1};
 
 {$R *.res}
 

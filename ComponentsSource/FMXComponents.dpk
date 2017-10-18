@@ -28,7 +28,8 @@ package FMXComponents;
 {$IMPLICITBUILD ON}
 
 requires
-  rtl;
+  rtl,
+  fmx;
 
 contains
   FMX.BezierAnimation in 'FMX.BezierAnimation.pas',
@@ -42,13 +43,12 @@ contains
   FMX.ImageSlider in 'FMX.ImageSlider.pas',
   FMX.LoadingIndicator in 'FMX.LoadingIndicator.pas',
   FMX.QRCode in 'FMX.QRCode.pas',
-  FMX.RainingBarEd in 'FMX.RainingBarEd.pas',
   FMX.RatingBar in 'FMX.RatingBar.pas',
   FMX.RegComponents in 'FMX.RegComponents.pas',
   FMX.ScrollableList in 'FMX.ScrollableList.pas',
   FMX.Seg7Shape in 'FMX.Seg7Shape.pas',
   FMX.SimpleBBCodeText in 'FMX.SimpleBBCodeText.pas',
   FMX.Toast in 'FMX.Toast.pas',
-  ONE.Callout in 'ONE.Callout.pas';
+  FMX.Callout in 'FMX.Callout.pas';
 
 end.
