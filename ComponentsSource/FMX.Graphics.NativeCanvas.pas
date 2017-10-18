@@ -61,6 +61,7 @@ uses
   System.Generics.Collections,
 
 {$IFDEF ANDROID}
+  Androidapi.JNI.JavaTypes,
   Androidapi.JNI.GraphicsContentViewText,
   Androidapi.JNIBridge,
   Androidapi.Helpers,
@@ -190,6 +191,7 @@ type
     procedure DrawPath(const APath: TPathData; const AOpacity: Single; const AFill: TBrush; const AStroke: TStrokeBrush); override;
 
     // 下列为 Canvas 原有函数
+    procedure FillText(const ARect: TRectF; const AText: string; const WordWrap: Boolean; const AOpacity: Single; const Flags: TFillTextFlags; const ATextAlign: TTextAlign; const AVTextAlign: TTextAlign = TTextAlign.Center); override;
     procedure DrawLine(const APt1, APt2: TPointF; const AOpacity: Single; const ABrush: TStrokeBrush); overload; override;
 
     procedure IntersectClipRect(const ARect: TRectF); override;
@@ -822,6 +824,7 @@ begin
 
   Paint1 := TJPaint.Wrap(TJPaint.JavaClass.init(TJPaint.JavaClass.ANTI_ALIAS_FLAG));
   Paint1.setAlpha(Round(AOpacity * 255));
+  Paint1.setAntiAlias(true);
 
   jb := BitmapToJBitmap(ABitmap);
   src := TJRect.JavaClass.init;
@@ -943,6 +946,52 @@ begin
 
     GlobalCanvas.clipRect(JR, TJRegion_Op.JavaClass.REPLACE);
   end;
+end;
+
+procedure TAndroidNativeCanvas.FillText(const ARect: TRectF; const AText: string; const WordWrap: Boolean; const AOpacity: Single; const Flags: TFillTextFlags; const ATextAlign, AVTextAlign: TTextAlign);
+var
+  js: JString;
+  Paint1: JPaint;
+  tr: JRect;
+  x, y: Single;
+  align: JPaint_Align;
+  fm: JPaint_FontMetricsInt;
+begin
+  if GlobalCanvas = nil then
+    Exit;
+  js := StringToJString(AText);
+  Paint1 := TJPaint.Wrap(TJPaint.JavaClass.init(TJPaint.JavaClass.ANTI_ALIAS_FLAG));
+  Paint1.setTextSize(Font.Size);
+  if (Fill <> nil) and (Fill.Kind <> TBrushKind.None) then
+  begin
+    ApplyFill(Paint1, Fill, ARect, AOpacity);
+  end;
+  align := TJPaint_Align.Wrap(TJPaint_Align.JavaClass.LEFT);
+  Paint1.setTextAlign(align);
+  Paint1.setStrikeThruText(TFontStyle.fsStrikeOut in Font.Style);
+  Paint1.setUnderlineText(TFontStyle.fsUnderline in Font.Style);
+  Paint1.setFakeBoldText(TFontStyle.fsBold in Font.Style);
+  if TFontStyle.fsItalic in Font.Style then
+    Paint1.setTextSkewX(-0.5);
+  tr := TJRect.JavaClass.init;
+  Paint1.getTextBounds(js, 0, js.length, tr);
+  case ATextAlign of
+    TTextAlign.Center: x := (ARect.Width - tr.width) / 2;
+    TTextAlign.Leading: x := 0;
+    TTextAlign.Trailing: x := ARect.Width - tr.width - tr.left;
+  end;
+
+  fm := Paint1.getFontMetricsInt;
+  case AVTextAlign of
+    TTextAlign.Center: y := (ARect.Height - tr.top) / 2;
+    TTextAlign.Leading: y := -fm.top;
+    TTextAlign.Trailing: y := ARect.Height - fm.bottom;
+  end;
+  x := x + ARect.Left;
+  y := y + ARect.Top;
+  GlobalCanvas.drawText(js, x, y, Paint1);
+  Log.d('ARect: [%f, %f, %f, %f], tr: [x:%d, y:%d, w:%d, h:%d], x: %f, y: %f, fm.top: %d, fm.leading: %d, fm.bottom: %d, s: %s',
+    [ARect.Left, ARect.Top, ARect.Right, ARect.Bottom, tr.left, tr.top, tr.width, tr.height, x, y, fm.top, fm.leading, fm.bottom, AText]);
 end;
 
 procedure TAndroidNativeCanvas.NativeDraw(const ARect: TRectF; const ADrawProc: TDrawProc);

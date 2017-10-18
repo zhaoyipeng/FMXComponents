@@ -27,3 +27,11 @@
 /Demo/LoadingIndicatorDemo.stat
 /Demo/OSX32/Debug
 /Demo/FMXGR32DemoProj.res
+/ComponentsSource/Android/Debug
+/Demo/TestINativeCanvas/Android/Debug
+/Demo/TestINativeCanvas/__history
+/Demo/TestINativeCanvas/Win32/Debug
+/Demo/TestINativeCanvas/TestINativeCanvas.dproj.local
+/Demo/TestINativeCanvas/TestINativeCanvas.res
+/Demo/TestCallout/TestFMXCallout.stat
+/Demo/TestINativeCanvas/TestDrawBitmap.stat
