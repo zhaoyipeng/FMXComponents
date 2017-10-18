@@ -23,18 +23,17 @@
 //
 // *************************************************************************** }
 { ------------------------------------------ }
-{                                            }
-{ (c) 2017 by Aone                           }
-{                                            }
-{ QQ: 1467948783                             }
-{                                            }
-{ http://www.cnblogs.com/onechen             }
-{                                            }
+{ }
+{ (c) 2017 by Aone }
+{ }
+{ QQ: 1467948783 }
+{ }
+{ http://www.cnblogs.com/onechen }
+{ }
 { ------------------------------------------ }
-{ Start: 2017.01.16                          }
+{ Start: 2017.01.16 }
 { ------------------------------------------ }
 // [原创] 改善 Firemonkey Canvas 几何绘图质量问题（移动平台）by Aone
-
 
 // The basic usage of this unit:
 // write these code in you paint method
@@ -54,6 +53,7 @@ interface
 uses
   System.Types,
   System.UITypes,
+  System.UIConsts,
   System.Math,
   System.Math.Vectors,
   System.Classes,
@@ -146,6 +146,7 @@ type
     procedure DrawPolygon(const Points: TPolygon; const AOpacity: Single; const AFill: TBrush; const AStroke: TStrokeBrush); overload; override;
 
     // 下列为 Canvas 原有函数
+    procedure FillText(const ARect: TRectF; const AText: string; const WordWrap: Boolean; const AOpacity: Single; const Flags: TFillTextFlags; const ATextAlign: TTextAlign; const AVTextAlign: TTextAlign = TTextAlign.Center); override;
     procedure DrawLine(const APt1, APt2: TPointF; const AOpacity: Single); overload; override;
 
     procedure FillRect(const ARect: TRectF; const XRadius, YRadius: Single; const ACorners: TCorners; const AOpacity: Single; const ACornerType: TCornerType = TCornerType.Round); overload; override;
@@ -225,6 +226,10 @@ type
 
 implementation
 
+type
+  TMyCanvas = class(TCanvas)
+
+  end;
 { TFiremonkeyCanvas }
 
 procedure TFiremonkeyCanvas.DrawArc(const Center, Radius: TPointF; StartAngle, SweepAngle: Single; const AOpacity: Single; const AFill: TBrush; const AStroke: TStrokeBrush; const Inside: Boolean);
@@ -432,7 +437,7 @@ begin
 {$IFDEF ANDROID}
       Result := TAndroidNativeCanvas.Create(Self);
 {$ELSE}
-      Result := nil;
+      Result := TIOSNativeCanvas.Create(Self);
 {$ENDIF}
 {$ELSE}
       Result := TFiremonkeyCanvas.Create(Self);
@@ -444,6 +449,10 @@ end;
 
 {$IF Defined(ANDROID) or Defined(IOS)}
 { TCustomNativeCanvas }
+
+procedure TCustomNativeCanvas.FillText(const ARect: TRectF; const AText: string; const WordWrap: Boolean; const AOpacity: Single; const Flags: TFillTextFlags; const ATextAlign: TTextAlign; const AVTextAlign: TTextAlign = TTextAlign.Center);
+begin
+end;
 
 procedure TCustomNativeCanvas.DrawLine(const APt1, APt2: TPointF; const AOpacity: Single);
 begin
@@ -1086,7 +1095,7 @@ begin
   if Length(AStroke.DashArray) > 0 then
   begin
     // select the proper dash array for the printer
-    if FPrinter <> nil then
+    if TMyCanvas(FCanvas).FPrinter <> nil then
       if AStroke.Dash <> TStrokeDash.Custom then
         Dash := TStrokeBrush.StdDash[TStrokeBrush.TDashDevice.Printer, AStroke.Dash].DashArray
       else
@@ -1133,6 +1142,28 @@ begin
     InflateRect(R, AStroke.Thickness / 2, AStroke.Thickness / 2);
     ApplyGradient(AStroke, R);
   end;
+end;
+
+procedure TIOSNativeCanvas.DrawBitmap(const ABitmap: TBitmap; const SrcRect,
+  DstRect: TRectF; const AOpacity: Single; const HighSpeed: Boolean);
+var
+  NativeImage: UIImage;
+  image: CGImageRef;
+begin
+  if GlobalCanvas = nil then
+    Exit;
+
+  NativeImage := BitmapToUIImage(ABitmap);
+  image := CGImageCreateWithImageInRect(NativeImage.CGImage,
+    CGRectMake(SrcRect.Left, SrcRect.Top, SrcRect.Width, SrcRect.Height));
+  CGContextSaveGState(GlobalCanvas);
+  CGContextSetAlpha(GlobalCanvas, AOpacity);
+  CGContextTranslateCTM(GlobalCanvas, 0, height);
+  CGContextScaleCTM(GlobalCanvas, 1.0, -1.0);
+  CGContextDrawImage(GlobalCanvas,
+    CGRectMake(DstRect.Left, Height - DstRect.Bottom, DstRect.Width, DstRect.Height),
+    image);
+  CGContextRestoreGState(GlobalCanvas);
 end;
 
 procedure TIOSNativeCanvas.DrawFill(const ABrush: TBrush; const SrcRect, DesRect: TRectF; const AOpacity: Single);
@@ -1240,10 +1271,10 @@ var
 begin
   if GlobalCanvas <> nil then
   begin
-    LRect[0] := CGRectFromRect(TRectF.Create(-FWidth, -FWidth, ARect.Left, FHeight));
-    LRect[1] := CGRectFromRect(TRectF.Create(ARect.Right, -FHeight, FWidth, FHeight));
-    LRect[2] := CGRectFromRect(TRectF.Create(ARect.Left, -FHeight, ARect.Right, ARect.Top));
-    LRect[3] := CGRectFromRect(TRectF.Create(ARect.Left, ARect.Bottom, ARect.Right, FHeight));
+    LRect[0] := CGRectFromRect(TRectF.Create(-FCanvas.Width, -FCanvas.Width, ARect.Left, FCanvas.Height));
+    LRect[1] := CGRectFromRect(TRectF.Create(ARect.Right, -FCanvas.Height, FCanvas.Width, FCanvas.Height));
+    LRect[2] := CGRectFromRect(TRectF.Create(ARect.Left, -FCanvas.Height, ARect.Right, ARect.Top));
+    LRect[3] := CGRectFromRect(TRectF.Create(ARect.Left, ARect.Bottom, ARect.Right, FCanvas.Height));
     CGContextClipToRects(GlobalCanvas, @LRect[0], 4);
   end;
 end;
@@ -1254,11 +1285,74 @@ begin
     CGContextClipToRect(GlobalCanvas, CGRectFromRect(ARect));
 end;
 
+function MyUIImageToBitmap(const AImage: UIImage; const ARotate: Single; const AMaxSize: TSize): TBitmap;
+
+  function ReduceImageSize(const AOriginalSize: TSize): TSize;
+  var
+    ImageRatio: Double;
+    ScaleCoef: Double;
+    MinWidth: Integer;
+    MinHeight: Integer;
+    MaxBitmapSize: Integer;
+  begin
+    Result := AOriginalSize;
+    MinWidth := Min(AOriginalSize.Width, AMaxSize.Width);
+    MinHeight := Min(AOriginalSize.Height, AMaxSize.Height);
+    ImageRatio := AOriginalSize.Width / AOriginalSize.Height;
+    if MinWidth / MinHeight < ImageRatio then
+      Result := TSize.Create(MinWidth, Round(MinWidth / ImageRatio))
+    else
+      Result := TSize.Create(Round(MinHeight * ImageRatio), MinHeight);
+
+    MaxBitmapSize := TCanvasManager.DefaultCanvas.GetAttribute(TCanvasAttribute.MaxBitmapSize);
+    if (MaxBitmapSize > 0) and (Max(AOriginalSize.cx, AOriginalSize.cy) div MaxBitmapSize > 0) then
+    begin
+      ScaleCoef := Max(AOriginalSize.cx, AOriginalSize.cy) / MaxBitmapSize;
+      Result := TSize.Create(Round(AOriginalSize.cx / ScaleCoef), Round(AOriginalSize.cy / ScaleCoef));
+    end;
+  end;
+
+var
+  ImageRef: CGImageRef;
+  Bitmap: TBitmap;
+  CtxRef: CGContextRef;
+  ColorSpace: CGColorSpaceRef;
+  Data: TBitmapData;
+  BitmapSize: TSize;
+begin
+  ImageRef := AImage.CGImage;
+  if ImageRef <> nil then
+  begin
+    BitmapSize := ReduceImageSize(TSize.Create(CGImageGetWidth(ImageRef), CGImageGetHeight(ImageRef)));
+    Bitmap := TBitmap.Create(BitmapSize.cx, BitmapSize.cy);
+    Bitmap.Clear(0);
+    ColorSpace := CGColorSpaceCreateDeviceRGB;
+    try
+      if Bitmap.Map(TMapAccess.Write, Data) then
+      try
+        CtxRef := CGBitmapContextCreate(Data.Data, Bitmap.Width, Bitmap.Height, 8, Data.Pitch, ColorSpace,
+          kCGImageAlphaPremultipliedLast or kCGBitmapByteOrder32Big);
+        try
+          CGContextDrawImage(CtxRef, CGRectMake(0, 0, Bitmap.Width, BitMap.Height), ImageRef);
+        finally
+          CGContextRelease(CtxRef);
+        end;
+      finally
+        Bitmap.Unmap(Data);
+      end;
+    finally
+      CGColorSpaceRelease(ColorSpace);
+    end;
+    Bitmap.Rotate(ARotate);
+    Result := Bitmap;
+  end
+  else
+    Result := nil;
+end;
+
 procedure TIOSNativeCanvas.NativeDraw(const ARect: TRectF; const ADrawProc: TDrawProc);
 var
   NativeImage: UIImage;
-  PNGRepresentation: NSData;
-  PNGMemoryStream: TMemoryStream;
   Bitmap: TBitmap;
 begin
   NativeImage := nil;
@@ -1283,20 +1377,10 @@ begin
 
   if Assigned(NativeImage) then
   begin
-    PNGRepresentation := TNSData.Wrap(UIImagePNGRepresentation((NativeImage as ILocalObject).GetObjectID));
-
-    if Assigned(PNGRepresentation) then
-    begin
-      Bitmap := TBitmap.Create(0, 0);
-      PNGMemoryStream := TMemoryStream.Create;
-      PNGMemoryStream.Write(PNGRepresentation.bytes^, PNGRepresentation.Length);
-      Bitmap.LoadFromStream(PNGMemoryStream);
-      PNGMemoryStream.Free;
-
-      // 显示
-      DrawBitmap(Bitmap, RectF(0, 0, Bitmap.Width, Bitmap.Height), ARect, 1);
-      FreeAndNil(Bitmap);
-    end;
+    Bitmap := MyUIImageToBitmap(NativeImage, 0, NativeImage.size.ToSizeF.Round);
+    // 显示
+    FCanvas.DrawBitmap(Bitmap, RectF(0, 0, Bitmap.Width, Bitmap.Height), ARect, 1);
+    FreeAndNil(Bitmap);
   end;
 
   UIGraphicsEndImageContext;

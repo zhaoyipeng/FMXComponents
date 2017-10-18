@@ -1,40 +1,3 @@
-// ***************************************************************************
-//
-// Firemonkey Native Canvas Class
-//
-// Copyright 2017 Aone (amtbonechen@gmail.com), 谢顿 (zhaoyipeng@hotmail.com)
-//
-// This unit is based on Aone's FMX.Graphics.Native.pas, 谢顿 changed it
-// to INativeCanvas, the original version information is below
-//
-// ***************************************************************************
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//
-// *************************************************************************** }
-{ ------------------------------------------ }
-{                                            }
-{ (c) 2017 by Aone                           }
-{                                            }
-{ QQ: 1467948783                             }
-{                                            }
-{ http://www.cnblogs.com/onechen             }
-{                                            }
-{ ------------------------------------------ }
-{ Start: 2017.01.16                          }
-{ ------------------------------------------ }
-// [原创] 改善 Firemonkey Canvas 几何绘图质量问题（移动平台）by Aone
-
 unit FMX.Graphics.INativeCanvas;
 
 interface
@@ -175,12 +138,15 @@ type
     function GetFill: TBrush; inline;
     procedure SetFill(const Value: TBrush); inline;
     function GetFont: TFont; inline;
-
+    function GetWidth: Integer; inline;
+    function GetHeight: Integer; inline;
     property Scale: Single read GetScale;
     property Matrix: TMatrix read GetMatrix;
     property Stroke: TStrokeBrush read GetStroke;
     property Fill: TBrush read GetFill write SetFill;
     property Font: TFont read GetFont;
+    property Width: Integer read GetWidth;
+    property Height: Integer read GetHeight;
   end;
 
 implementation
@@ -227,6 +193,11 @@ begin
   Result := FCanvas.Font;
 end;
 
+function TAbstractCanvas.GetHeight: Integer;
+begin
+  Result := FCanvas.Height;
+end;
+
 function TAbstractCanvas.GetMatrix: TMatrix;
 begin
   Result := FCanvas.Matrix;
@@ -240,6 +211,11 @@ end;
 function TAbstractCanvas.GetStroke: TStrokeBrush;
 begin
   Result := FCanvas.Stroke;
+end;
+
+function TAbstractCanvas.GetWidth: Integer;
+begin
+  Result := FCanvas.Width;
 end;
 
 procedure TAbstractCanvas.SetFill(const Value: TBrush);
