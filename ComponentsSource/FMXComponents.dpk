@@ -49,6 +49,8 @@ contains
   FMX.Seg7Shape in 'FMX.Seg7Shape.pas',
   FMX.SimpleBBCodeText in 'FMX.SimpleBBCodeText.pas',
   FMX.Toast in 'FMX.Toast.pas',
-  FMX.Callout in 'FMX.Callout.pas';
+  FMX.Callout in 'FMX.Callout.pas',
+  FMX.RotatingText in 'FMX.RotatingText.pas',
+  FMX.Animation in 'FMX.Animation.pas';
 
 end.

@@ -10,6 +10,11 @@ Support QQ Group: 513799640<br>
 ![FMXComponents](SnapShots/group_qrcode.jpg)  <br>
 You can also add my skype: zhaoyipeng@hotmail.com<br>
 
+## 16.TFMXRotatingText<br>
+A Firemonkey Rotating Text Component be inspired by RotatingText(https://github.com/sdsmdg/RotatingText)<br>
+![FMXRotatingText](SnapShots/FMXRotatingText.gif)  <br>
+
+
 ## 15.INativeCanvas
 
 We know the firemonkey's canvas is very bad quality on mobile platforms<br>

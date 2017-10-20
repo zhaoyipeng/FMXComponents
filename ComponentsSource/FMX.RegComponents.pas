@@ -40,6 +40,7 @@ uses
   , FMX.QRCode
   , FMX.LoadingIndicator
   , FMX.Callout
+  , FMX.RotatingText
   ;
 
 procedure Register;
@@ -63,6 +64,7 @@ begin
   RegisterComponents(FMX_COMPONENTS_PALETTE, [TFMXQRCode]);
   RegisterComponents(FMX_COMPONENTS_PALETTE, [TFMXLoadingIndicator]);
   RegisterComponents(FMX_COMPONENTS_PALETTE, [TFMXCallout]);
+  RegisterComponents(FMX_COMPONENTS_PALETTE, [TFMXRotatingText]);
 end;
 
 end.

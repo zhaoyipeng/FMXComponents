@@ -54,12 +54,14 @@ uses
   FMX.Objects,
   FMX.Graphics,
   FMX.Graphics.INativeCanvas,
-  FMX.Graphics.NativeCanvas;
+  FMX.Graphics.NativeCanvas,
+  FMX.ComponentsCommon;
 
 type
 
 { TFMXCallout }
 
+  [ComponentPlatformsAttribute(TFMXPlatforms)]
   TFMXCallout = class(TRectangle)
   private
     FPath: TPathData;

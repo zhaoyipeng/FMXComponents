@@ -21,6 +21,9 @@
         <Projects Include="Demo\TestINativeCanvas\TestINativeCanvas.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="Demo\RotatingTextDemo\RotateTextDemoProj.dproj">
+            <Dependencies/>
+        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -83,14 +86,23 @@
     <Target Name="TestINativeCanvas:Make">
         <MSBuild Projects="Demo\TestINativeCanvas\TestINativeCanvas.dproj" Targets="Make"/>
     </Target>
+    <Target Name="RotateTextDemoProj">
+        <MSBuild Projects="Demo\RotatingTextDemo\RotateTextDemoProj.dproj"/>
+    </Target>
+    <Target Name="RotateTextDemoProj:Clean">
+        <MSBuild Projects="Demo\RotatingTextDemo\RotateTextDemoProj.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="RotateTextDemoProj:Make">
+        <MSBuild Projects="Demo\RotatingTextDemo\RotateTextDemoProj.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="FMXComponents;FMXComponentEd;FMXComponentsDemo;LoadingIndicatorDemo;TestFMXCallout;TestINativeCanvas"/>
+        <CallTarget Targets="FMXComponents;FMXComponentEd;FMXComponentsDemo;LoadingIndicatorDemo;TestFMXCallout;TestINativeCanvas;RotateTextDemoProj"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="FMXComponents:Clean;FMXComponentEd:Clean;FMXComponentsDemo:Clean;LoadingIndicatorDemo:Clean;TestFMXCallout:Clean;TestINativeCanvas:Clean"/>
+        <CallTarget Targets="FMXComponents:Clean;FMXComponentEd:Clean;FMXComponentsDemo:Clean;LoadingIndicatorDemo:Clean;TestFMXCallout:Clean;TestINativeCanvas:Clean;RotateTextDemoProj:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="FMXComponents:Make;FMXComponentEd:Make;FMXComponentsDemo:Make;LoadingIndicatorDemo:Make;TestFMXCallout:Make;TestINativeCanvas:Make"/>
+        <CallTarget Targets="FMXComponents:Make;FMXComponentEd:Make;FMXComponentsDemo:Make;LoadingIndicatorDemo:Make;TestFMXCallout:Make;TestINativeCanvas:Make;RotateTextDemoProj:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

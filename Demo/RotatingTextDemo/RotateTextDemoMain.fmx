@@ -1,0 +1,226 @@
+object RotatingTextDemoForm: TRotatingTextDemoForm
+  Left = 0
+  Top = 0
+  Caption = 'Rotating Text Demo'
+  ClientHeight = 468
+  ClientWidth = 853
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Orientations = [Landscape]
+  FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  DesignerMasterStyle = 0
+  object Text1: TText
+    Align = Top
+    Position.X = 145.000000000000000000
+    Position.Y = 137.000000000000000000
+    Size.Width = 708.000000000000000000
+    Size.Height = 73.000000000000000000
+    Size.PlatformDefault = False
+    Text = 'FMXComponents TFMXRotatingText'
+    TextSettings.Font.Family = 'Raleway'
+    TextSettings.Font.Size = 24.000000000000000000
+  end
+  object ListBox1: TListBox
+    Align = MostLeft
+    Size.Width = 145.000000000000000000
+    Size.Height = 468.000000000000000000
+    Size.PlatformDefault = False
+    StyleLookup = 'listboxstyle'
+    TabOrder = 1
+    DisableFocusEffect = True
+    ItemHeight = 40.000000000000000000
+    Items.Strings = (
+      'Linear'
+      'Quadratic'
+      'Cubic'
+      'Quartic'
+      'Quintic'
+      'Sinusoidal'
+      'Exponential'
+      'Circular'
+      'Elastic'
+      'Back'
+      'Bounce')
+    DefaultItemStyles.ItemStyle = ''
+    DefaultItemStyles.GroupHeaderStyle = ''
+    DefaultItemStyles.GroupFooterStyle = ''
+    OnChange = ListBox1Change
+    Viewport.Width = 141.000000000000000000
+    Viewport.Height = 464.000000000000000000
+  end
+  object GridPanelLayout1: TGridPanelLayout
+    Align = Client
+    Size.Width = 708.000000000000000000
+    Size.Height = 258.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 2
+    ColumnCollection = <
+      item
+        Value = 50.000000000000000000
+      end
+      item
+        Value = 50.000000000000000000
+      end>
+    ControlCollection = <
+      item
+        Column = 0
+        Control = FMXRotatingText1
+        Row = 0
+      end
+      item
+        Column = 1
+        Control = FMXRotatingText2
+        Row = 0
+      end
+      item
+        Column = 0
+        Control = TextLeft
+        Row = 1
+      end
+      item
+        Column = 1
+        Control = TextRight
+        Row = 1
+      end>
+    RowCollection = <
+      item
+        Value = 100.000000000000000000
+      end
+      item
+        SizeStyle = Auto
+      end
+      item
+        SizeStyle = Auto
+      end>
+    object FMXRotatingText1: TFMXRotatingText
+      Fill.Color = claBlack
+      Size.Width = 303.000000000000000000
+      Size.Height = 28.175998687744140000
+      Size.PlatformDefault = False
+      Lines.Strings = (
+        'HELLO'
+        'GOOD'
+        'FIREMONKEY'
+        'AWESOME'
+        'DELPHI')
+      TextSettings.Font.Family = 'Raleway'
+      TextSettings.Font.Size = 24.000000000000000000
+      TextSettings.FontColor = xFFFFA036
+      UpdateDuration = 2.000000000000000000
+      AnimationDuration = 1.000000000000000000
+      RotatingDirection = TopToBottom
+    end
+    object FMXRotatingText2: TFMXRotatingText
+      Fill.Color = claBlack
+      Position.X = 354.000000000000000000
+      Size.Width = 300.000000000000000000
+      Size.Height = 28.175998687744140000
+      Size.PlatformDefault = False
+      Lines.Strings = (
+        'HELLO'
+        'GOOD'
+        'FIREMONKEY'
+        'AWESOME'
+        'DELPHI')
+      TextSettings.Font.Family = 'Raleway'
+      TextSettings.Font.Size = 24.000000000000000000
+      TextSettings.FontColor = xFFFFA036
+      UpdateDuration = 2.000000000000000000
+      AnimationDuration = 1.000000000000000000
+      RotatingDirection = TopToBottom
+    end
+    object TextLeft: TText
+      Anchors = []
+      Position.X = 27.000000000000000000
+      Position.Y = 208.000000000000000000
+      Size.Width = 300.000000000000000000
+      Size.Height = 50.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.Font.Family = 'Raleway'
+      TextSettings.Font.Size = 24.000000000000000000
+    end
+    object TextRight: TText
+      Anchors = []
+      Position.X = 381.000000000000000000
+      Position.Y = 208.000000000000000000
+      Size.Width = 300.000000000000000000
+      Size.Height = 50.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.Font.Family = 'Raleway'
+      TextSettings.Font.Size = 24.000000000000000000
+    end
+  end
+  object Layout1: TLayout
+    Align = Top
+    Position.X = 145.000000000000000000
+    Size.Width = 708.000000000000000000
+    Size.Height = 137.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 4
+    object GroupBox1: TGroupBox
+      Align = Left
+      Margins.Left = 8.000000000000000000
+      Position.X = 8.000000000000000000
+      Size.Width = 209.000000000000000000
+      Size.Height = 137.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'Rotating Direction'
+      TabOrder = 0
+      object rbBottomToTop: TRadioButton
+        GroupName = 'Direction'
+        Position.X = 33.000000000000000000
+        Position.Y = 78.000000000000000000
+        Size.Width = 168.000000000000000000
+        Size.Height = 19.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        Text = 'Bottom to Top'
+        OnChange = rbTopToBottomChange
+      end
+      object rbTopToBottom: TRadioButton
+        GroupName = 'Direction'
+        IsChecked = True
+        Position.X = 33.000000000000000000
+        Position.Y = 38.000000000000000000
+        Size.Width = 168.000000000000000000
+        Size.Height = 19.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+        Text = 'Top to Bottom'
+      end
+    end
+    object GroupBox2: TGroupBox
+      Align = Left
+      Margins.Left = 8.000000000000000000
+      Position.X = 225.000000000000000000
+      Size.Width = 209.000000000000000000
+      Size.Height = 137.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'Select Text'
+      TabOrder = 1
+      object rbSelectRight: TRadioButton
+        GroupName = 'Texts'
+        Position.X = 33.000000000000000000
+        Position.Y = 78.000000000000000000
+        Size.Width = 168.000000000000000000
+        Size.Height = 19.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        Text = 'Right'
+        OnChange = rbTopToBottomChange
+      end
+      object rbSelectLeft: TRadioButton
+        GroupName = 'Texts'
+        IsChecked = True
+        Position.X = 33.000000000000000000
+        Position.Y = 38.000000000000000000
+        Size.Width = 168.000000000000000000
+        Size.Height = 19.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+        Text = 'Left'
+      end
+    end
+  end
+end
