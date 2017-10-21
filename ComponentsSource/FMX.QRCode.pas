@@ -4,6 +4,7 @@ interface
 
 uses
   System.Classes,
+  System.SysUtils,
   System.Types,
   System.UITypes,
   FMX.Types,
@@ -11,6 +12,7 @@ uses
   FMX.Graphics,
   FMX.Objects,
   FMX.MultiResBitmap,
+  FMX.Platform,
   FMX.ComponentsCommon,
   DelphiZXingQRCode;
 
@@ -131,26 +133,34 @@ end;
 procedure TFMXQRCode.CreateQRImage;
 var
   QRCode: TDelphiZXingQRCode;
-  Row, Column: Integer;
+  Row, Column, I, J: Integer;
   Data: TBitmapData;
+  ScreenService: IFMXScreenService;
+  Scale1: Single;
 begin
+  if TPlatformServices.Current.SupportsPlatformService(IFMXScreenService, ScreenService) then
+    Scale1 := ScreenService.GetScreenScale
+  else
+    Scale1 := 1;
   if FNeedUpdate then
   begin
     if not Assigned(FQRImage) then
-      FQRImage := TBitmap.Create;
+      FQRImage := TBitmap.Create(
+        Round(Scale1 * Self.Width), Round(Scale1 * Self.Height));
     QRCode := TDelphiZXingQRCode.Create;
     try
       QRCode.Data := Text;
       QRCode.Encoding := TQRCodeEncoding.qrAuto;
       QRCode.QuietZone := FQuietZone;
-      FQRImage.SetSize(QRCode.Rows, QRCode.Columns);
       FQRImage.Map(TMapAccess.Write, Data);
       try
-        for Row := 0 to QRCode.Rows - 1 do
+        for Row := 0 to FQRImage.Height - 1 do
         begin
-          for Column := 0 to QRCode.Columns - 1 do
+          J := Row * QRCode.Rows div FQRImage.Height;
+          for Column := 0 to FQRImage.Width - 1 do
           begin
-            if (QRCode.IsBlack[Row, Column]) then
+            I := Column * QRCode.Columns div FQRImage.Width;
+            if (QRCode.IsBlack[J, I]) then
             begin
               Data.SetPixel(Column, Row, FForeGround);
             end
@@ -218,6 +228,7 @@ begin
 procedure TFMXQRCode.Resize;
 begin
   inherited;
+  Update;
   Repaint;
 end;
 
