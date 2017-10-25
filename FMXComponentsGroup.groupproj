@@ -24,6 +24,9 @@
         <Projects Include="Demo\RotatingTextDemo\RotateTextDemoProj.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="Demo\TestBezierAnimation\TestBezierAnimation.dproj">
+            <Dependencies/>
+        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -95,14 +98,23 @@
     <Target Name="RotateTextDemoProj:Make">
         <MSBuild Projects="Demo\RotatingTextDemo\RotateTextDemoProj.dproj" Targets="Make"/>
     </Target>
+    <Target Name="TestBezierAnimation">
+        <MSBuild Projects="Demo\TestBezierAnimation\TestBezierAnimation.dproj"/>
+    </Target>
+    <Target Name="TestBezierAnimation:Clean">
+        <MSBuild Projects="Demo\TestBezierAnimation\TestBezierAnimation.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="TestBezierAnimation:Make">
+        <MSBuild Projects="Demo\TestBezierAnimation\TestBezierAnimation.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="FMXComponents;FMXComponentEd;FMXComponentsDemo;LoadingIndicatorDemo;TestFMXCallout;TestINativeCanvas;RotateTextDemoProj"/>
+        <CallTarget Targets="FMXComponents;FMXComponentEd;FMXComponentsDemo;LoadingIndicatorDemo;TestFMXCallout;TestINativeCanvas;RotateTextDemoProj;TestBezierAnimation"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="FMXComponents:Clean;FMXComponentEd:Clean;FMXComponentsDemo:Clean;LoadingIndicatorDemo:Clean;TestFMXCallout:Clean;TestINativeCanvas:Clean;RotateTextDemoProj:Clean"/>
+        <CallTarget Targets="FMXComponents:Clean;FMXComponentEd:Clean;FMXComponentsDemo:Clean;LoadingIndicatorDemo:Clean;TestFMXCallout:Clean;TestINativeCanvas:Clean;RotateTextDemoProj:Clean;TestBezierAnimation:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="FMXComponents:Make;FMXComponentEd:Make;FMXComponentsDemo:Make;LoadingIndicatorDemo:Make;TestFMXCallout:Make;TestINativeCanvas:Make;RotateTextDemoProj:Make"/>
+        <CallTarget Targets="FMXComponents:Make;FMXComponentEd:Make;FMXComponentsDemo:Make;LoadingIndicatorDemo:Make;TestFMXCallout:Make;TestINativeCanvas:Make;RotateTextDemoProj:Make;TestBezierAnimation:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

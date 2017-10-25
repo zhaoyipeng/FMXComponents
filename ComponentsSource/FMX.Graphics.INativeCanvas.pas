@@ -18,6 +18,8 @@ type
     function GetCanvas: TCanvas;
 
     procedure NativeDraw(const ARect: TRectF; const ADrawProc: TDrawProc);
+    procedure BeginNativeDraw(const ARect: TRectF);
+    procedure EndNativeDraw;
 
     { aligning }
     function AlignToPixel(const Value: TPointF): TPointF; overload;
@@ -85,6 +87,8 @@ type
     constructor Create(ACanvas: TCanvas); virtual;
     function GetCanvas: TCanvas;
     procedure NativeDraw(const ARect: TRectF; const ADrawProc: TDrawProc); virtual; abstract;
+    procedure BeginNativeDraw(const ARect: TRectF); virtual;
+    procedure EndNativeDraw; virtual;
 
     procedure DrawBitmap(const ABitmap: TBitmap; const SrcRect, DstRect: TRectF; const AOpacity: Single; const HighSpeed: Boolean = False); virtual; abstract;
     procedure FillText(const ARect: TRectF; const AText: string; const WordWrap: Boolean; const AOpacity: Single; const Flags: TFillTextFlags; const ATextAlign: TTextAlign; const AVTextAlign: TTextAlign = TTextAlign.Center); virtual; abstract;
@@ -173,9 +177,19 @@ begin
 
 end;
 
+procedure TAbstractCanvas.BeginNativeDraw(const ARect: TRectF);
+begin
+
+end;
+
 constructor TAbstractCanvas.Create(ACanvas: TCanvas);
 begin
   FCanvas := ACanvas;
+end;
+
+procedure TAbstractCanvas.EndNativeDraw;
+begin
+
 end;
 
 function TAbstractCanvas.GetCanvas: TCanvas;

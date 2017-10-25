@@ -1,0 +1,86 @@
+object Form11: TForm11
+  Left = 0
+  Top = 0
+  Caption = 'cubic-bezier animation demo'
+  ClientHeight = 571
+  ClientWidth = 640
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  DesignerMasterStyle = 0
+  object pbCanvas: TPaintBox
+    Position.X = 40.000000000000000000
+    Position.Y = 96.000000000000000000
+    Size.Width = 300.000000000000000000
+    Size.Height = 300.000000000000000000
+    Size.PlatformDefault = False
+    OnPaint = pbCanvasPaint
+    object SelectionPoint1: TSelectionPoint
+      GripSize = 9.000000000000000000
+      Position.X = 56.000000000000000000
+      Position.Y = 80.000000000000000000
+      Size.Width = 18.000000000000000000
+      Size.Height = 18.000000000000000000
+      Size.PlatformDefault = False
+      OnTrack = SelectionPoint1Track
+    end
+    object SelectionPoint2: TSelectionPoint
+      GripSize = 9.000000000000000000
+      Position.X = 64.000000000000000000
+      Position.Y = 88.000000000000000000
+      Size.Width = 18.000000000000000000
+      Size.Height = 18.000000000000000000
+      Size.PlatformDefault = False
+      OnTrack = SelectionPoint2Track
+    end
+  end
+  object Label1: TLabel
+    StyledSettings = [Family, Style, FontColor]
+    Position.X = 24.000000000000000000
+    Position.Y = 24.000000000000000000
+    Size.Width = 185.000000000000000000
+    Size.Height = 49.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.Font.Size = 30.000000000000000000
+    Text = 'cubic-bezier:'
+    TabOrder = 1
+  end
+  object edtEqation: TEdit
+    Touch.InteractiveGestures = [LongTap, DoubleTap]
+    TabOrder = 2
+    Text = '0,0,1,1'
+    TextSettings.Font.Size = 32.000000000000000000
+    Position.X = 216.000000000000000000
+    Position.Y = 24.000000000000000000
+    Size.Width = 305.000000000000000000
+    Size.Height = 49.000000000000000000
+    Size.PlatformDefault = False
+    StyledSettings = [Family, Style, FontColor]
+    OnEnter = edtEqationEnter
+  end
+  object Rectangle2: TRectangle
+    Align = Bottom
+    Margins.Left = 8.000000000000000000
+    Margins.Top = 8.000000000000000000
+    Margins.Right = 8.000000000000000000
+    Margins.Bottom = 8.000000000000000000
+    Position.X = 8.000000000000000000
+    Position.Y = 417.000000000000000000
+    Size.Width = 624.000000000000000000
+    Size.Height = 65.000000000000000000
+    Size.PlatformDefault = False
+  end
+  object Rectangle3: TRectangle
+    Align = Bottom
+    Margins.Left = 8.000000000000000000
+    Margins.Top = 8.000000000000000000
+    Margins.Right = 8.000000000000000000
+    Margins.Bottom = 8.000000000000000000
+    Position.X = 8.000000000000000000
+    Position.Y = 498.000000000000000000
+    Size.Width = 624.000000000000000000
+    Size.Height = 65.000000000000000000
+    Size.PlatformDefault = False
+  end
+end

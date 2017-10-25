@@ -43,3 +43,5 @@
 /Demo/TestCallout/OSX32/Debug
 /Demo/TestINativeCanvas/OSX32/Debug
 /Demo/TestINativeCanvas/iOSSimulator/Debug
+/Demo/TestBezierAnimation/__history
+/Demo/TestBezierAnimation/Win32/Debug

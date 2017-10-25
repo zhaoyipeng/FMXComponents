@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+  <Transactions>
+    <Transaction>2017/10/25 18:13:36.109,=C:\Users\zhaoyipeng\Documents\Embarcadero\Studio\Projects\Unit11.pas</Transaction>
+    <Transaction>2017/10/25 18:14:22.906,G:\Develop\Delphi\Group\FMXComponents2\Demo\TestBezierAnimation\TestBezierAnimationMain.pas=C:\Users\zhaoyipeng\Documents\Embarcadero\Studio\Projects\Unit11.pas</Transaction>
+    <Transaction>2017/10/25 18:14:22.906,G:\Develop\Delphi\Group\FMXComponents2\Demo\TestBezierAnimation\TestBezierAnimationMain.fmx=C:\Users\zhaoyipeng\Documents\Embarcadero\Studio\Projects\Unit11.fmx</Transaction>
+    <Transaction>2017/10/25 18:14:30.972,G:\Develop\Delphi\Group\FMXComponents2\Demo\TestBezierAnimation\TestBezierAnimation.dproj=C:\Users\zhaoyipeng\Documents\Embarcadero\Studio\Projects\Project12.dproj</Transaction>
+    <Transaction>2017/10/25 18:18:18.448,=G:\Develop\Delphi\Group\FMXComponents2\ComponentsSource\FMX.BezierAnimation.pas</Transaction>
+  </Transactions>
+  <ActiveMobileDevice>   <NoProfile Android="DelphiTestDevice"/>
+    <PmacOSVM iOSSimulator="iPhone5"/>
+  </ActiveMobileDevice>
+</BorlandProject>
