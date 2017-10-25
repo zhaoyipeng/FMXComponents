@@ -14,7 +14,6 @@ You can also add my skype: zhaoyipeng@hotmail.com<br>
 A Firemonkey Rotating Text Component be inspired by RotatingText(https://github.com/sdsmdg/RotatingText)<br>
 ![FMXRotatingText](SnapShots/FMXRotatingText.gif)  <br>
 
-
 ## 15.INativeCanvas
 
 We know the firemonkey's canvas is very bad quality on mobile platforms<br>
@@ -23,6 +22,12 @@ We know the firemonkey's canvas is very bad quality on mobile platforms<br>
 After Aone's hard work we can use native method drawing the graph, you can get same quality as native mobile platform, Aone's method is using helper class to TCanvas, you must static decide use native or firemonkey to draw graph, I changed it to a INativeCanvas interface, you can change the method at runtime.
 
 ![INativeCanvas](SnapShots/INativeCanvas.png)  <br>
+
+this is the compare of Firemonkey Canvas and INativeCanvas FillText method<br>
+
+![iOSFMXCanvas](SnapShots/iOSFMXCanvas.png)  <br>
+![iOSNativeCanvas](SnapShots/iOSNativeCanvas.png)  <br>
+
 
 All you need is add several lines.
 
@@ -52,7 +57,7 @@ This component wrote by Aone, it's also a very good demo of the INativeCanvas. T
 ![TFMXCallout](SnapShots/FMXCallout.gif)  <br>
 
 ## 13.graphics32 for Firemonkey
-
+
 ![FMXGR32Demo](SnapShots/FMXGR32Demo.gif)  
 
 ![FMXGR32Demo2](SnapShots/FMXGR32Demo2.gif)  

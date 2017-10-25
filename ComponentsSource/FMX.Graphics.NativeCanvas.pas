@@ -74,10 +74,12 @@ uses
   iOSapi.CocoaTypes,
   iOSapi.UIKit,
   iOSapi.Foundation,
+  iOSapi.CoreText,
   iOSapi.CoreGraphics,
   Macapi.CoreFoundation,
   Macapi.ObjectiveC,
   Macapi.Helpers,
+  FMX.FontGlyphs.iOS,
   FMX.Helpers.iOS,
 {$ENDIF}
   FMX.Types,
@@ -207,13 +209,16 @@ type
     procedure ApplyFill(const ABrush: TBrush; const ARect: TRectF; const AOpacity: Single);
     procedure DrawFill(const ABrush: TBrush; const SrcRect, DesRect: TRectF; const AOpacity: Single);
     procedure ApplyStroke(const AStroke: TStrokeBrush; const ARect: TRectF; const AOpacity: Single);
+    function GetPostScriptFontName: CFStringRef;
   public
+    constructor Create(ACanvas: TCanvas); override;
     procedure NativeDraw(const ARect: TRectF; const ADrawProc: TDrawProc); override;
     procedure DrawBitmap(const ABitmap: TBitmap; const SrcRect, DstRect: TRectF; const AOpacity: Single; const HighSpeed: Boolean = False); override;
 
     procedure DrawPath(const APath: TPathData; const AOpacity: Single; const AFill: TBrush; const AStroke: TStrokeBrush); override;
 
     // 下列为 Canvas 原有函数
+    procedure FillText(const ARect: TRectF; const AText: string; const WordWrap: Boolean; const AOpacity: Single; const Flags: TFillTextFlags; const ATextAlign: TTextAlign; const AVTextAlign: TTextAlign = TTextAlign.Center); override;
     procedure DrawLine(const APt1, APt2: TPointF; const AOpacity: Single; const ABrush: TStrokeBrush); overload; override;
 
     procedure IntersectClipRect(const ARect: TRectF); override;
@@ -232,6 +237,185 @@ type
   TMyCanvas = class(TCanvas)
 
   end;
+{$IFDEF IOS}
+  NSStringClass = interface(NSObjectClass)
+    ['{B324D490-B58F-4BE8-A5F4-7DAD2E142A5E}']
+    {class} function availableStringEncodings: PNSStringEncoding; cdecl;
+    {class} function defaultCStringEncoding: NSStringEncoding; cdecl;
+    {class} function localizedNameOfStringEncoding(encoding: NSStringEncoding): Pointer; cdecl;
+    {class} function localizedStringWithFormat(localizedStringWithFormat: NSString): Pointer; cdecl;
+    {class} function pathWithComponents(components: NSArray): Pointer; cdecl;
+    {class} function stringWithCString(bytes: MarshaledAString): Pointer; cdecl; overload;
+    {class} function stringWithCString(cString: MarshaledAString; encoding: NSStringEncoding): Pointer; cdecl; overload;
+//    {class} function stringWithCString(bytes: MarshaledAString; length: NSUInteger): Pointer; cdecl; overload;
+    {class} function stringWithCharacters(characters: MarshaledString; length: NSUInteger): Pointer; cdecl;
+    {class} function stringWithContentsOfFile(path: NSString): Pointer; cdecl; overload;
+    {class} function stringWithContentsOfFile(path: NSString; encoding: NSStringEncoding; error: PPointer): Pointer; cdecl; overload;
+    {class} function stringWithContentsOfFile(path: NSString; usedEncoding: PNSStringEncoding; error: PPointer): Pointer; cdecl; overload;
+    {class} function stringWithContentsOfURL(url: NSURL): Pointer; cdecl; overload;
+    {class} function stringWithContentsOfURL(url: NSURL; encoding: NSStringEncoding; error: PPointer): Pointer; cdecl; overload;
+    {class} function stringWithContentsOfURL(url: NSURL; usedEncoding: PNSStringEncoding; error: PPointer): Pointer; cdecl; overload;
+    {class} function stringWithFormat(stringWithFormat: NSString): Pointer; cdecl;
+    {class} function stringWithString(string_: NSString): Pointer; cdecl;
+    {class} function stringWithUTF8String(nullTerminatedCString: MarshaledAString): Pointer; cdecl;
+  end;
+
+   NSString = interface(NSObject)
+    ['{A62E83E4-AEB3-405F-8AFA-5B873D6E057F}']
+    function UTF8String: MarshaledAString; cdecl;
+    function boolValue: Boolean; cdecl;
+    function cString: MarshaledAString; cdecl;
+    function cStringLength: NSUInteger; cdecl;
+    function cStringUsingEncoding(encoding: NSStringEncoding): MarshaledAString; cdecl;
+    function canBeConvertedToEncoding(encoding: NSStringEncoding): Boolean; cdecl;
+    function capitalizedString: NSString; cdecl;
+    function caseInsensitiveCompare(string_: NSString): NSComparisonResult; cdecl;
+    function characterAtIndex(index: NSUInteger): unichar; cdecl;
+    function commonPrefixWithString(aString: NSString; options: NSStringCompareOptions): NSString; cdecl;
+    function compare(string_: NSString): NSComparisonResult; cdecl; overload;
+    function compare(string_: NSString; options: NSStringCompareOptions): NSComparisonResult; cdecl; overload;
+    function compare(string_: NSString; options: NSStringCompareOptions; range: NSRange): NSComparisonResult; cdecl; overload;
+    function compare(string_: NSString; options: NSStringCompareOptions; range: NSRange; locale: Pointer): NSComparisonResult; cdecl; overload;
+    function completePathIntoString(outputName: NSString; caseSensitive: Boolean; matchesIntoArray: NSArray; filterTypes: NSArray): NSUInteger; cdecl;
+    function componentsSeparatedByCharactersInSet(separator: NSCharacterSet): NSArray; cdecl;
+    function componentsSeparatedByString(separator: NSString): NSArray; cdecl;
+    function dataUsingEncoding(encoding: NSStringEncoding): NSData; cdecl; overload;
+    function dataUsingEncoding(encoding: NSStringEncoding; allowLossyConversion: Boolean): NSData; cdecl; overload;
+    function decomposedStringWithCanonicalMapping: NSString; cdecl;
+    function decomposedStringWithCompatibilityMapping: NSString; cdecl;
+    function description: NSString; cdecl;
+    function doubleValue: double; cdecl;
+    function fastestEncoding: NSStringEncoding; cdecl;
+    function fileSystemRepresentation: MarshaledAString; cdecl;
+    function floatValue: Single; cdecl;
+    function getBytes(buffer: Pointer; maxLength: NSUInteger; usedLength: NSUInteger; encoding: NSStringEncoding; options: NSStringEncodingConversionOptions; range: NSRange; remainingRange: PNSRange): Boolean; cdecl;
+    procedure getCString(bytes: MarshaledAString); cdecl; overload;
+    procedure getCString(bytes: MarshaledAString; maxLength: NSUInteger); cdecl; overload;
+    function getCString(buffer: MarshaledAString; maxLength: NSUInteger; encoding: NSStringEncoding): Boolean; cdecl; overload;
+    procedure getCString(bytes: MarshaledAString; maxLength: NSUInteger; range: NSRange; remainingRange: PNSRange); cdecl; overload;
+    procedure getCharacters(buffer: MarshaledString); cdecl; overload;
+    procedure getCharacters(buffer: MarshaledString; range: NSRange); cdecl; overload;
+    function getFileSystemRepresentation(cname: MarshaledAString; maxLength: NSUInteger): Boolean; cdecl;
+    function hasPrefix(aString: NSString): Boolean; cdecl;
+    function hasSuffix(aString: NSString): Boolean; cdecl;
+    function hash: NSUInteger; cdecl;
+    function init: Pointer; cdecl;
+    function initWithBytes(bytes: Pointer; length: NSUInteger; encoding: NSStringEncoding): Pointer; cdecl;
+    function initWithBytesNoCopy(bytes: Pointer; length: NSUInteger; encoding: NSStringEncoding; freeWhenDone: Boolean): Pointer; cdecl;
+    function initWithCString(bytes: MarshaledAString): Pointer; cdecl; overload;
+    function initWithCString(nullTerminatedCString: MarshaledAString; encoding: NSStringEncoding): Pointer; cdecl; overload;
+//    function initWithCString(bytes: PAnsiChar; length: NSUInteger): Pointer; cdecl; overload;
+    function initWithCStringNoCopy(bytes: MarshaledAString; length: NSUInteger; freeWhenDone: Boolean): Pointer; cdecl;
+    function initWithCharacters(characters: MarshaledString; length: NSUInteger): Pointer; cdecl;
+    function initWithCharactersNoCopy(characters: MarshaledString; length: NSUInteger; freeWhenDone: Boolean): Pointer; cdecl;
+    function initWithContentsOfFile(path: NSString): Pointer; cdecl; overload;
+    function initWithContentsOfFile(path: NSString; encoding: NSStringEncoding; error: PPointer): Pointer; cdecl; overload;
+    function initWithContentsOfFile(path: NSString; usedEncoding: PNSStringEncoding; error: PPointer): Pointer; cdecl; overload;
+    function initWithContentsOfURL(url: NSURL): Pointer; cdecl; overload;
+    function initWithContentsOfURL(url: NSURL; encoding: NSStringEncoding; error: PPointer): Pointer; cdecl; overload;
+    function initWithContentsOfURL(url: NSURL; usedEncoding: PNSStringEncoding; error: PPointer): Pointer; cdecl; overload;
+    function initWithData(data: NSData; encoding: NSStringEncoding): Pointer; cdecl;
+    function initWithFormat(initWithFormat: NSString): Pointer; cdecl; overload;
+    function initWithFormat(format: NSString; locale: Pointer): Pointer; cdecl; overload;
+    function initWithString(aString: NSString): Pointer; cdecl;
+    function initWithUTF8String(nullTerminatedCString: MarshaledAString): Pointer; cdecl;
+    function intValue: Integer; cdecl;
+    function integerValue: NSInteger; cdecl;
+    function isAbsolutePath: Boolean; cdecl;
+    function isEqualToString(aString: NSString): Boolean; cdecl;
+    function lastPathComponent: NSString; cdecl;
+    function length: NSUInteger; cdecl;
+    function lengthOfBytesUsingEncoding(enc: NSStringEncoding): NSUInteger; cdecl;
+    function lineRangeForRange(range: NSRange): NSRange; cdecl;
+    function localizedCaseInsensitiveCompare(string_: NSString): NSComparisonResult; cdecl;
+    function localizedCompare(string_: NSString): NSComparisonResult; cdecl;
+    function localizedStandardCompare(string_: NSString): NSComparisonResult; cdecl;
+    function longLongValue: Int64; cdecl;
+    function lossyCString: MarshaledAString; cdecl;
+    function lowercaseString: NSString; cdecl;
+    function maximumLengthOfBytesUsingEncoding(enc: NSStringEncoding): NSUInteger; cdecl;
+    function paragraphRangeForRange(range: NSRange): NSRange; cdecl;
+    function pathComponents: NSArray; cdecl;
+    function pathExtension: NSString; cdecl;
+    function precomposedStringWithCanonicalMapping: NSString; cdecl;
+    function precomposedStringWithCompatibilityMapping: NSString; cdecl;
+    function propertyList: Pointer; cdecl;
+    function propertyListFromStringsFileFormat: NSDictionary; cdecl;
+    function rangeOfCharacterFromSet(aSet: NSCharacterSet): NSRange; cdecl; overload;
+    function rangeOfCharacterFromSet(aSet: NSCharacterSet; options: NSStringCompareOptions): NSRange; cdecl; overload;
+    function rangeOfCharacterFromSet(aSet: NSCharacterSet; options: NSStringCompareOptions; range: NSRange): NSRange; cdecl; overload;
+    function rangeOfComposedCharacterSequenceAtIndex(index: NSUInteger): NSRange; cdecl;
+    function rangeOfComposedCharacterSequencesForRange(range: NSRange): NSRange; cdecl;
+    function rangeOfString(aString: NSString): NSRange; cdecl; overload;
+    function rangeOfString(aString: NSString; options: NSStringCompareOptions): NSRange; cdecl; overload;
+    function rangeOfString(aString: NSString; options: NSStringCompareOptions; range: NSRange): NSRange; cdecl; overload;
+    function rangeOfString(aString: NSString; options: NSStringCompareOptions; range: NSRange; locale: NSLocale): NSRange; cdecl; overload;
+    function smallestEncoding: NSStringEncoding; cdecl;
+    function stringByAbbreviatingWithTildeInPath: NSString; cdecl;
+    function stringByAddingPercentEscapesUsingEncoding(enc: NSStringEncoding): NSString; cdecl;
+    function stringByAppendingFormat(stringByAppendingFormat: NSString): NSString; cdecl;
+    function stringByAppendingPathComponent(str: NSString): NSString; cdecl;
+    function stringByAppendingPathExtension(str: NSString): NSString; cdecl;
+    function stringByAppendingString(aString: NSString): NSString; cdecl;
+    function stringByDeletingLastPathComponent: NSString; cdecl;
+    function stringByDeletingPathExtension: NSString; cdecl;
+    function stringByExpandingTildeInPath: NSString; cdecl;
+    function stringByFoldingWithOptions(options: NSStringCompareOptions; locale: NSLocale): NSString; cdecl;
+    function stringByPaddingToLength(newLength: NSUInteger; withString: NSString; startingAtIndex: NSUInteger): NSString; cdecl;
+    function stringByReplacingCharactersInRange(range: NSRange; withString: NSString): NSString; cdecl;
+    function stringByReplacingOccurrencesOfString(target: NSString; withString: NSString): NSString; cdecl; overload;
+    function stringByReplacingOccurrencesOfString(target: NSString; withString: NSString; options: NSStringCompareOptions; range: NSRange): NSString; cdecl; overload;
+    function stringByReplacingPercentEscapesUsingEncoding(enc: NSStringEncoding): NSString; cdecl;
+    function stringByResolvingSymlinksInPath: NSString; cdecl;
+    function stringByStandardizingPath: NSString; cdecl;
+    function stringByTrimmingCharactersInSet(set_: NSCharacterSet): NSString; cdecl;
+    function stringsByAppendingPaths(paths: NSArray): NSArray; cdecl;
+    function substringFromIndex(from: NSUInteger): NSString; cdecl;
+    function substringToIndex(to_: NSUInteger): NSString; cdecl;
+    function substringWithRange(range: NSRange): NSString; cdecl;
+    function uppercaseString: NSString; cdecl;
+    function writeToFile(path: NSString; atomically: Boolean): Boolean; cdecl; overload;
+    function writeToFile(path: NSString; atomically: Boolean; encoding: NSStringEncoding; error: PPointer): Boolean; cdecl; overload;
+    function writeToURL(url: NSURL; atomically: Boolean): Boolean; cdecl; overload;
+    function writeToURL(url: NSURL; atomically: Boolean; encoding: NSStringEncoding; error: PPointer): Boolean; cdecl; overload;
+    procedure drawInRect(aRect: NSRect; withAttributes: NSDictionary); cdecl;
+    procedure drawAtPoint(aPoint: NSPoint; withAttributes: NSDictionary); cdecl;
+    function sizeWithAttributes(attributes: NSDictionary): NSSize; cdecl;
+    function boundingRectWithSize(size: NSSize; options: NSStringDrawingOptions; attributes: NSDictionary): NSRect; cdecl;
+  end;
+  TNSString = class(TOCGenericImport<NSStringClass, NSString>)  end;
+
+  UIFontClass = interface(NSObjectClass)
+    ['{F21CAA74-9F23-42C5-A0F3-CECA57AFB3BC}']
+    {class} function boldSystemFontOfSize(fontSize: CGFloat): Pointer; cdecl;
+    {class} function buttonFontSize: CGFloat; cdecl;
+    {class} function familyNames: NSArray; cdecl;
+    {class} function fontNamesForFamilyName(familyName: NSString): NSArray; cdecl;
+    {class} function fontWithName(fontName: NSString; size: CGFloat): Pointer; cdecl;
+    {class} function italicSystemFontOfSize(fontSize: CGFloat): Pointer; cdecl;
+    {class} function labelFontSize: CGFloat; cdecl;
+    {class} function smallSystemFontSize: CGFloat; cdecl;
+    {class} function systemFontOfSize(fontSize: CGFloat): Pointer; cdecl;
+    {class} function systemFontSize: CGFloat; cdecl;
+    {class} function fontWithDescriptor(descriptor: UIFontDescriptor; size: CGFloat): Pointer; cdecl;
+  end;
+  UIFont = interface(NSObject)
+    ['{026495EC-177F-4517-9B25-C2F2371A110D}']
+    function ascender: CGFloat; cdecl;
+    function capHeight: CGFloat; cdecl;
+    function descender: CGFloat; cdecl;
+    function familyName: NSString; cdecl;
+    function fontName: NSString; cdecl;
+    function fontWithSize(fontSize: CGFloat): UIFont; cdecl;
+    function leading: CGFloat; cdecl;
+    function lineHeight: CGFloat; cdecl;
+    function pointSize: CGFloat; cdecl;
+    function xHeight: CGFloat; cdecl;
+    function fontDescriptor: UIFontDescriptor; cdecl;
+  end;
+  TUIFont = class(TOCGenericImport<UIFontClass, UIFont>)  end;
+{$ENDIF}
+
 { TFiremonkeyCanvas }
 
 procedure TFiremonkeyCanvas.DrawArc(const Center, Radius: TPointF; StartAngle, SweepAngle: Single; const AOpacity: Single; const AFill: TBrush; const AStroke: TStrokeBrush; const Inside: Boolean);
@@ -1193,6 +1377,12 @@ begin
   end;
 end;
 
+constructor TIOSNativeCanvas.Create(ACanvas: TCanvas);
+begin
+  inherited;
+  FCanvas.Font.Family := NSStrToStr(iOSapi.Foundation.NSString(TUIFont.Wrap(TUIFont.OCClass.systemFontOfSize(14)).fontName));
+end;
+
 procedure TIOSNativeCanvas.DrawBitmap(const ABitmap: TBitmap; const SrcRect,
   DstRect: TRectF; const AOpacity: Single; const HighSpeed: Boolean);
 var
@@ -1326,6 +1516,129 @@ begin
     LRect[3] := CGRectFromRect(TRectF.Create(ARect.Left, ARect.Bottom, ARect.Right, FCanvas.Height));
     CGContextClipToRects(GlobalCanvas, @LRect[0], 4);
   end;
+end;
+
+function NSSTR(Str: string): NSString;
+var
+  M: TMarshaller;
+begin
+  Result := TNSString.Wrap(TNSString.OCClass.stringWithUTF8String(M.AsAnsi(Str, CP_UTF8).ToPointer));
+end;
+
+function TIOSNativeCanvas.GetPostScriptFontName: CFStringRef;
+var
+  LUIFont: UIFont;
+  LocalObject: ILocalObject;
+begin
+  Result := nil;
+  LUIFont := TUIFont.Wrap(TUIFont.OCClass.fontWithName(NSString(StrToNSStr(FCanvas.Font.Family)), FCanvas.Font.Size));
+  if Supports(LUIFont, ILocalObject, LocalObject) then
+    Result := CTFontCopyPostScriptName(LocalObject.GetObjectID);
+  if Result = nil then
+    //In case there is no direct name for the requested font returns source name and let CoreText to select appropriate font
+    Result := CFSTR(FCanvas.Font.Family);
+end;
+
+procedure TIOSNativeCanvas.FillText(const ARect: TRectF; const AText: string; const WordWrap: Boolean; const AOpacity: Single; const Flags: TFillTextFlags; const ATextAlign, AVTextAlign: TTextAlign);
+const
+  //Rotating matrix to simulate Italic font attribute
+  ItalicMatrix: CGAffineTransform = (
+    a: 1;
+    b: 0;
+    c: 0.176326981; //~tan(10 degrees)
+    d: 1;
+    tx: 0;
+    ty: 0
+  );
+var
+  NS: NSString;
+  dic: NSMutableDictionary;
+  ps: NSMutableParagraphStyle;
+  f: UIFont;
+  sz: CGSize;
+  tr: NSRect;
+  font, NewFontRef: CTFontRef;
+  ftName: NSString;
+  desc: UIFontDescriptor;
+begin
+  if GlobalCanvas = nil then
+    Exit;
+
+  font := CTFontCreateWithName(GetPostScriptFontName, FCanvas.Font.Size, nil);
+  try
+  //以下方法仅对英文有效，因此屏蔽
+//    if TFontStyle.fsItalic in FCanvas.Font.Style then
+//    begin
+//      NewFontRef := CTFontCreateCopyWithSymbolicTraits(font, 0, nil,
+//        kCTFontItalicTrait, kCTFontItalicTrait);
+//      if NewFontRef <> nil then
+//      begin
+//        CFRelease(font);
+//        font := NewFontRef;
+//      end;
+//    end;
+    if TFontStyle.fsBold in FCanvas.Font.Style then
+    begin
+      NewFontRef := CTFontCreateCopyWithSymbolicTraits(font, FCanvas.Font.Size, nil, kCTFontBoldTrait, kCTFontBoldTrait);
+      if NewFontRef <> nil then
+      begin
+        CFRelease(font);
+        font := NewFontRef;
+      end;
+    end;
+    ftName := TNSString.wrap(CTFontCopyPostScriptName(font));
+  except
+    CFRelease(font);
+    ftName := NSStr(FCanvas.Font.Family);
+  end;
+
+  NS := NSSTR(AText);
+
+  dic := TNSMutableDictionary.Wrap(TNSMutableDictionary.Wrap(TNSMutableDictionary.OCClass.alloc).init);
+  if TFontStyle.fsItalic in FCanvas.Font.Style then
+  begin
+    desc := TUIFontDescriptor.OCClass.fontDescriptorWithNameMatrix(iOSapi.Foundation.NSString(ftName), ItalicMatrix);
+    F := TUIFont.Wrap((TUIFont.OCClass.fontWithDescriptor(desc, FCanvas.Font.Size)));
+  end
+  else
+    f := TUIFont.Wrap(TUIFont.OCClass.fontWithName(ftName, FCanvas.Font.Size));
+
+  ps := TNSMutableParagraphStyle.Wrap(TNSMutableParagraphStyle.Wrap(TNSMutableParagraphStyle.OCClass.alloc).init);
+  case ATextAlign of
+    TTextAlign.Center: ps.setAlignment(UITextAlignmentCenter);
+    TTextAlign.Leading: ps.setAlignment(UITextAlignmentLeft);
+    TTextAlign.Trailing: ps.setAlignment(UITextAlignmentRight);
+  end;
+  ps.setLineBreakMode(NSLineBreakByTruncatingTail);
+
+  dic.setValue((f as ILocalObject).GetObjectID, NSFontAttributeName);
+  dic.setValue((AlphaColorToUIColor(FCanvas.Fill.Color) as ILocalObject).GetObjectID, NSForegroundColorAttributeName);
+  dic.setValue((ps as ILocalObject).GetObjectID, NSParagraphStyleAttributeName);
+  if (TFontStyle.fsUnderline in FCanvas.Font.Style) or (TFontStyle.fsStrikeOut in FCanvas.Font.Style) then
+  begin
+    if TFontStyle.fsUnderline in FCanvas.Font.Style then
+    begin
+      dic.setValue(TNSNumber.OCClass.numberWithInt(NSUnderlineStyleSingle), NSUnderlineStyleAttributeName);
+    end;
+    if TFontStyle.fsStrikeOut in FCanvas.Font.Style then
+    begin
+      dic.setValue(TNSNumber.OCClass.numberWithInt(NSUnderlineStyleSingle), NSStrikethroughStyleAttributeName);
+    end;
+    dic.setValue(TNSNumber.OCClass.numberWithInt(0), NSBaselineOffsetAttributeName);
+  end;
+
+  sz := NS.sizeWithAttributes(dic);
+
+  case AVTextAlign of
+    TTextAlign.Center:
+      tr := NSRect.Create(ARect.Left, ARect.Top + (ARect.Height - sz.height)/ 2, ARect.Width, (ARect.Height - sz.height) / 2);
+    TTextAlign.Leading:
+      tr := NSRect.Create(ARect);
+    TTextAlign.Trailing:
+      tr := NSRect.Create(ARect.Left, ARect.Bottom - sz.height, ARect.Width, sz.height);
+  end;
+
+  NS.drawInRect(tr, dic);
 end;
 
 procedure TIOSNativeCanvas.IntersectClipRect(const ARect: TRectF);

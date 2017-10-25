@@ -38,3 +38,8 @@
 /Demo/TestCallout/TestFMXCallout.identcache
 /Demo/TestINativeCanvas/TestINativeCanvas.identcache
 /Demo/TestINativeCanvas/TestINativeCanvas.stat
+/Demo/RotatingTextDemo/OSX32/Debug
+/Demo/RotatingTextDemo/iOSSimulator/Debug
+/Demo/TestCallout/OSX32/Debug
+/Demo/TestINativeCanvas/OSX32/Debug
+/Demo/TestINativeCanvas/iOSSimulator/Debug

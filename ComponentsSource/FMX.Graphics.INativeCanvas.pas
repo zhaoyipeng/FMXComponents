@@ -82,7 +82,7 @@ type
   protected
     FCanvas: TCanvas;
   public
-    constructor Create(ACanvas: TCanvas);
+    constructor Create(ACanvas: TCanvas); virtual;
     function GetCanvas: TCanvas;
     procedure NativeDraw(const ARect: TRectF; const ADrawProc: TDrawProc); virtual; abstract;
 
