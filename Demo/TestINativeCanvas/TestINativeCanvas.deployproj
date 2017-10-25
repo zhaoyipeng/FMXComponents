@@ -4,10 +4,10 @@
         <ProjectFileVersion>12</ProjectFileVersion>
     </ProjectExtensions>
     <PropertyGroup>
-        <DeviceId Condition="'$(Platform)'=='Android'">127.0.0.1:62001</DeviceId>
+        <DeviceId Condition="'$(Platform)'=='Android'">DelphiTestDevice</DeviceId>
         <DeviceId Condition="'$(Platform)'=='iOSDevice32'"/>
         <DeviceId Condition="'$(Platform)'=='iOSDevice64'"/>
-        <DeviceId Condition="'$(Platform)'=='iOSSimulator'">iPhone5</DeviceId>
+        <DeviceId Condition="'$(Platform)'=='iOSSimulator'">2637D4A6-9E93-4885-ACBB-2F07C2E02CEC</DeviceId>
     </PropertyGroup>
     <ItemGroup Condition="'$(Platform)'=='iOSDevice64'"/>
     <ItemGroup Condition="'$(Platform)'=='Win64'"/>
@@ -63,6 +63,16 @@
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Android\Debug\libTestINativeCanvas.so" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>TestINativeCanvas\library\lib\armeabi-v7a\</RemoteDir>
+            <RemoteName>libTestINativeCanvas.so</RemoteName>
+            <DeployClass>ProjectOutput</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+            <Required>True</Required>
         </DeployFile>
         <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_SplashImage_426x320.png" Condition="'$(Config)'=='Debug'">
             <RemoteDir>TestINativeCanvas\res\drawable-small\</RemoteDir>
@@ -126,16 +136,6 @@
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
-        </DeployFile>
-        <DeployFile Include="Android\Debug\libTestINativeCanvas.so" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>TestINativeCanvas\library\lib\armeabi-v7a\</RemoteDir>
-            <RemoteName>libTestINativeCanvas.so</RemoteName>
-            <DeployClass>ProjectOutput</DeployClass>
-            <Operation>1</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-            <Required>True</Required>
         </DeployFile>
         <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_SplashImage_640x480.png" Condition="'$(Config)'=='Debug'">
             <RemoteDir>TestINativeCanvas\res\drawable-large\</RemoteDir>
@@ -206,15 +206,6 @@
             <RemoteDir>TestINativeCanvas.app\</RemoteDir>
             <RemoteName>FM_ApplicationIcon_144x144.png</RemoteName>
             <DeployClass>iPad_AppIcon144</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
-        <DeployFile Include="iOSSimulator\Debug\TestDrawBitmap.entitlements" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>TestINativeCanvas.app\</RemoteDir>
-            <RemoteName>TestDrawBitmap.entitlements</RemoteName>
-            <DeployClass>ProjectiOSEntitlements</DeployClass>
             <Operation>0</Operation>
             <LocalCommand/>
             <RemoteCommand/>
@@ -337,15 +328,6 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="iOSSimulator\Debug\TestDrawBitmap.info.plist" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>TestINativeCanvas.app\</RemoteDir>
-            <RemoteName>Info.plist</RemoteName>
-            <DeployClass>ProjectiOSInfoPList</DeployClass>
-            <Operation>1</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
         <DeployFile Include="$(BDS)\bin\Artwork\iOS\iPhone\FM_LaunchImage_640x960.png" Condition="'$(Config)'=='Debug'">
             <RemoteDir>TestINativeCanvas.app\</RemoteDir>
             <RemoteName>Default@2x.png</RemoteName>
@@ -354,16 +336,6 @@
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
-        </DeployFile>
-        <DeployFile Include="iOSSimulator\Debug\TestINativeCanvas" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>TestINativeCanvas.app\</RemoteDir>
-            <RemoteName>TestINativeCanvas</RemoteName>
-            <DeployClass>ProjectOutput</DeployClass>
-            <Operation>1</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-            <Required>True</Required>
         </DeployFile>
         <DeployFile Include="$(BDS)\bin\Artwork\iOS\iPhone\FM_SpotlightSearchIcon_40x40.png" Condition="'$(Config)'=='Debug'">
             <RemoteDir>TestINativeCanvas.app\</RemoteDir>
@@ -392,20 +364,20 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="$(BDS)\bin\Artwork\iOS\iPhone\FM_LaunchImage_320x480.png" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>TestINativeCanvas.app\</RemoteDir>
-            <RemoteName>Default.png</RemoteName>
-            <DeployClass>iPhone_Launch320</DeployClass>
-            <Operation>1</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
         <DeployFile Include="$(BDS)\bin\Artwork\iOS\iPad\FM_LaunchImageLandscape_1024x768.png" Condition="'$(Config)'=='Debug'">
             <RemoteDir>TestINativeCanvas.app\</RemoteDir>
             <RemoteName>Default-Landscape~ipad.png</RemoteName>
             <DeployClass>iPad_Launch1024x768</DeployClass>
             <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="$(BDS)\bin\Artwork\iOS\iPhone\FM_LaunchImage_320x480.png" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>TestINativeCanvas.app\</RemoteDir>
+            <RemoteName>Default.png</RemoteName>
+            <DeployClass>iPhone_Launch320</DeployClass>
+            <Operation>1</Operation>
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
@@ -423,6 +395,15 @@
             <RemoteDir>TestINativeCanvas.app\</RemoteDir>
             <RemoteName>FM_ApplicationIcon_76x76.png</RemoteName>
             <DeployClass>iPad_AppIcon76</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="iOSSimulator\Debug\TestINativeCanvas.entitlements" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>TestINativeCanvas.app\</RemoteDir>
+            <RemoteName>TestINativeCanvas.entitlements</RemoteName>
+            <DeployClass>ProjectiOSEntitlements</DeployClass>
             <Operation>0</Operation>
             <LocalCommand/>
             <RemoteCommand/>
@@ -482,11 +463,30 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
+        <DeployFile Include="iOSSimulator\Debug\TestINativeCanvas" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>TestINativeCanvas.app\</RemoteDir>
+            <RemoteName>TestINativeCanvas</RemoteName>
+            <DeployClass>ProjectOutput</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+            <Required>True</Required>
+        </DeployFile>
         <DeployFile Include="$(BDS)\bin\Artwork\iOS\iPhone\FM_ApplicationIcon_120x120.png" Condition="'$(Config)'=='Debug'">
             <RemoteDir>TestINativeCanvas.app\</RemoteDir>
             <RemoteName>FM_ApplicationIcon_120x120.png</RemoteName>
             <DeployClass>iPhone_AppIcon120</DeployClass>
             <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="iOSSimulator\Debug\TestINativeCanvas.rsm" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>TestINativeCanvas.app\</RemoteDir>
+            <RemoteName>TestINativeCanvas.rsm</RemoteName>
+            <DeployClass>DebugSymbols</DeployClass>
+            <Operation>1</Operation>
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
@@ -514,6 +514,15 @@
             <RemoteName>FM_SpotlightSearchIcon_50x50.png</RemoteName>
             <DeployClass>iPad_SpotLight50</DeployClass>
             <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="iOSSimulator\Debug\TestINativeCanvas.info.plist" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>TestINativeCanvas.app\</RemoteDir>
+            <RemoteName>Info.plist</RemoteName>
+            <DeployClass>ProjectiOSInfoPList</DeployClass>
+            <Operation>1</Operation>
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>

@@ -7,7 +7,12 @@ uses
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.StdCtrls,
   FMX.Controls.Presentation, FMX.Edit, FMX.EditBox, FMX.SpinBox, FMX.Objects,
   FMX.Graphics.INativeCanvas,
-  FMX.Graphics.NativeCanvas, FMX.Layouts;
+  FMX.Graphics.NativeCanvas, FMX.Layouts, FMX.ListBox
+  {$IFDEF IOS}
+  , iOSapi.UIKit
+  , iOSapi.Foundation
+  {$ENDIF}
+  ;
 
 type
   TTestDrawBitmapMainForm = class(TForm)
@@ -21,6 +26,7 @@ type
     procedure BitmapOpacitySpinBoxChangeTracking(Sender: TObject);
     procedure PaintBox1Paint(Sender: TObject; Canvas: TCanvas);
     procedure NativeDrawSwitchSwitch(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
   public
@@ -37,6 +43,18 @@ implementation
 procedure TTestDrawBitmapMainForm.BitmapOpacitySpinBoxChangeTracking(Sender: TObject);
 begin
   PaintBox1.Repaint;
+end;
+
+procedure TTestDrawBitmapMainForm.FormCreate(Sender: TObject);
+  {$IFDEF IOS}
+var
+  familyNames: NSArray;
+  {$ENDIF}
+begin
+  {$IFDEF IOS}
+//  familyNames := TUIFont.OCClass.familyNames;
+
+  {$ENDIF}
 end;
 
 procedure TTestDrawBitmapMainForm.NativeDrawSwitchSwitch(Sender: TObject);
@@ -81,7 +99,7 @@ begin
       BitmapOpacitySpinBox.Value / 255);
     R := PaintBox1.LocalRect;
     R.Inflate(-30,-30);
-    AStroke.Thickness := 4;
+    AStroke.Thickness := 2;
     AFill := TBrush.Create(TBrushKind.Solid, TAlphaColors.Lightgray);
     ICanvas.DrawRect(R, 0, 0, AllCorners, 1, AFill, AStroke);
     ICanvas.Fill.Kind := TBrushKind.Solid;

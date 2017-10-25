@@ -4,7 +4,7 @@
         <ProjectFileVersion>12</ProjectFileVersion>
     </ProjectExtensions>
     <PropertyGroup>
-        <DeviceId Condition="'$(Platform)'=='Android'">127.0.0.1:62001</DeviceId>
+        <DeviceId Condition="'$(Platform)'=='Android'">DelphiTestDevice</DeviceId>
         <DeviceId Condition="'$(Platform)'=='iOSDevice32'"/>
         <DeviceId Condition="'$(Platform)'=='iOSDevice64'"/>
         <DeviceId Condition="'$(Platform)'=='iOSSimulator'">iPhone5</DeviceId>
@@ -26,6 +26,15 @@
     </ItemGroup>
     <ItemGroup Condition="'$(Platform)'=='Linux64'"/>
     <ItemGroup Condition="'$(Platform)'=='OSX32'">
+        <DeployFile Include="OSX32\Debug\TestFMXCallout.entitlements" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>TestFMXCallout.app\..\</RemoteDir>
+            <RemoteName>TestFMXCallout.entitlements</RemoteName>
+            <DeployClass>ProjectOSXEntitlements</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
         <DeployFile Include="$(BDS)\Redist\osx32\libcgsqlite3.dylib">
             <RemoteDir>TestFMXCallout.app\Contents\MacOS\</RemoteDir>
             <RemoteName>libcgsqlite3.dylib</RemoteName>
@@ -43,6 +52,43 @@
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="OSX32\Debug\TestFMXCallout.info.plist" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>TestFMXCallout.app\Contents\</RemoteDir>
+            <RemoteName>Info.plist</RemoteName>
+            <DeployClass>ProjectOSXInfoPList</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="$(BDS)\bin\delphi_PROJECTICNS.icns" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>TestFMXCallout.app\Contents\Resources\</RemoteDir>
+            <RemoteName>TestFMXCallout.icns</RemoteName>
+            <DeployClass>ProjectOSXResource</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="OSX32\Debug\TestFMXCallout.rsm" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>TestFMXCallout.app\Contents\MacOS\</RemoteDir>
+            <RemoteName>TestFMXCallout.rsm</RemoteName>
+            <DeployClass>DebugSymbols</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="OSX32\Debug\TestFMXCallout" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>TestFMXCallout.app\Contents\MacOS\</RemoteDir>
+            <RemoteName>TestFMXCallout</RemoteName>
+            <DeployClass>ProjectOutput</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+            <Required>True</Required>
         </DeployFile>
     </ItemGroup>
     <ItemGroup Condition="'$(Platform)'=='Android'">
@@ -73,6 +119,16 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
+        <DeployFile Include="Android\Debug\libTestFMXCallout.so" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>TestFMXCallout\library\lib\armeabi-v7a\</RemoteDir>
+            <RemoteName>libTestFMXCallout.so</RemoteName>
+            <DeployClass>ProjectOutput</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+            <Required>True</Required>
+        </DeployFile>
         <DeployFile Include="$(BDS)\bin\Artwork\Android\FM_SplashImage_426x320.png" Condition="'$(Config)'=='Debug'">
             <RemoteDir>TestFMXCallout\res\drawable-small\</RemoteDir>
             <RemoteName>splash_image.png</RemoteName>
@@ -82,7 +138,7 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="Android\Debug\libTestFMXCallout.so" Condition="'$(Config)'=='Debug'">
+        <DeployFile Include="Android\Release\libTestFMXCallout.so" Condition="'$(Config)'=='Release'">
             <RemoteDir>TestFMXCallout\library\lib\armeabi-v7a\</RemoteDir>
             <RemoteName>libTestFMXCallout.so</RemoteName>
             <DeployClass>ProjectOutput</DeployClass>
@@ -335,16 +391,6 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="Android\Release\libTestFMXCallout.so" Condition="'$(Config)'=='Release'">
-            <RemoteDir>TestFMXCallout\library\lib\armeabi-v7a\</RemoteDir>
-            <RemoteName>libTestFMXCallout.so</RemoteName>
-            <DeployClass>ProjectOutput</DeployClass>
-            <Operation>1</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-            <Required>True</Required>
-        </DeployFile>
         <DeployFile Include="Android\Release\AndroidManifest.xml" Condition="'$(Config)'=='Release'">
             <RemoteDir>TestFMXCallout\</RemoteDir>
             <RemoteName>AndroidManifest.xml</RemoteName>
@@ -563,6 +609,16 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
+        <DeployFile Include="iOSSimulator\Release\TestFMXCallout" Condition="'$(Config)'=='Release'">
+            <RemoteDir>TestFMXCallout.app\</RemoteDir>
+            <RemoteName>TestFMXCallout</RemoteName>
+            <DeployClass>ProjectOutput</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+            <Required>True</Required>
+        </DeployFile>
         <DeployFile Include="$(BDS)\bin\Artwork\iOS\iPhone\FM_SpotlightSearchIcon_80x80.png" Condition="'$(Config)'=='Release'">
             <RemoteDir>TestFMXCallout.app\</RemoteDir>
             <RemoteName>FM_SpotlightSearchIcon_80x80.png</RemoteName>
@@ -625,16 +681,6 @@
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
-        </DeployFile>
-        <DeployFile Include="iOSSimulator\Release\TestFMXCallout" Condition="'$(Config)'=='Release'">
-            <RemoteDir>TestFMXCallout.app\</RemoteDir>
-            <RemoteName>TestFMXCallout</RemoteName>
-            <DeployClass>ProjectOutput</DeployClass>
-            <Operation>1</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-            <Required>True</Required>
         </DeployFile>
         <DeployFile Include="$(BDS)\bin\Artwork\iOS\iPad\FM_SpotlightSearchIcon_100x100.png" Condition="'$(Config)'=='Release'">
             <RemoteDir>TestFMXCallout.app\</RemoteDir>
