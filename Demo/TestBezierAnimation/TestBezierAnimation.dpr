@@ -3,7 +3,7 @@ program TestBezierAnimation;
 uses
   System.StartUpCopy,
   FMX.Forms,
-  TestBezierAnimationMain in 'TestBezierAnimationMain.pas' {Form11},
+  TestBezierAnimationMain in 'TestBezierAnimationMain.pas' {CubicBezierAnimationMainForm},
   FMX.BezierAnimation in '..\..\ComponentsSource\FMX.BezierAnimation.pas',
   BezierPanel in 'BezierPanel.pas';
 
@@ -11,6 +11,6 @@ uses
 
 begin
   Application.Initialize;
-  Application.CreateForm(TForm11, Form11);
+  Application.CreateForm(TCubicBezierAnimationMainForm, CubicBezierAnimationMainForm);
   Application.Run;
 end.

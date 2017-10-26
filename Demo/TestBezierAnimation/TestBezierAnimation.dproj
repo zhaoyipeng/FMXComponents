@@ -313,7 +313,7 @@
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
         <DCCReference Include="TestBezierAnimationMain.pas">
-            <Form>Form11</Form>
+            <Form>CubicBezierAnimationMainForm</Form>
             <FormType>fmx</FormType>
         </DCCReference>
         <DCCReference Include="..\..\ComponentsSource\FMX.BezierAnimation.pas"/>
