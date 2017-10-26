@@ -1301,6 +1301,7 @@ var
   i: Integer;
   LColor: TAlphaColorF;
   R: TRectF;
+  StrokeDash: FMX.Graphics.TDashArray;
 begin
   if GlobalCanvas = nil then
     Exit;
@@ -1329,10 +1330,17 @@ begin
   begin
     // select the proper dash array for the printer
     if TMyCanvas(FCanvas).FPrinter <> nil then
+    begin
       if AStroke.Dash <> TStrokeDash.Custom then
-        Dash := TStrokeBrush.StdDash[TStrokeBrush.TDashDevice.Printer, AStroke.Dash].DashArray
+        StrokeDash := TStrokeBrush.StdDash[TStrokeBrush.TDashDevice.Printer, AStroke.Dash].DashArray
       else
-        Dash := AStroke.DashArray
+        StrokeDash := AStroke.DashArray;
+      SetLength(Dash, Length(StrokeDash));
+      for I := 0 to High(StrokeDash) do
+      begin
+        Dash[I] := StrokeDash[I];
+      end;
+    end
     else // adjust the line dashes for the screen
     begin
       SetLength(Dash, Length(AStroke.DashArray));

@@ -26,7 +26,6 @@ type
     procedure BitmapOpacitySpinBoxChangeTracking(Sender: TObject);
     procedure PaintBox1Paint(Sender: TObject; Canvas: TCanvas);
     procedure NativeDrawSwitchSwitch(Sender: TObject);
-    procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
   public
@@ -43,18 +42,6 @@ implementation
 procedure TTestDrawBitmapMainForm.BitmapOpacitySpinBoxChangeTracking(Sender: TObject);
 begin
   PaintBox1.Repaint;
-end;
-
-procedure TTestDrawBitmapMainForm.FormCreate(Sender: TObject);
-  {$IFDEF IOS}
-var
-  familyNames: NSArray;
-  {$ENDIF}
-begin
-  {$IFDEF IOS}
-//  familyNames := TUIFont.OCClass.familyNames;
-
-  {$ENDIF}
 end;
 
 procedure TTestDrawBitmapMainForm.NativeDrawSwitchSwitch(Sender: TObject);

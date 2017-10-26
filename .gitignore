@@ -45,3 +45,5 @@
 /Demo/TestINativeCanvas/iOSSimulator/Debug
 /Demo/TestBezierAnimation/__history
 /Demo/TestBezierAnimation/Win32/Debug
+/Demo/TestBezierAnimation/Android/Debug
+/Demo/TestINativeCanvas/iOSDevice64/Debug
