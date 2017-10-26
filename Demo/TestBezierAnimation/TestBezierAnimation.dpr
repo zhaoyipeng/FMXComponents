@@ -4,7 +4,8 @@ uses
   System.StartUpCopy,
   FMX.Forms,
   TestBezierAnimationMain in 'TestBezierAnimationMain.pas' {Form11},
-  FMX.BezierAnimation in '..\..\ComponentsSource\FMX.BezierAnimation.pas';
+  FMX.BezierAnimation in '..\..\ComponentsSource\FMX.BezierAnimation.pas',
+  BezierPanel in 'BezierPanel.pas';
 
 {$R *.res}
 

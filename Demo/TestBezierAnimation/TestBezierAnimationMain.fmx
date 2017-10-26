@@ -59,28 +59,4 @@ object Form11: TForm11
     StyledSettings = [Family, Style, FontColor]
     OnEnter = edtEqationEnter
   end
-  object Rectangle2: TRectangle
-    Align = Bottom
-    Margins.Left = 8.000000000000000000
-    Margins.Top = 8.000000000000000000
-    Margins.Right = 8.000000000000000000
-    Margins.Bottom = 8.000000000000000000
-    Position.X = 8.000000000000000000
-    Position.Y = 417.000000000000000000
-    Size.Width = 624.000000000000000000
-    Size.Height = 65.000000000000000000
-    Size.PlatformDefault = False
-  end
-  object Rectangle3: TRectangle
-    Align = Bottom
-    Margins.Left = 8.000000000000000000
-    Margins.Top = 8.000000000000000000
-    Margins.Right = 8.000000000000000000
-    Margins.Bottom = 8.000000000000000000
-    Position.X = 8.000000000000000000
-    Position.Y = 498.000000000000000000
-    Size.Width = 624.000000000000000000
-    Size.Height = 65.000000000000000000
-    Size.PlatformDefault = False
-  end
 end

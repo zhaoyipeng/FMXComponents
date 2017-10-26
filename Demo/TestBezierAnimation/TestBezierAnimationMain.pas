@@ -30,8 +30,6 @@ type
     SelectionPoint2: TSelectionPoint;
     Label1: TLabel;
     edtEqation: TEdit;
-    Rectangle2: TRectangle;
-    Rectangle3: TRectangle;
     procedure FormCreate(Sender: TObject);
     procedure edtEqationEnter(Sender: TObject);
     procedure pbCanvasPaint(Sender: TObject; Canvas: TCanvas);
