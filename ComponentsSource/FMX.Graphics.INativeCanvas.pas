@@ -1,4 +1,4 @@
-unit FMX.Graphics.INativeCanvas;
+ï»¿unit FMX.Graphics.INativeCanvas;
 
 interface
 
@@ -21,20 +21,22 @@ type
     procedure BeginNativeDraw(const ARect: TRectF);
     procedure EndNativeDraw;
 
+    procedure SetMatrix(const M: TMatrix);
+
     { aligning }
     function AlignToPixel(const Value: TPointF): TPointF; overload;
     function AlignToPixel(const Rect: TRectF): TRectF; overload;
     function AlignToPixelVertically(const Value: Single): Single;
     function AlignToPixelHorizontally(const Value: Single): Single;
 
-    // Í¿É« + ÏßÉ«Ò»´ÎÍê³É
+    // æ¶‚è‰² + çº¿è‰²ä¸€æ¬¡å®Œæˆ
     procedure DrawRect(const ARect: TRectF; const XRadius, YRadius: Single; const ACorners: TCorners; const AOpacity: Single; const AFill: TBrush; const AStroke: TStrokeBrush; const ACornerType: TCornerType = TCornerType.Round; const Inside: Boolean = False); overload;
     procedure DrawPath(const APath: TPathData; const AOpacity: Single; const AFill: TBrush; const AStroke: TStrokeBrush); overload;
     procedure DrawEllipse(const ARect: TRectF; const AOpacity: Single; const AFill: TBrush; const AStroke: TStrokeBrush; const Inside: Boolean = False); overload;
     procedure DrawArc(const Center, Radius: TPointF; StartAngle, SweepAngle: Single; const AOpacity: Single; const AFill: TBrush; const AStroke: TStrokeBrush; const Inside: Boolean = False); overload;
     procedure DrawPolygon(const Points: TPolygon; const AOpacity: Single; const AFill: TBrush; const AStroke: TStrokeBrush); overload;
 
-    // ÏÂÁĞÎª Canvas Ô­ÓĞº¯Êı
+    // ä¸‹åˆ—ä¸º Canvas åŸæœ‰å‡½æ•°
     procedure DrawBitmap(const ABitmap: TBitmap; const SrcRect, DstRect: TRectF; const AOpacity: Single; const HighSpeed: Boolean = False);
     procedure FillText(const ARect: TRectF; const AText: string; const WordWrap: Boolean; const AOpacity: Single; const Flags: TFillTextFlags; const ATextAlign: TTextAlign; const AVTextAlign: TTextAlign = TTextAlign.Center);
 
@@ -90,17 +92,19 @@ type
     procedure BeginNativeDraw(const ARect: TRectF); virtual;
     procedure EndNativeDraw; virtual;
 
+    procedure SetMatrix(const M: TMatrix); virtual; abstract;
+
     procedure DrawBitmap(const ABitmap: TBitmap; const SrcRect, DstRect: TRectF; const AOpacity: Single; const HighSpeed: Boolean = False); virtual; abstract;
     procedure FillText(const ARect: TRectF; const AText: string; const WordWrap: Boolean; const AOpacity: Single; const Flags: TFillTextFlags; const ATextAlign: TTextAlign; const AVTextAlign: TTextAlign = TTextAlign.Center); virtual; abstract;
 
-    // Í¿É« + ÏßÉ«Ò»´ÎÍê³É
+    // æ¶‚è‰² + çº¿è‰²ä¸€æ¬¡å®Œæˆ
     procedure DrawRect(const ARect: TRectF; const XRadius, YRadius: Single; const ACorners: TCorners; const AOpacity: Single; const AFill: TBrush; const AStroke: TStrokeBrush; const ACornerType: TCornerType = TCornerType.Round; const Inside: Boolean = False); overload; virtual; abstract;
     procedure DrawPath(const APath: TPathData; const AOpacity: Single; const AFill: TBrush; const AStroke: TStrokeBrush); overload; virtual; abstract;
     procedure DrawEllipse(const ARect: TRectF; const AOpacity: Single; const AFill: TBrush; const AStroke: TStrokeBrush; const Inside: Boolean = False); overload; virtual; abstract;
     procedure DrawArc(const Center, Radius: TPointF; StartAngle, SweepAngle: Single; const AOpacity: Single; const AFill: TBrush; const AStroke: TStrokeBrush; const Inside: Boolean = False); overload; virtual; abstract;
     procedure DrawPolygon(const Points: TPolygon; const AOpacity: Single; const AFill: TBrush; const AStroke: TStrokeBrush); overload; virtual; abstract;
 
-    // ÏÂÁĞÎª Canvas Ô­ÓĞº¯Êı
+    // ä¸‹åˆ—ä¸º Canvas åŸæœ‰å‡½æ•°
     { aligning }
     function AlignToPixel(const Value: TPointF): TPointF; overload; inline;
     function AlignToPixel(const Rect: TRectF): TRectF; overload; inline;

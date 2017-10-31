@@ -106,6 +106,8 @@ type
     procedure DrawBitmap(const ABitmap: TBitmap; const SrcRect, DstRect: TRectF; const AOpacity: Single; const HighSpeed: Boolean = False); override;
     procedure FillText(const ARect: TRectF; const AText: string; const WordWrap: Boolean; const AOpacity: Single; const Flags: TFillTextFlags; const ATextAlign: TTextAlign; const AVTextAlign: TTextAlign = TTextAlign.Center); override;
 
+    procedure SetMatrix(const M: TMatrix); override;
+
     procedure DrawLine(const APt1, APt2: TPointF; const AOpacity: Single); overload; override;
     procedure DrawLine(const APt1, APt2: TPointF; const AOpacity: Single; const ABrush: TStrokeBrush); overload; override;
 
@@ -214,6 +216,8 @@ type
     constructor Create(ACanvas: TCanvas); override;
     procedure NativeDraw(const ARect: TRectF; const ADrawProc: TDrawProc); override;
     procedure DrawBitmap(const ABitmap: TBitmap; const SrcRect, DstRect: TRectF; const AOpacity: Single; const HighSpeed: Boolean = False); override;
+
+    procedure SetMatrix(const M: TMatrix); override;
 
     procedure DrawPath(const APath: TPathData; const AOpacity: Single; const AFill: TBrush; const AStroke: TStrokeBrush); override;
 
@@ -601,6 +605,11 @@ end;
 procedure TFiremonkeyCanvas.DrawBitmap(const ABitmap: TBitmap; const SrcRect, DstRect: TRectF; const AOpacity: Single; const HighSpeed: Boolean);
 begin
   FCanvas.DrawBitmap(ABitmap, SrcRect, DstRect, AOpacity, HighSpeed);
+end;
+
+procedure TFiremonkeyCanvas.SetMatrix(const M: TMatrix);
+begin
+  FCanvas.SetMatrix(M);
 end;
 
 procedure TFiremonkeyCanvas.DrawEllipse(const ARect: TRectF; const AOpacity: Single);
@@ -1411,6 +1420,30 @@ begin
     CGRectMake(DstRect.Left, Height - DstRect.Bottom, DstRect.Width, DstRect.Height),
     image);
   CGContextRestoreGState(GlobalCanvas);
+end;
+
+procedure TIOSNativeCanvas.SetMatrix(const M: TMatrix);
+var
+  LMatrix: TMatrix;
+  Transform: CGAffineTransform;
+begin
+  if GlobalCanvas <> nil then
+  begin
+    Transform := CGContextGetCTM(GlobalCanvas);
+    LMatrix := TMatrix.Identity;
+    LMatrix.m11 := Transform.a;
+    LMatrix.m12 := Transform.b;
+    LMatrix.m21 := Transform.c;
+    LMatrix.m22 := Transform.d;
+    LMatrix.m31 := Transform.tx;
+    LMatrix.m32 := Transform.ty;
+    LMatrix := LMatrix.Inverse;
+
+    CGContextConcatCTM(GlobalCanvas, CGAffineTransformMake(LMatrix.m11, LMatrix.m12, LMatrix.m21, LMatrix.m22, LMatrix.m31,
+      LMatrix.m32));
+//    AdaptCoordinateSystem;
+    CGContextConcatCTM(GlobalCanvas, CGAffineTransformMake(M.m11, M.m12, M.m21, M.m22, M.m31, M.m32));
+  end;
 end;
 
 procedure TIOSNativeCanvas.DrawFill(const ABrush: TBrush; const SrcRect, DesRect: TRectF; const AOpacity: Single);
