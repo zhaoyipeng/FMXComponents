@@ -10,6 +10,11 @@ Support QQ Group: 513799640<br>
 ![FMXComponents](SnapShots/group_qrcode.jpg)  <br>
 You can also add my skype: zhaoyipeng@hotmail.com<br>
 
+##17. PhotoCorrect<br>
+![FMXGR32Demo2](SnapShots/FMXGR32Demo2.gif)  
+I have not much time, so this release just source code, not component yet.<br>
+最近时间不多，没有封装成控件，先发布了实现源码。<br>
+
 ## 16.TFMXRotatingText<br>
 A Firemonkey Rotating Text Component be inspired by RotatingText(https://github.com/sdsmdg/RotatingText)<br>
 ![FMXRotatingText](SnapShots/FMXRotatingText.gif)  <br>
@@ -59,8 +64,6 @@ This component wrote by Aone, it's also a very good demo of the INativeCanvas. T
 ## 13.graphics32 for Firemonkey
 
 ![FMXGR32Demo](SnapShots/FMXGR32Demo.gif)  
-
-![FMXGR32Demo2](SnapShots/FMXGR32Demo2.gif)  
 
 Firemonkey version of Graphics32 [graphics32-for-Firemonkey](https://github.com/zhaoyipeng/graphics32-for-Firemonkey)
 
