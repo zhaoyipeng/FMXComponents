@@ -180,4 +180,7 @@ TFMXToast is a toast component using pure fmx<br>
 A QRCode display component<br>
 use DelphiZXingQRCode to generate QRCode image<br>
 
+## License
+
+The FMXComponents is open-sourced software licensed under the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.html).
 

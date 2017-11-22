@@ -104,6 +104,7 @@ type
   protected
     procedure Resize; override;
     procedure Paint; override;
+    procedure SetVisible(const Value: Boolean); override;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -277,6 +278,15 @@ begin
       Repaint;
     end;
   end;
+end;
+
+procedure TFMXLoadingIndicator.SetVisible(const Value: Boolean);
+begin
+  inherited;
+  if Value then
+    FAnimation.Start
+  else
+    FAnimation.StopAtCurrent;
 end;
 
 procedure TFMXLoadingIndicator.Start;
