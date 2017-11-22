@@ -1,5 +1,8 @@
 # FMXComponents
 
+Main site: https://github.com/zhaoyipeng/FMXComponents <br>
+Mirror site: https://gitee.com/zhaoyipeng/FMXComponents <br>
+
 This project includes the components that donors and I have actually used in applications.<br> 
 If you have some components want to add into this project, you can send it to zhaoyipeng@hotmail.com
 
@@ -10,7 +13,7 @@ Support QQ Group: 513799640<br>
 ![FMXComponents](SnapShots/group_qrcode.jpg)  <br>
 You can also add my skype: zhaoyipeng@hotmail.com<br>
 
-##17. PhotoCorrect<br>
+## 17. PhotoCorrect<br>
 ![FMXGR32Demo2](SnapShots/FMXGR32Demo2.gif)  
 I have not much time, so this release just source code, not component yet.<br>
 最近时间不多，没有封装成控件，先发布了实现源码。<br>
