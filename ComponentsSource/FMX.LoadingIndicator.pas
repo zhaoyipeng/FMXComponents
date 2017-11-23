@@ -1,3 +1,17 @@
+﻿// ***************************************************************************
+//
+// A Firemonkey LoadingIndicator Component
+//
+// Copyright 2017 谢顿 (zhaoyipeng@hotmail.com)
+//
+// https://github.com/zhaoyipeng/FMXComponents
+//
+// ***************************************************************************
+// version history
+// 2017-11-23, v0.2.0.0 :
+//  add Stop, Running method, when call Start method can resume from last
+//  animation position
+//
 unit FMX.LoadingIndicator;
 
 interface
@@ -78,6 +92,7 @@ type
     FAnimation: TAnimation;
     FDrawProc: procedure of object;
     FBezier: TBezier;
+    FLastStopTime: Single;
     function GetCellRect(CellWidth, CellHeight: Single; const Cell: TCell): TRectF;
     function GetColor: TAlphaColor;
     procedure OnAnimation(Sender: TObject);
@@ -105,11 +120,15 @@ type
     procedure Resize; override;
     procedure Paint; override;
     procedure SetVisible(const Value: Boolean); override;
+    function GetAnimationTime: Single;
+    function GetNormalizedAnimationTime: Single;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
     procedure Loaded; override;
+    function Running: Boolean;
     procedure Start;
+    procedure Stop;
   published
     property Color: TAlphaColor read GetColor write SetColor;
     property Kind: TLoadingIndicatorKind read FKind write SetKind
@@ -164,12 +183,25 @@ type
 implementation
 
 type
-  TMyAnimation = class(TAnimation)
+  TAnimationHelper = class helper for TAnimation
   protected
-    procedure ProcessAnimation; override;
+    procedure SetTime(const ATime: Single);
   end;
 
-  { TFMXLoadingIndicator }
+  TFMXLoadingAnimation = class(TAnimation)
+  private
+    FLastStopTime: Single;
+    FLastStopNormalizedTime: Single;
+  protected
+    procedure FirstFrame; override;
+    procedure ProcessAnimation; override;
+  public
+    constructor Create(AOwner: TComponent); override;
+    procedure Stop; override;
+  end;
+
+
+{ TFMXLoadingIndicator }
 procedure TFMXLoadingIndicator.OnAnimation(Sender: TObject);
 begin
   Repaint;
@@ -194,6 +226,7 @@ end;
 constructor TFMXLoadingIndicator.Create(AOwner: TComponent);
 begin
   inherited;
+  FLastStopTime := 0;
   FBezier := TBezier.Create(0.09,0.57,0.49,0.9);
   FBrush := TBrush.Create(TBrushKind.Solid, $FF1282B2);
   FKind := TLoadingIndicatorKind.Pulse;
@@ -286,13 +319,18 @@ begin
   if Value then
     FAnimation.Start
   else
-    FAnimation.StopAtCurrent;
+    FAnimation.Stop;
 end;
 
 procedure TFMXLoadingIndicator.Start;
 begin
   CreateAnimation;
   FAnimation.Start;
+end;
+
+procedure TFMXLoadingIndicator.Stop;
+begin
+  FAnimation.Stop;
 end;
 
 procedure TFMXLoadingIndicator.ConfirmSize;
@@ -310,7 +348,7 @@ procedure TFMXLoadingIndicator.CreateAnimation;
 begin
   if not Assigned(FAnimation) then
   begin
-    FAnimation := TMyAnimation.Create(Self);
+    FAnimation := TFMXLoadingAnimation.Create(Self);
     FAnimation.Stored := False;
     FAnimation.Loop := True;
     FAnimation.OnProcess := OnAnimation;
@@ -339,7 +377,7 @@ begin
   R := Min(P.X, P.Y) - 2;
   Path := TPathData.Create;
   try
-    T := FAnimation.NormalizedTime;
+    T := GetNormalizedAnimationTime;
     Ani := GetEaseInOut;
     for I := 0 to 7 do
     begin
@@ -384,7 +422,7 @@ var
   R: Single;
   T, A: Single;
 begin
-  T := FAnimation.NormalizedTime;
+  T := GetNormalizedAnimationTime;
   A := InterpolateSingle(0, 360, T);
 
   P := LocalRect.CenterPoint;
@@ -411,7 +449,7 @@ var
   T: Single;
   O: Single;
 begin
-  T := FAnimation.NormalizedTime;
+  T := GetNormalizedAnimationTime;
   P := LocalRect.CenterPoint;
   R := Min(P.X, P.Y);
   StartAngle := -15;
@@ -445,7 +483,7 @@ var
   R, S: Single;
   T, A: Single;
 begin
-  T := FAnimation.NormalizedTime;
+  T := GetNormalizedAnimationTime;
   A := InterpolateSingle(0, 360, T);
   if T < 0.5 then
     S := InterpolateSingle(1, 0.6, T/0.5)
@@ -500,7 +538,7 @@ var
 begin
   P := LocalRect.CenterPoint;
   Ani := GetEaseInOut;
-  T := FAnimation.NormalizedTime;
+  T := GetNormalizedAnimationTime;
   CalcAS(Ani, T, A1, S1);
   T := T * 2 - Trunc(T * 2);
   CalcAS(Ani, T, A2, S2);
@@ -527,7 +565,7 @@ var
   T, A: Single;
   DR: TRectF;
 begin
-  T := FAnimation.NormalizedTime;
+  T := GetNormalizedAnimationTime;
   A := InterpolateSingle(0, 360, T);
   T := InterpolateCubic(T, 0, 1, 1, TAnimationType.InOut);
   if T < 0.5 then
@@ -576,7 +614,7 @@ begin
   P := LocalRect.CenterPoint;
   R := Min(P.X, P.Y) - 2;
   Ani := FBezier;
-  T := FAnimation.NormalizedTime;
+  T := GetNormalizedAnimationTime;
   if T<0.7 then
   begin
     T := Ani.Solve(T/0.7, TBezier.epsilon);
@@ -613,7 +651,7 @@ var
   R, R1, R2: Single;
   DR: TRectF;
 begin
-  T := FAnimation.NormalizedTime;
+  T := GetNormalizedAnimationTime;
   S := InterpolateSingle(1, 0, T);
   P := LocalRect.CenterPoint;
   R := Min(P.X, P.Y);
@@ -641,7 +679,7 @@ var
   SX, SY: Single;
   T: Single;
 begin
-  T := FAnimation.NormalizedTime;
+  T := GetNormalizedAnimationTime;
   SY := CalcScale(T);
   T := T - 0.5;
   if T < 0 then
@@ -659,7 +697,7 @@ var
   R: Single;
   DR: TRectF;
 begin
-  T := FAnimation.NormalizedTime;
+  T := GetNormalizedAnimationTime;
   S := InterpolateSingle(0, 1, T);
   P := LocalRect.CenterPoint;
   R := Min(P.X, P.Y) * S;
@@ -674,7 +712,7 @@ var
   S: Single;
   R, DR: TRectF;
 begin
-  T := FAnimation.NormalizedTime;
+  T := GetNormalizedAnimationTime;
   for I := 0 to 7 do
   begin
     if T < 0.4 then
@@ -701,7 +739,7 @@ var
   R: TRectF;
   W, H, Space: Single;
 begin
-  T := FAnimation.NormalizedTime;
+  T := GetNormalizedAnimationTime;
   W := (Width - 20) / 5;
   H := Height;
   Space := 0;
@@ -734,7 +772,7 @@ var
   W, H, Space: Single;
   Ani: TBezier;
 begin
-  T := FAnimation.NormalizedTime;
+  T := GetNormalizedAnimationTime;
   W := (Width - 20) / 5;
   H := Height;
   Space := 0;
@@ -776,7 +814,7 @@ var
   W, H, Space: Single;
   Ani: TBezier;
 begin
-  T := FAnimation.NormalizedTime;
+  T := GetNormalizedAnimationTime;
   W := (Width - 20) / 5;
   H := Height;
   Space := 0;
@@ -818,7 +856,7 @@ var
   R, DR: TRectF;
   W, H, Space, CR: Single;
 begin
-  T := FAnimation.CurrentTime;
+  T := GetAnimationTime;
   W := (Width - 10) / 3;
   H := Height;
   Space := 0;
@@ -845,6 +883,14 @@ begin
   end;
 end;
 
+function TFMXLoadingIndicator.GetAnimationTime: Single;
+begin
+  if FAnimation.Running then
+    Result := FAnimation.CurrentTime
+  else
+    Result := TFMXLoadingAnimation(FAnimation).FLastStopTime;
+end;
+
 function TFMXLoadingIndicator.GetCellRect(CellWidth, CellHeight: Single;
   const Cell: TCell): TRectF;
 var
@@ -863,12 +909,56 @@ begin
   Result := FBrush.Color
 end;
 
-{ TMyAnimation }
+function TFMXLoadingIndicator.GetNormalizedAnimationTime: Single;
+begin
+  if FAnimation.Running then
+    Result := FAnimation.NormalizedTime
+  else
+    Result := TFMXLoadingAnimation(FAnimation).FLastStopNormalizedTime;
+end;
 
-procedure TMyAnimation.ProcessAnimation;
+function TFMXLoadingIndicator.Running: Boolean;
+begin
+  Result := FAnimation.Running;
+end;
+
+{ TFMXLoadingAnimation }
+
+constructor TFMXLoadingAnimation.Create(AOwner: TComponent);
+begin
+  inherited;
+  FLastStopNormalizedTime := 0;
+  FLastStopTime := 0;
+end;
+
+procedure TFMXLoadingAnimation.FirstFrame;
+begin
+  inherited;
+  if Inverse then
+    SetTime(Duration - FLastStopTime)
+  else
+    SetTime(FLastStopTime);
+end;
+
+procedure TFMXLoadingAnimation.ProcessAnimation;
 begin
 
 end;
 
+
+procedure TFMXLoadingAnimation.Stop;
+begin
+  FLastStopTime := CurrentTime;
+  FLastStopNormalizedTime := NormalizedTime;
+  inherited;
+end;
+
+{ TAnimationHelper }
+
+procedure TAnimationHelper.SetTime(const ATime: Single);
+begin
+   with Self do
+    FTime := ATime;
+end;
 
 end.
