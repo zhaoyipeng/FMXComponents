@@ -9,7 +9,9 @@ uses
   System.UIConsts,
 //  FMX.Graphics.INativeCanvas,
 //  FMX.Graphics.NativeCanvas,
-  FMX.BezierAnimation, FMX.Layouts, BezierPanel;
+  FMX.BezierAnimation,
+  FMX.Layouts,
+  FMX.BezierPanel, FMX.Ani;
 
 type
   TSelectionPoint = class(FMX.Objects.TSelectionPoint)
@@ -36,22 +38,31 @@ type
     LayoutRunners: TLayout;
     Layout1: TLayout;
     Layout2: TLayout;
+    BezierPanel1: TFMXBezierPanel;
+    BezierPanel2: TFMXBezierPanel;
+    BezierAnimation1: TFMXBezierAnimation;
+    BezierAnimation2: TFMXBezierAnimation;
+    Layout3: TLayout;
+    btnRun: TButton;
+    trckbrDuration: TTrackBar;
+    lblDuration: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure edtEqationEnter(Sender: TObject);
     procedure pbCanvasPaint(Sender: TObject; Canvas: TCanvas);
     procedure SelectionPoint1Track(Sender: TObject; var X, Y: Single);
     procedure SelectionPoint2Track(Sender: TObject; var X, Y: Single);
     procedure Button1Click(Sender: TObject);
+    procedure btnRunClick(Sender: TObject);
+    procedure trckbrDurationChange(Sender: TObject);
   private
     { Private declarations }
     p1x, p1y, p2x, p2y: Single;
     FChanging: Boolean;
-    FRunner1, FRunner2: TBezierPanel;
     FPanels: TArray<TBezierPanelSelector>;
     function GetPoint(x, y: Single): TPointF;
     procedure SetBezier(p1x, p1y, p2x, p2y: Single);
     procedure UpdateEquation;
-    function CreatePanel(AParent: TControl; State: Boolean): TBezierPanel;
+    function CreatePanel(AParent: TControl; State: Boolean): TFMXBezierPanel;
     function CreateSelector(AParent: TControl; Offset, p1x, p1y, p2x, p2y: Single;
       text: string): TBezierPanelSelector;
     procedure SetSelectedPanel(APanel: TBezierPanelSelector);
@@ -77,10 +88,6 @@ procedure TCubicBezierAnimationMainForm.FormCreate(Sender: TObject);
 CONST
   PW = 125;
 begin
-  FRunner1 := CreatePanel(Layout1, True);
-  FRunner2 := CreatePanel(Layout2, True);
-  FRunner1.SelectedBackground := $FFFF0088;
-
   SelectionPoint1.SelectedFillColor := $FFFF0088;
   SelectionPoint2.SelectedFillColor := $FF00AABB;
 
@@ -186,8 +193,8 @@ begin
   begin
     p1x := SelectionPoint1.Position.Point.x / pbCanvas.Width;
     p1y := (pbCanvas.Height - SelectionPoint1.Position.Point.y) / pbCanvas.Height;
-    FRunner1.P1X := p1x;
-    FRunner1.P1Y := p1y;
+    BezierPanel1.P1X := p1x;
+    BezierPanel1.P1Y := p1y;
     UpdateEquation;
     pbCanvas.Repaint;
   end;
@@ -199,8 +206,8 @@ begin
   begin
     p2x := SelectionPoint2.Position.Point.x / pbCanvas.Width;
     p2y := (pbCanvas.Height - SelectionPoint2.Position.Point.y) / pbCanvas.Height;
-    FRunner1.P2X := p2x;
-    FRunner1.P2Y := p2y;
+    BezierPanel1.P2X := p2x;
+    BezierPanel1.P2Y := p2y;
     UpdateEquation;
     pbCanvas.Repaint;
   end;
@@ -226,12 +233,17 @@ begin
   begin
     FPanels[I].IsSelected := FPanels[I] = APanel;
   end;
-  FRunner2.P1X := APanel.Panel.P1X;
-  FRunner2.P1Y := APanel.Panel.P1Y;
-  FRunner2.P2X := APanel.Panel.P2X;
-  FRunner2.P2Y := APanel.Panel.P2Y;
+  BezierPanel2.P1X := APanel.Panel.P1X;
+  BezierPanel2.P1Y := APanel.Panel.P1Y;
+  BezierPanel2.P2X := APanel.Panel.P2X;
+  BezierPanel2.P2Y := APanel.Panel.P2Y;
   edtEqation2.Text := Format('%.2f,%.2f,%.2f,%.2f',
-    [FRunner2.p1x, FRunner2.p1y, FRunner2.p2x, FRunner2.p2y]);
+    [BezierPanel2.p1x, BezierPanel2.p1y, BezierPanel2.p2x, BezierPanel2.p2y]);
+end;
+
+procedure TCubicBezierAnimationMainForm.trckbrDurationChange(Sender: TObject);
+begin
+  lblDuration.Text := trckbrDuration.Value.ToString;
 end;
 
 procedure TCubicBezierAnimationMainForm.UpdateEquation;
@@ -241,15 +253,28 @@ begin
   FChanging := False;
 end;
 
+procedure TCubicBezierAnimationMainForm.btnRunClick(Sender: TObject);
+begin
+  BezierAnimation1.Duration := trckbrDuration.Value;
+  BezierAnimation2.Duration := trckbrDuration.Value;
+  with BezierPanel1 do
+    BezierAnimation1.SetData(P1X, P1Y, P2X, P2Y);
+  with BezierPanel2 do
+    BezierAnimation2.SetData(P1X, P1Y, P2X, P2Y);
+
+  BezierAnimation1.Start;
+  BezierAnimation2.Start;
+end;
+
 procedure TCubicBezierAnimationMainForm.Button1Click(Sender: TObject);
 begin
   edtEqation.Text := Format('%.2f,%.2f,%.2f,%.2f', [p1x, p1y, p2x, p2y]);
 end;
 
 function TCubicBezierAnimationMainForm.CreatePanel(AParent: TControl;
-  State: Boolean): TBezierPanel;
+  State: Boolean): TFMXBezierPanel;
 begin
-  Result := TBezierPanel.Create(Self);
+  Result := TFMXBezierPanel.Create(Self);
   Result.Position.Point := PointF(0, 0);
   Result.Height := AParent.Height;
   Result.Width := Result.Height;

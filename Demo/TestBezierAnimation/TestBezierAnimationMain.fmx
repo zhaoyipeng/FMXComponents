@@ -17,9 +17,9 @@ object CubicBezierAnimationMainForm: TCubicBezierAnimationMainForm
     Margins.Right = 20.000000000000000000
     Margins.Bottom = 20.000000000000000000
     Position.X = 20.000000000000000000
-    Position.Y = 117.000000000000000000
+    Position.Y = 167.000000000000000000
     Size.Width = 320.000000000000000000
-    Size.Height = 320.000000000000000000
+    Size.Height = 270.000000000000000000
     Size.PlatformDefault = False
     OnPaint = pbCanvasPaint
     object SelectionPoint1: TSelectionPoint
@@ -43,6 +43,7 @@ object CubicBezierAnimationMainForm: TCubicBezierAnimationMainForm
   end
   object LayoutTop: TLayout
     Align = Top
+    Position.Y = 50.000000000000000000
     Size.Width = 994.000000000000000000
     Size.Height = 97.000000000000000000
     Size.PlatformDefault = False
@@ -51,7 +52,7 @@ object CubicBezierAnimationMainForm: TCubicBezierAnimationMainForm
       Touch.InteractiveGestures = [LongTap, DoubleTap]
       TabOrder = 0
       Text = '0,0,1,1'
-      TextSettings.Font.Size = 32.000000000000000000
+      TextSettings.Font.Size = 24.000000000000000000
       Position.X = 232.000000000000000000
       Position.Y = 24.000000000000000000
       Size.Width = 305.000000000000000000
@@ -63,7 +64,7 @@ object CubicBezierAnimationMainForm: TCubicBezierAnimationMainForm
       Touch.InteractiveGestures = [LongTap, DoubleTap]
       TabOrder = 1
       Text = '0,0,1,1'
-      TextSettings.Font.Size = 32.000000000000000000
+      TextSettings.Font.Size = 24.000000000000000000
       Position.X = 560.000000000000000000
       Position.Y = 24.000000000000000000
       Size.Width = 305.000000000000000000
@@ -79,7 +80,7 @@ object CubicBezierAnimationMainForm: TCubicBezierAnimationMainForm
       Size.Width = 185.000000000000000000
       Size.Height = 49.000000000000000000
       Size.PlatformDefault = False
-      TextSettings.Font.Size = 30.000000000000000000
+      TextSettings.Font.Size = 24.000000000000000000
       Text = 'cubic-bezier:'
       TabOrder = 2
     end
@@ -87,7 +88,7 @@ object CubicBezierAnimationMainForm: TCubicBezierAnimationMainForm
   object LayoutRunners: TLayout
     Align = Client
     Size.Width = 634.000000000000000000
-    Size.Height = 360.000000000000000000
+    Size.Height = 310.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 2
     object Layout1: TLayout
@@ -102,6 +103,26 @@ object CubicBezierAnimationMainForm: TCubicBezierAnimationMainForm
       Size.Height = 67.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 2
+      object BezierPanel1: TFMXBezierPanel
+        P2X = 1.000000000000000000
+        P2Y = 1.000000000000000000
+        NormalBackground = xFFE5E5E5
+        NormalForeground = claBlack
+        SelectedBackground = xFFFF0088
+        SelectedForeground = claWhite
+        IsSelected = True
+        Size.Width = 67.000000000000000000
+        Size.Height = 67.000000000000000000
+        Size.PlatformDefault = False
+        object BezierAnimation1: TFMXBezierAnimation
+          Duration = 0.200000002980232200
+          PropertyName = 'Position.X'
+          StartValue = 0.000000000000000000
+          StopValue = 560.000000000000000000
+          P2X = 1.000000000000000000
+          P2Y = 1.000000000000000000
+        end
+      end
     end
     object Layout2: TLayout
       Align = Top
@@ -115,6 +136,26 @@ object CubicBezierAnimationMainForm: TCubicBezierAnimationMainForm
       Size.Height = 67.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 1
+      object BezierPanel2: TFMXBezierPanel
+        P2X = 1.000000000000000000
+        P2Y = 1.000000000000000000
+        NormalBackground = xFFE5E5E5
+        NormalForeground = claBlack
+        SelectedBackground = xFF00AABB
+        SelectedForeground = claWhite
+        IsSelected = False
+        Size.Width = 67.000000000000000000
+        Size.Height = 67.000000000000000000
+        Size.PlatformDefault = False
+        object BezierAnimation2: TFMXBezierAnimation
+          Duration = 0.200000002980232200
+          PropertyName = 'Position.X'
+          StartValue = 0.000000000000000000
+          StopValue = 560.000000000000000000
+          P2X = 1.000000000000000000
+          P2Y = 1.000000000000000000
+        end
+      end
     end
     object LayoutPanels: TLayout
       Align = Top
@@ -122,6 +163,43 @@ object CubicBezierAnimationMainForm: TCubicBezierAnimationMainForm
       Size.Height = 160.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 3
+    end
+  end
+  object Layout3: TLayout
+    Align = Top
+    Size.Width = 994.000000000000000000
+    Size.Height = 50.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 3
+    object btnRun: TButton
+      Position.X = 16.000000000000000000
+      Position.Y = 1.000000000000000000
+      Size.Width = 105.000000000000000000
+      Size.Height = 49.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 3
+      Text = 'Run'
+      OnClick = btnRunClick
+    end
+    object trckbrDuration: TTrackBar
+      CanParentFocus = True
+      Frequency = 1.000000000000000000
+      Max = 10.000000000000000000
+      Min = 1.000000000000000000
+      Orientation = Horizontal
+      Position.X = 152.000000000000000000
+      Position.Y = 16.000000000000000000
+      Size.Width = 345.000000000000000000
+      Size.Height = 20.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 4
+      Value = 1.000000000000000000
+      OnChange = trckbrDurationChange
+    end
+    object lblDuration: TLabel
+      Position.X = 544.000000000000000000
+      Position.Y = 16.000000000000000000
+      TabOrder = 5
     end
   end
 end

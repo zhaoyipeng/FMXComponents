@@ -1,4 +1,17 @@
-unit BezierPanel;
+// ***************************************************************************
+//
+// A Firemonkey Bezier Visual Component
+//
+// Copyright 2017 Ð»¶Ù (zhaoyipeng@hotmail.com)
+//
+// https://github.com/zhaoyipeng/FMXComponents
+//
+// ***************************************************************************
+// version history
+// 2017-12-04, v0.1.0.0 :
+//  first release version
+//
+unit FMX.BezierPanel;
 
 interface
 
@@ -11,10 +24,12 @@ uses
   FMX.Graphics,
   FMX.Controls,
   FMX.Objects,
-  FMX.BezierAnimation;
+  FMX.BezierAnimation,
+  FMX.ComponentsCommon;
 
 type
-  TBezierPanel = class(TControl)
+  [ComponentPlatformsAttribute(TFMXPlatforms)]
+  TFMXBezierPanel = class(TControl)
   private
     FNormalBackground: TAlphaColor;
     FSelectedForeground: TAlphaColor;
@@ -51,12 +66,34 @@ type
     property SelectedBackground: TAlphaColor read FSelectedBackground write SetSelectedBackground;
     property SelectedForeground: TAlphaColor read FSelectedForeground write SetSelectedForeground;
     property IsSelected: Boolean read FIsSelected write SetIsSelected;
+    property Align;
+    property Anchors;
+    property ClipChildren default False;
+    property ClipParent default False;
+    property Cursor default crDefault;
+    property DragMode default TDragMode.dmManual;
+    property EnableDragHighlight default True;
+    property Enabled default True;
+    property Locked default False;
+    property Height;
+    property HitTest default True;
+    property Padding;
+    property Opacity;
+    property Margins;
+    property PopupMenu;
+    property Position;
+    property RotationAngle;
+    property RotationCenter;
+    property Scale;
+    property Size;
+    property Visible default True;
+    property Width;
   end;
 
   TBezierPanelSelector = class(TControl)
   private
     FText: TText;
-    FPanel: TBezierPanel;
+    FPanel: TFMXBezierPanel;
     function GetText: string;
     procedure SetText(const Value: string);
     function GetIsSelected: Boolean;
@@ -66,7 +103,7 @@ type
     procedure SetBezier(p1x, p1y, p2x, p2y: Single);
   published
     property OnClick;
-    property Panel: TBezierPanel read FPanel stored false;
+    property Panel: TFMXBezierPanel read FPanel stored false;
     property IsSelected: Boolean read GetIsSelected write SetIsSelected;
     property Text: string read GetText write SetText;
   end;
@@ -94,7 +131,7 @@ end;
 
 { TBezierPanel }
 
-constructor TBezierPanel.Create(AComponent: TComponent);
+constructor TFMXBezierPanel.Create(AComponent: TComponent);
 begin
   inherited;
   FNormalBackground := $FFE5E5E5;
@@ -108,18 +145,18 @@ begin
   FP2Y := 1;
 end;
 
-destructor TBezierPanel.Destroy;
+destructor TFMXBezierPanel.Destroy;
 begin
   FPath.Free;
   inherited;
 end;
 
-function TBezierPanel.GetBesizerExpression: string;
+function TFMXBezierPanel.GetBesizerExpression: string;
 begin
   Result := Format('%.2f,%.2f,%.2f,%.2f', [P1X, P1Y, P2X, P2Y])
 end;
 
-function TBezierPanel.GetPoint(x, y: Single): TPointF;
+function TFMXBezierPanel.GetPoint(x, y: Single): TPointF;
 const
   MARGIN_SIZE = 10;
 begin
@@ -127,7 +164,7 @@ begin
   Result.y := (Height - 2 * MARGIN_SIZE) * (1 - y) + MARGIN_SIZE;
 end;
 
-procedure TBezierPanel.Paint;
+procedure TFMXBezierPanel.Paint;
 const
   POINT_SIZE = 3;
 var
@@ -193,11 +230,11 @@ begin
   DrawPoint(Canvas, p2x, p2y);
 end;
 
-procedure TBezierPanel.SetBesizerExpression(const Value: string);
+procedure TFMXBezierPanel.SetBesizerExpression(const Value: string);
 begin
 end;
 
-procedure TBezierPanel.SetIsSelected(const Value: Boolean);
+procedure TFMXBezierPanel.SetIsSelected(const Value: Boolean);
 begin
   if FIsSelected <> Value then
   begin
@@ -206,7 +243,7 @@ begin
   end;
 end;
 
-procedure TBezierPanel.SetNormalBackground(const Value: TAlphaColor);
+procedure TFMXBezierPanel.SetNormalBackground(const Value: TAlphaColor);
 begin
   if FNormalBackground <> Value then
   begin
@@ -215,7 +252,7 @@ begin
   end;
 end;
 
-procedure TBezierPanel.SetNormalForeground(const Value: TAlphaColor);
+procedure TFMXBezierPanel.SetNormalForeground(const Value: TAlphaColor);
 begin
   if FNormalForeground <> Value then
   begin
@@ -224,7 +261,7 @@ begin
   end;
 end;
 
-procedure TBezierPanel.SetP1X(const Value: Single);
+procedure TFMXBezierPanel.SetP1X(const Value: Single);
 begin
   if FP1X <> Value then
   begin
@@ -233,7 +270,7 @@ begin
   end;
 end;
 
-procedure TBezierPanel.SetP1Y(const Value: Single);
+procedure TFMXBezierPanel.SetP1Y(const Value: Single);
 begin
   if FP1Y <> Value then
   begin
@@ -242,7 +279,7 @@ begin
   end;
 end;
 
-procedure TBezierPanel.SetP2X(const Value: Single);
+procedure TFMXBezierPanel.SetP2X(const Value: Single);
 begin
   if FP2X <> Value then
   begin
@@ -251,7 +288,7 @@ begin
   end;
 end;
 
-procedure TBezierPanel.SetP2Y(const Value: Single);
+procedure TFMXBezierPanel.SetP2Y(const Value: Single);
 begin
   if FP2Y <> Value then
   begin
@@ -260,7 +297,7 @@ begin
   end;
 end;
 
-procedure TBezierPanel.SetSelectedBackground(const Value: TAlphaColor);
+procedure TFMXBezierPanel.SetSelectedBackground(const Value: TAlphaColor);
 begin
   if FSelectedBackground <> Value then
   begin
@@ -269,7 +306,7 @@ begin
   end;
 end;
 
-procedure TBezierPanel.SetSelectedForeground(const Value: TAlphaColor);
+procedure TFMXBezierPanel.SetSelectedForeground(const Value: TAlphaColor);
 begin
   if FSelectedForeground <> Value then
   begin
@@ -293,7 +330,7 @@ begin
   FText.Align := TAlignLayout.Bottom;
   FText.Parent := Self;
 
-  FPanel := TBezierPanel.Create(Self);
+  FPanel := TFMXBezierPanel.Create(Self);
   FPanel.HitTest := False;
   FPanel.Stored := False;
   FPanel.Align := TAlignLayout.Client;

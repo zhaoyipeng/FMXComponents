@@ -1,6 +1,28 @@
+// ***************************************************************************
+//
+// A Firemonkey Bezier Animation Component
+//
+// Copyright 2017 Ð»¶Ù (zhaoyipeng@hotmail.com)
+//
+// https://github.com/zhaoyipeng/FMXComponents
+//
+// ***************************************************************************
+// version history
+// 2017-12-04, v0.1.0.0 :
+//  first release version
+//
 unit FMX.BezierAnimation;
 
 interface
+
+uses
+  System.Classes,
+  System.Rtti,
+  FMX.Types,
+  FMX.Utils,
+  FMX.Ani,
+  FMX.ComponentsCommon;
+
 type
   TBezier = class
   public const
@@ -17,12 +39,45 @@ type
     function Solve(x, epsilon: Double): Double;
   end;
 
+  [ComponentPlatformsAttribute(TFMXPlatforms)]
+  TFMXBezierAnimation = class(TFloatAnimation)
+  private
+    FBezier: TBezier;
+    FP2X: Double;
+    FP2Y: Double;
+    FP1X: Double;
+    FP1Y: Double;
+    procedure SetP1X(const Value: Double);
+    procedure SetP1Y(const Value: Double);
+    procedure SetP2X(const Value: Double);
+    procedure SetP2Y(const Value: Double);
+    procedure UpdateBezier;
+  protected
+    procedure ProcessAnimation; override;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure SetData(p1x, p1y, p2x, p2y: Double);
+    function BezierTime: Single;
+  published
+    property P1X: Double read FP1X write SetP1X;
+    property P1Y: Double read FP1Y write SetP1Y;
+    property P2X: Double read FP2X write SetP2X;
+    property P2Y: Double read FP2Y write SetP2Y;
+  end;
+
 function GetEaseInOut: TBezier;
 
 implementation
 
 var
   EaseInOut: TBezier = nil;
+
+type
+  TAnimationHelper = class helper for TAnimation
+  public
+    function GetDelayTime: Single;
+  end;
 
 function GetEaseInOut: TBezier;
 begin
@@ -114,6 +169,108 @@ begin
 
   // Failure.
   Exit(t2);
+end;
+
+{ TBezierAnimation }
+
+function TFMXBezierAnimation.BezierTime: Single;
+begin
+  Result := 0;
+  if (Duration > 0) and (GetDelayTime <= 0) then
+  begin
+    Result := FBezier.Solve(InterpolateLinear(CurrentTime, 0, 1, Duration), TBezier.epsilon);
+  end;
+end;
+
+constructor TFMXBezierAnimation.Create(AOwner: TComponent);
+begin
+  inherited;
+  FP1X := 0;
+  FP1Y := 0;
+  FP2X := 1;
+  FP2Y := 1;
+  FBezier := TBezier.Create(0,0,1,1);
+end;
+
+destructor TFMXBezierAnimation.Destroy;
+begin
+  FBezier.Free;
+  inherited;
+end;
+
+procedure TFMXBezierAnimation.ProcessAnimation;
+var
+  T: TRttiType;
+  P: TRttiProperty;
+begin
+  if FInstance <> nil then
+  begin
+    T := SharedContext.GetType(FInstance.ClassInfo);
+    if T <> nil then
+    begin
+      P := T.GetProperty(FPath);
+      if (P <> nil) and (P.PropertyType.TypeKind = tkFloat) then
+        P.SetValue(FInstance, InterpolateSingle(StartValue, StopValue, BezierTime));
+    end;
+  end;
+end;
+
+procedure TFMXBezierAnimation.SetData(p1x, p1y, p2x, p2y: Double);
+begin
+  FP1X := p1x;
+  FP1Y := p1y;
+  FP2X := p2x;
+  FP2Y := p2y;
+  FBezier.SetData(p1x, p1y, p2x, p2y);
+end;
+
+procedure TFMXBezierAnimation.SetP1X(const Value: Double);
+begin
+  if FP1X <> Value then
+  begin
+    FP1X := Value;
+    UpdateBezier;
+  end;
+end;
+
+procedure TFMXBezierAnimation.SetP1Y(const Value: Double);
+begin
+  if FP1Y <> Value then
+  begin
+    FP1Y := Value;
+    UpdateBezier;
+  end;
+end;
+
+procedure TFMXBezierAnimation.SetP2X(const Value: Double);
+begin
+  if FP2X <> Value then
+  begin
+    FP2X := Value;
+    UpdateBezier;
+  end;
+end;
+
+procedure TFMXBezierAnimation.SetP2Y(const Value: Double);
+begin
+  if FP2Y <> Value then
+  begin
+    FP2Y := Value;
+    UpdateBezier;
+  end;
+end;
+
+procedure TFMXBezierAnimation.UpdateBezier;
+begin
+  FBezier.SetData(FP1X, FP1Y, FP2X, FP2Y);
+end;
+
+{ TAnimationHelper }
+
+function TAnimationHelper.GetDelayTime: Single;
+begin
+  with Self do
+    Result := FDelayTime;
 end;
 
 initialization

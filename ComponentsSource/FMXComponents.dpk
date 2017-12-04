@@ -51,6 +51,7 @@ contains
   FMX.Toast in 'FMX.Toast.pas',
   FMX.Callout in 'FMX.Callout.pas',
   FMX.RotatingText in 'FMX.RotatingText.pas',
-  FMX.Animation in 'FMX.Animation.pas';
+  FMX.Animation in 'FMX.Animation.pas',
+  FMX.BezierPanel in 'FMX.BezierPanel.pas';
 
 end.

@@ -13,6 +13,10 @@ Support QQ Group: 513799640<br>
 ![FMXComponents](SnapShots/group_qrcode.jpg)  <br>
 You can also add my skype: zhaoyipeng@hotmail.com<br>
 
+## 18. [FMXBezierAnimation](wiki/FMXBezierAnimation)<br>
+![FMXBezierAnimation](SnapShots/FMXBezierAnimation.gif)  
+
+
 ## 17. PhotoCorrect<br>
 ![FMXGR32Demo2](SnapShots/FMXGR32Demo2.gif)  
 I have not much time, so this release just source code, not component yet.<br>

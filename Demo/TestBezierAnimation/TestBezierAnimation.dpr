@@ -5,7 +5,7 @@ uses
   FMX.Forms,
   TestBezierAnimationMain in 'TestBezierAnimationMain.pas' {CubicBezierAnimationMainForm},
   FMX.BezierAnimation in '..\..\ComponentsSource\FMX.BezierAnimation.pas',
-  BezierPanel in 'BezierPanel.pas';
+  FMX.BezierPanel in '..\..\ComponentsSource\FMX.BezierPanel.pas';
 
 {$R *.res}
 

@@ -27,6 +27,8 @@ uses
   , FMX.LoadingIndicator
   , FMX.Callout
   , FMX.RotatingText
+  , FMX.BezierAnimation
+  , FMX.BezierPanel
   ;
 
 procedure Register;
@@ -51,6 +53,9 @@ begin
   RegisterComponents(FMX_COMPONENTS_PALETTE, [TFMXLoadingIndicator]);
   RegisterComponents(FMX_COMPONENTS_PALETTE, [TFMXCallout]);
   RegisterComponents(FMX_COMPONENTS_PALETTE, [TFMXRotatingText]);
+  RegisterComponents(FMX_COMPONENTS_PALETTE, [TFMXBezierAnimation]);
+  RegisterComponents(FMX_COMPONENTS_PALETTE, [TFMXBezierPanel]);
+
 end;
 
 end.
