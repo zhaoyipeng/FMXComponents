@@ -13,7 +13,7 @@ Support QQ Group: 513799640<br>
 ![FMXComponents](SnapShots/group_qrcode.jpg)  <br>
 You can also add my skype: zhaoyipeng@hotmail.com<br>
 
-## 18. [FMXBezierAnimation](wiki/FMXBezierAnimation)<br>
+## 18. [FMXBezierAnimation](https://github.com/zhaoyipeng/FMXComponents/wiki/FMXBezierAnimation)<br>
 ![FMXBezierAnimation](SnapShots/FMXBezierAnimation.gif)  
 
 
