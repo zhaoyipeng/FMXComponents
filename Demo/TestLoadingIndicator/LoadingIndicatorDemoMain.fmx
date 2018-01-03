@@ -1,0 +1,41 @@
+object LoadingIndicatorDemoMainForm: TLoadingIndicatorDemoMainForm
+  Left = 0
+  Top = 0
+  Caption = 'Form35'
+  ClientHeight = 469
+  ClientWidth = 353
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  DesignerMasterStyle = 0
+  object FMXLoadingIndicator1: TFMXLoadingIndicator
+    HitTest = False
+    Position.X = 80.000000000000000000
+    Position.Y = 184.000000000000000000
+    Size.Width = 81.000000000000000000
+    Size.Height = 57.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+    Active = False
+    Color = xFF1282B2
+    Kind = ArcsRing
+  end
+  object Button1: TButton
+    Position.X = 72.000000000000000000
+    Position.Y = 32.000000000000000000
+    TabOrder = 2
+    Text = 'Start/Stop'
+    OnClick = Button1Click
+  end
+  object FMXLoadingIndicator2: TFMXLoadingIndicator
+    HitTest = False
+    Position.X = 176.000000000000000000
+    Position.Y = 184.000000000000000000
+    Size.Width = 81.000000000000000000
+    Size.Height = 57.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    Color = xFF1282B2
+    Kind = ArcsRing
+  end
+end
