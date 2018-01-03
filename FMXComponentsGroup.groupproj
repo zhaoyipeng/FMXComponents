@@ -30,6 +30,9 @@
         <Projects Include="Demo\PhotoCorrect\PhotoCorrect.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="Demo\TestLoadingIndicator\TestLoadingIndicator.dproj">
+            <Dependencies/>
+        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -119,14 +122,23 @@
     <Target Name="PhotoCorrect:Make">
         <MSBuild Projects="Demo\PhotoCorrect\PhotoCorrect.dproj" Targets="Make"/>
     </Target>
+    <Target Name="TestLoadingIndicator">
+        <MSBuild Projects="Demo\TestLoadingIndicator\TestLoadingIndicator.dproj"/>
+    </Target>
+    <Target Name="TestLoadingIndicator:Clean">
+        <MSBuild Projects="Demo\TestLoadingIndicator\TestLoadingIndicator.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="TestLoadingIndicator:Make">
+        <MSBuild Projects="Demo\TestLoadingIndicator\TestLoadingIndicator.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="FMXComponents;FMXComponentEd;FMXComponentsDemo;LoadingIndicatorDemo;TestFMXCallout;TestINativeCanvas;RotateTextDemoProj;TestBezierAnimation;PhotoCorrect"/>
+        <CallTarget Targets="FMXComponents;FMXComponentEd;FMXComponentsDemo;LoadingIndicatorDemo;TestFMXCallout;TestINativeCanvas;RotateTextDemoProj;TestBezierAnimation;PhotoCorrect;TestLoadingIndicator"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="FMXComponents:Clean;FMXComponentEd:Clean;FMXComponentsDemo:Clean;LoadingIndicatorDemo:Clean;TestFMXCallout:Clean;TestINativeCanvas:Clean;RotateTextDemoProj:Clean;TestBezierAnimation:Clean;PhotoCorrect:Clean"/>
+        <CallTarget Targets="FMXComponents:Clean;FMXComponentEd:Clean;FMXComponentsDemo:Clean;LoadingIndicatorDemo:Clean;TestFMXCallout:Clean;TestINativeCanvas:Clean;RotateTextDemoProj:Clean;TestBezierAnimation:Clean;PhotoCorrect:Clean;TestLoadingIndicator:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="FMXComponents:Make;FMXComponentEd:Make;FMXComponentsDemo:Make;LoadingIndicatorDemo:Make;TestFMXCallout:Make;TestINativeCanvas:Make;RotateTextDemoProj:Make;TestBezierAnimation:Make;PhotoCorrect:Make"/>
+        <CallTarget Targets="FMXComponents:Make;FMXComponentEd:Make;FMXComponentsDemo:Make;LoadingIndicatorDemo:Make;TestFMXCallout:Make;TestINativeCanvas:Make;RotateTextDemoProj:Make;TestBezierAnimation:Make;PhotoCorrect:Make;TestLoadingIndicator:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>
