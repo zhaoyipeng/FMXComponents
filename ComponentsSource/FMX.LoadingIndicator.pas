@@ -93,6 +93,7 @@ type
     FDrawProc: procedure of object;
     FBezier: TBezier;
     FLastStopTime: Single;
+    FActive: Boolean;
     function GetCellRect(CellWidth, CellHeight: Single; const Cell: TCell): TRectF;
     function GetColor: TAlphaColor;
     procedure OnAnimation(Sender: TObject);
@@ -116,6 +117,7 @@ type
     procedure DrawLineScalePulseOutRapid;
     procedure FillArc(Arc: TPathData; Center: TPointF; const Riduas, Thickness,
       AngleStart, AngleEnd, AOpacity: Single; const ABrush: TBrush);
+    procedure SetActive(const Value: Boolean);
   protected
     procedure Resize; override;
     procedure Paint; override;
@@ -130,6 +132,7 @@ type
     procedure Start;
     procedure Stop;
   published
+    property Active: Boolean read FActive write SetActive default True;
     property Color: TAlphaColor read GetColor write SetColor;
     property Kind: TLoadingIndicatorKind read FKind write SetKind
       default TLoadingIndicatorKind.Pulse;
@@ -236,12 +239,26 @@ begin
   FAnimation.Duration := INDICATOR_DURING[FKind];
   FAnimation.AutoReverse := INDICATOR_AUTOREVERSE[FKind];
   FDrawProc := DrawPulse;
+  FActive := True;
 end;
 
 procedure TFMXLoadingIndicator.Loaded;
 begin
   inherited;
-  Start;
+  if FActive then
+    Start;
+end;
+
+procedure TFMXLoadingIndicator.SetActive(const Value: Boolean);
+begin
+  if FActive <> Value then
+  begin
+    FActive := Value;
+    if FActive then
+      Start
+    else
+      Stop;
+  end;
 end;
 
 procedure TFMXLoadingIndicator.SetColor(const Value: TAlphaColor);
