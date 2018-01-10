@@ -51,11 +51,13 @@ uses
   FMX.ComponentsCommon;
 
 type
+  TWeekNames = array [1..7] of string;
   TMonthNames = array [1..12] of string;
 
 const
-  TWeeks: array [0 .. 6] of string = ('日', '一', '二', '三', '四',
-    '五', '六');
+  TCnWeeks: TWeekNames = ('日', '一', '二', '三', '四', '五', '六');
+  TEnWeeks: TWeekNames = ('SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT');
+
   TCnMonths: TMonthNames = ('一月', '二月', '三月', '四月', '五月', '六月',
     '七月', '八月', '九月', '十月', '十一月', '十二月');
   TEnMonths: TMonthNames = (
@@ -75,9 +77,11 @@ const
 type
   TWeekLayout = class(TControl)
   private
+    FWeekNames: TWeekNames;
     procedure DoDrawDay(LocRect:TRectF; AIndex:Integer);
   protected
     procedure Paint; override;
+    procedure SetWeekNames(const Names: TWeekNames);
   end;
 
   [ComponentPlatformsAttribute(TFMXPlatforms)]
@@ -97,8 +101,7 @@ type
     FStartDate: TDate;
     FEndDate: TDate;
     FIsShowLunarDate: Boolean;
-    FMonthNames: array [1..12] of string;
-
+    FMonthNames: TMonthNames;
     procedure SetSelectedDate(const Value: TDate);
     function DefineItemIndexOfFirstDayInMonth(ADate:TDate):Integer;
     procedure FillDays;
@@ -116,6 +119,7 @@ type
   public
     constructor Create(AOwner: TComponent); override;
     procedure SetMonthNames(const Names: TMonthNames; IsRepaint: Boolean = True);
+    procedure SetWeekNames(const Names: TWeekNames; IsRepaint: Boolean = True);
   published
     property Align;
     property Anchors;
@@ -155,7 +159,7 @@ implementation
 procedure TWeekLayout.DoDrawDay(LocRect: TRectF; AIndex: Integer);
 begin
   Canvas.Fill.Color:=$FF000000;
-  Canvas.FillText(LocRect, TWeeks[AIndex], False , 1, [], TTextAlign.Center, TTextAlign.Center);
+  Canvas.FillText(LocRect, FWeekNames[AIndex], False , 1, [], TTextAlign.Center, TTextAlign.Center);
 end;
 
 procedure TWeekLayout.Paint;
@@ -169,10 +173,20 @@ begin
   ARect.Left:=ClipRect.Left;
   ARect.Height:=ClipRect.Height;
   ARect.Width:= OffSetX;
-  for i := 0 to 6 do
+  for i := 1 to 7 do
   begin
     DoDrawDay(ARect, i);
     ARect.Offset(OffSetX, 0);
+  end;
+end;
+
+procedure TWeekLayout.SetWeekNames(const Names: TWeekNames);
+var
+  I: Integer;
+begin
+  for I := Low(Names) to High(Names) do
+  begin
+    FWeekNames[I] := Names[I];
   end;
 end;
 
@@ -183,7 +197,6 @@ var
   LocaleService:IFMXLocaleService;
 begin
   inherited;
-  SetMonthNames(TCnMonths, False);
   //默认 最近两个月
   FStartDate := Now;
   FEndDate := IncMonth(Now, 1);
@@ -217,6 +230,8 @@ begin
   FWeekLayout.Margins.Right := FCalenderView.ItemSpaces.Right;
 
   FNeedFillDays:=True;
+  SetMonthNames(TCnMonths, False);
+  SetWeekNames(TCnWeeks, False);
 end;
 
 function TFMXCalendarControl.DefineItemIndexOfFirstDayInMonth(ADate:TDate): Integer;
@@ -444,6 +459,19 @@ begin
   if (FStartDate <> Value) and (Value < FEndDate) then
   begin
     FStartDate := Value;
+    FNeedFillDays := True;
+    Repaint;
+  end;
+end;
+
+procedure TFMXCalendarControl.SetWeekNames(const Names: TWeekNames;
+  IsRepaint: Boolean);
+var
+  I: Integer;
+begin
+  FWeekLayout.SetWeekNames(Names);
+  if IsRepaint then
+  begin
     FNeedFillDays := True;
     Repaint;
   end;

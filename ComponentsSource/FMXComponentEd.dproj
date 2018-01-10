@@ -82,6 +82,7 @@
         <DCCReference Include="fmx.dcp"/>
         <DCCReference Include="FMXComponents.dcp"/>
         <DCCReference Include="FMX.RainingBarEd.pas"/>
+        <DCCReference Include="FMX.CalendarControlEd.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

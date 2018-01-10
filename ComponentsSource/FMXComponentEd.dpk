@@ -34,6 +34,7 @@ requires
   FMXComponents;
 
 contains
-  FMX.RainingBarEd in 'FMX.RainingBarEd.pas';
+  FMX.RainingBarEd in 'FMX.RainingBarEd.pas',
+  FMX.CalendarControlEd in 'FMX.CalendarControlEd.pas';
 
 end.
