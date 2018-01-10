@@ -21,11 +21,13 @@ object CalendarDemoMainForm: TCalendarDemoMainForm
       Size.Width = 366.000000000000000000
       Size.Height = 320.000000000000000000
       Size.PlatformDefault = False
+      Lang = 'en'
       StartDate = 42948.000000000000000000
       EndDate = 43020.422420370370000000
       FirstDayOfWeek = 7
       SelectedDate = 43110.000000000000000000
       IsShowLunarDate = False
+      OnSelectedItem = FMXCalendarControl1SelectedItem
     end
     object Layout7: TLayout
       Align = Top

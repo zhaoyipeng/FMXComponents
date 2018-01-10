@@ -48,13 +48,11 @@ begin
     case index of
       0: // Chinese
       begin
-        cal.SetMonthNames(TCnMonths);
-        cal.SetWeekNames(TCnWeeks);
+        cal.Lang := 'zh';
       end;
       1: // English
       begin
-        cal.SetMonthNames(TEnMonths);
-        cal.SetWeekNames(TEnWeeks);
+        cal.Lang := 'en';
       end;
     end;
     Designer.Modified;

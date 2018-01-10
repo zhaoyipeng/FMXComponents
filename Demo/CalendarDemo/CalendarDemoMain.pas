@@ -23,6 +23,7 @@ type
     procedure rbChineseChange(Sender: TObject);
     procedure chkShowLunarDateChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure FMXCalendarControl1SelectedItem(Sender: TObject);
   private
     { Private declarations }
   public
@@ -34,11 +35,31 @@ var
 
 implementation
 
+uses
+  qcndate,
+  CnCalendar;
+
 {$R *.fmx}
 
 procedure TCalendarDemoMainForm.chkShowLunarDateChange(Sender: TObject);
 begin
   FMXCalendarControl1.IsShowLunarDate := chkShowLunarDate.IsChecked;
+end;
+
+procedure TCalendarDemoMainForm.FMXCalendarControl1SelectedItem(
+  Sender: TObject);
+var
+  D: TCnDate;
+  Year, Month, Day: Word;
+begin
+  DecodeDate(FMXCalendarControl1.SelectedDate, Year, Month, Day);
+  D := ToCnDate(FMXCalendarControl1.SelectedDate);
+  txtCnDate1.Text := Format('农历%s%s', [CnMonthName(D), CnDayName(D)]);
+  txtCnDate2.Text :=
+    GetGanZhiFromNumber(GetGanZhiFromYear(Year)) +
+    GetShengXiaoFromNumber(D.Year) + '年 ' +
+    GetGanZhiFromNumber(GetGanZhiFromMonth(Year, Month, Day)) + '月 ' +
+    GetGanZhiFromNumber(GetGanZhiFromDay(Year, Month, Day)) + '日';
 end;
 
 procedure TCalendarDemoMainForm.FormCreate(Sender: TObject);

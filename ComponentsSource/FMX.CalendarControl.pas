@@ -29,6 +29,8 @@
 // 2017-09-11, v0.3.0.0 :
 //    fixed the bug when EndDate's month is December
 //    add set month names method
+// 2018-01-10, v0.4.0.0 :
+//    add English day support, add Lang property
 
 unit FMX.CalendarControl;
 
@@ -102,6 +104,7 @@ type
     FEndDate: TDate;
     FIsShowLunarDate: Boolean;
     FMonthNames: TMonthNames;
+    FLang: string;
     procedure SetSelectedDate(const Value: TDate);
     function DefineItemIndexOfFirstDayInMonth(ADate:TDate):Integer;
     procedure FillDays;
@@ -114,6 +117,7 @@ type
     procedure SetStartDate(const Value: TDate);
     procedure SetIsShowLunarDate(const Value: Boolean);
     procedure SetFirstDayOfWeekNum(const Value: Integer);
+    procedure SetLang(const Value: string);
   protected
     procedure Paint; override;
   public
@@ -143,6 +147,7 @@ type
     property Size;
     property Visible default True;
     property Width;
+    property Lang: string read FLang write SetLang;
     property StartDate:TDate read FStartDate write SetStartDate;
     property EndDate:TDate read FEndDate write SetEndDate;
     property FirstDayOfWeek:Integer read FFirstDayOfWeekNum write SetFirstDayOfWeekNum;
@@ -230,6 +235,7 @@ begin
   FWeekLayout.Margins.Right := FCalenderView.ItemSpaces.Right;
 
   FNeedFillDays:=True;
+  FLang := 'zh';
   SetMonthNames(TCnMonths, False);
   SetWeekNames(TCnWeeks, False);
 end;
@@ -434,6 +440,24 @@ begin
   if FIsShowLunarDate <> Value then
   begin
     FIsShowLunarDate := Value;
+    Repaint;
+  end;
+end;
+
+procedure TFMXCalendarControl.SetLang(const Value: string);
+begin
+  if FLang <> Value.ToLower  then
+  begin
+    FLang := Value.ToLower;
+    if FLang.Equals('en') then
+    begin
+      SetMonthNames(TEnMonths, False);
+      SetWeekNames(TEnWeeks, True);
+    end
+    else begin
+      SetMonthNames(TCnMonths, False);
+      SetWeekNames(TCnWeeks, True);
+    end;
     Repaint;
   end;
 end;
