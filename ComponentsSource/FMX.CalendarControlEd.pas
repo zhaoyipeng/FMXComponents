@@ -63,7 +63,7 @@ function TFMXCalendarControlEditor.GetVerb(index: Integer): string;
 begin
   case index of
     0:
-      Result := 'Chinese';
+      Result := 'жпнд';
     1:
       Result := 'English';
   end;
