@@ -9,12 +9,15 @@
 // https://github.com/zhaoyipeng/FMXComponents
 //
 // ***************************************************************************
+
 // version history
 // 2017-01-20, v0.1.0.0 : first release
+// 2018-01-31, v0.2.0.0 : merged with loko's change
 
 unit FMX.ImageSlider;
 
 interface
+
 uses
   System.Classes,
   System.Generics.Collections,
@@ -28,6 +31,7 @@ uses
   FMX.ComponentsCommon;
 
 type
+
   [ComponentPlatformsAttribute(TFMXPlatforms)]
   TFMXImageSlider = class(TLayout)
   private
@@ -38,14 +42,15 @@ type
     FDownPos: TPointF;
     FDownIndex: Integer;
     FAnimation: TFloatAnimation;
-    procedure SetActivePage(const Value: Integer);
+    procedure MoveToActivePage; { add }
+    procedure SetActivePage(const Value: Integer); { change }
     procedure SetPageCount(const Value: Integer);
     function GetPageCount: Integer;
   protected
     procedure Resize; override;
     procedure MouseDown(Button: TMouseButton; Shift: TShiftState; X, Y: Single); override;
     procedure MouseMove(Shift: TShiftState; X, Y: Single); override;
-    procedure MouseUp(Button: TMouseButton; Shift: TShiftState; X, Y: Single); override;
+    procedure MouseUp(Button: TMouseButton; Shift: TShiftState; X, Y: Single); override; { change }
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -91,8 +96,7 @@ begin
   Result := FPages.Count;
 end;
 
-procedure TFMXImageSlider.MouseDown(Button: TMouseButton; Shift: TShiftState; X,
-  Y: Single);
+procedure TFMXImageSlider.MouseDown(Button: TMouseButton; Shift: TShiftState; X, Y: Single);
 begin
   inherited;
   if (PageCount > 0) and (Button = TMouseButton.mbLeft) then
@@ -116,8 +120,7 @@ begin
   end;
 end;
 
-procedure TFMXImageSlider.MouseUp(Button: TMouseButton; Shift: TShiftState; X,
-  Y: Single);
+procedure TFMXImageSlider.MouseUp(Button: TMouseButton; Shift: TShiftState; X, Y: Single); { change }
 var
   DeltaX: Single;
 begin
@@ -136,11 +139,18 @@ begin
       if FActivePage < PageCount - 1 then
         FActivePage := FActivePage + 1;
     end;
-
-    FAnimation.StartValue := FContainer.Position.X;
-    FAnimation.StopValue := - FActivePage * Width;
-    FAnimation.Start;
+    { Loko } MoveToActivePage; // move to page
   end;
+end;
+
+procedure TFMXImageSlider.MoveToActivePage; { add }
+begin
+  { a methode to move to your active Page }
+  { Loko } FAnimation.StartValue := FContainer.Position.X;
+  { Loko } FAnimation.StopValue := -FActivePage * Width;
+  { Loko } FAnimation.Interpolation := TInterpolationType.Quintic;
+  { Loko } FAnimation.AnimationType := TAnimationType.Out;
+  { Loko } FAnimation.Start;
 end;
 
 procedure TFMXImageSlider.Resize;
@@ -152,7 +162,7 @@ begin
     FContainer.Width := Width
   else
     FContainer.Width := PageCount * Width;
-  for I := 0 to FPages.Count-1 do
+  for I := 0 to FPages.Count - 1 do
   begin
     FPages[I].Width := Width;
     FPages[I].Height := Height;
@@ -160,15 +170,12 @@ begin
   end;
 end;
 
-procedure TFMXImageSlider.SetActivePage(const Value: Integer);
+procedure TFMXImageSlider.SetActivePage(const Value: Integer); { change }
 begin
-  if FActivePage <> Value then
-  begin
-    if (FActivePage = -1) then
-      FContainer.Position.X := 0
-    else
-      FContainer.Position.X := -Width * FActivePage;
-  end;
+  if (Value < 0) or (Value > FPages.Count - 1) then // check if value valid
+    exit;
+  FActivePage := Value; // set FActivePage
+  MoveToActivePage; // move Page
 end;
 
 procedure TFMXImageSlider.SetPage(Index: Integer; AImage: TImage);
@@ -192,7 +199,7 @@ begin
     OldCount := PageCount;
     if OldCount < Value then
     begin
-      for I := OldCount+1 to Value do
+      for I := OldCount + 1 to Value do
       begin
         L := TLayout.Create(Self);
         L.Parent := FContainer;
@@ -205,11 +212,11 @@ begin
     end
     else if OldCount > Value then
     begin
-      for I := OldCount-1 downto Value do
+      for I := OldCount - 1 downto Value do
       begin
         L := FPages[I];
-  //      if L.ChildrenCount > 0 then
-  //        L.Children[0].Parent := Self.Parent;
+        // if L.ChildrenCount > 0 then
+        // L.Children[0].Parent := Self.Parent;
         L.DisposeOf;
       end;
       FPages.Count := Value;
