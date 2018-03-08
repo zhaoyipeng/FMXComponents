@@ -1,0 +1,126 @@
+object RatingBarDemoForm: TRatingBarDemoForm
+  Left = 0
+  Top = 0
+  Caption = 'FMXRatingBar Demo'
+  ClientHeight = 650
+  ClientWidth = 402
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  DesignerMasterStyle = 0
+  object Layout1: TLayout
+    Align = Top
+    Size.Width = 402.000000000000000000
+    Size.Height = 140.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 3
+    object FMXRatingBar1: TFMXRatingBar
+      Align = Center
+      Size.Width = 240.000000000000000000
+      Size.Height = 44.000000000000000000
+      Size.PlatformDefault = False
+      Data.Path = {
+        0B00000000000000000070431D94854101000000209F6243D514D34101000000
+        74C06743C56128420100000068665A432D6B0142010000005C0C4D43C5612842
+        0100000017315243D514D34101000000CDCC44431D94854101000000B9525543
+        FBE585410100000068665A430000803F01000000147A5F43FBE5854103000000
+        0028924500102645}
+      ActiveColor = claRoyalblue
+      InActiveColor = x30000000
+      Stroke.Color = claNull
+      Space = 6.000000000000000000
+      Value = 3.000000000000000000
+      Maximum = 5.000000000000000000
+      OnChanged = FMXRatingBar1Changed
+    end
+    object Label1: TLabel
+      Align = Bottom
+      StyledSettings = [Family, Style, FontColor]
+      Position.Y = 93.000000000000000000
+      Size.Width = 402.000000000000000000
+      Size.Height = 47.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.Font.Size = 20.000000000000000000
+      TextSettings.HorzAlign = Center
+      Text = '3'
+      TabOrder = 0
+    end
+  end
+  object Layout2: TLayout
+    Align = Top
+    Position.Y = 140.000000000000000000
+    Size.Width = 402.000000000000000000
+    Size.Height = 140.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 2
+    object FMXRatingBar2: TFMXRatingBar
+      Align = Center
+      Size.Width = 240.000000000000000000
+      Size.Height = 44.000000000000000000
+      Size.PlatformDefault = False
+      Data.Path = {
+        0600000000000000CDCC4443F4F274410100000000004C430000004101000000
+        62ED6843EA940041010000000000704306C97341010000000E6B5A439B7E1342
+        0300000000FFCC427EBA3C43}
+      ActiveColor = claRed
+      InActiveColor = x30000000
+      Stroke.Color = claNull
+      Space = 6.000000000000000000
+      Value = 5.000000000000000000
+      Maximum = 5.000000000000000000
+      OnChanged = FMXRatingBar2Changed
+    end
+    object Label2: TLabel
+      Align = Bottom
+      StyledSettings = [Family, Style, FontColor]
+      Position.Y = 93.000000000000000000
+      Size.Width = 402.000000000000000000
+      Size.Height = 47.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.Font.Size = 20.000000000000000000
+      TextSettings.HorzAlign = Center
+      Text = '5'
+      TabOrder = 0
+    end
+  end
+  object Layout3: TLayout
+    Align = Top
+    Position.Y = 280.000000000000000000
+    Size.Width = 402.000000000000000000
+    Size.Height = 140.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+    object FMXRatingBar3: TFMXRatingBar
+      Align = Center
+      Size.Width = 240.000000000000000000
+      Size.Height = 44.000000000000000000
+      Size.PlatformDefault = False
+      Data.Path = {
+        0F0000000000000067665A435B92F54002000000F2125F430000404002000000
+        ECA66643000040400200000074536B435B92F540020000000000704362924541
+        020000000000704388699F410200000074536B43D5CDC4410100000067665A43
+        B21B26420100000058794943D5CDC44102000000CDCC444387699F4102000000
+        CDCC44436092454102000000587949435892F54002000000E4254E4300004040
+        02000000DEB95543000040400200000067665A435B92F540}
+      ActiveColor = claSteelblue
+      InActiveColor = x30000000
+      Stroke.Color = claNull
+      Space = 6.000000000000000000
+      Value = 4.000000000000000000
+      Maximum = 5.000000000000000000
+      OnChanged = FMXRatingBar3Changed
+    end
+    object Label3: TLabel
+      Align = Bottom
+      StyledSettings = [Family, Style, FontColor]
+      Position.Y = 93.000000000000000000
+      Size.Width = 402.000000000000000000
+      Size.Height = 47.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.Font.Size = 20.000000000000000000
+      TextSettings.HorzAlign = Center
+      Text = '4'
+      TabOrder = 0
+    end
+  end
+end

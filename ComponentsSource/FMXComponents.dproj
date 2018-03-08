@@ -2,7 +2,7 @@
     <PropertyGroup>
         <ProjectGuid>{34FB8C4F-6466-4C32-9243-2ECCA015B385}</ProjectGuid>
         <MainSource>FMXComponents.dpk</MainSource>
-        <ProjectVersion>18.2</ProjectVersion>
+        <ProjectVersion>18.3</ProjectVersion>
         <FrameworkType>FMX</FrameworkType>
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Debug</Config>

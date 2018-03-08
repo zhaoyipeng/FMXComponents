@@ -36,6 +36,9 @@
         <Projects Include="Demo\CalendarDemo\CalendarDemo.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="Demo\RatingBarDemo\RatingBarDemo.dproj">
+            <Dependencies/>
+        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -143,14 +146,23 @@
     <Target Name="CalendarDemo:Make">
         <MSBuild Projects="Demo\CalendarDemo\CalendarDemo.dproj" Targets="Make"/>
     </Target>
+    <Target Name="RatingBarDemo">
+        <MSBuild Projects="Demo\RatingBarDemo\RatingBarDemo.dproj"/>
+    </Target>
+    <Target Name="RatingBarDemo:Clean">
+        <MSBuild Projects="Demo\RatingBarDemo\RatingBarDemo.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="RatingBarDemo:Make">
+        <MSBuild Projects="Demo\RatingBarDemo\RatingBarDemo.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="FMXComponents;FMXComponentEd;FMXComponentsDemo;LoadingIndicatorDemo;TestFMXCallout;TestINativeCanvas;RotateTextDemoProj;TestBezierAnimation;PhotoCorrect;TestLoadingIndicator;CalendarDemo"/>
+        <CallTarget Targets="FMXComponents;FMXComponentEd;FMXComponentsDemo;LoadingIndicatorDemo;TestFMXCallout;TestINativeCanvas;RotateTextDemoProj;TestBezierAnimation;PhotoCorrect;TestLoadingIndicator;CalendarDemo;RatingBarDemo"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="FMXComponents:Clean;FMXComponentEd:Clean;FMXComponentsDemo:Clean;LoadingIndicatorDemo:Clean;TestFMXCallout:Clean;TestINativeCanvas:Clean;RotateTextDemoProj:Clean;TestBezierAnimation:Clean;PhotoCorrect:Clean;TestLoadingIndicator:Clean;CalendarDemo:Clean"/>
+        <CallTarget Targets="FMXComponents:Clean;FMXComponentEd:Clean;FMXComponentsDemo:Clean;LoadingIndicatorDemo:Clean;TestFMXCallout:Clean;TestINativeCanvas:Clean;RotateTextDemoProj:Clean;TestBezierAnimation:Clean;PhotoCorrect:Clean;TestLoadingIndicator:Clean;CalendarDemo:Clean;RatingBarDemo:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="FMXComponents:Make;FMXComponentEd:Make;FMXComponentsDemo:Make;LoadingIndicatorDemo:Make;TestFMXCallout:Make;TestINativeCanvas:Make;RotateTextDemoProj:Make;TestBezierAnimation:Make;PhotoCorrect:Make;TestLoadingIndicator:Make;CalendarDemo:Make"/>
+        <CallTarget Targets="FMXComponents:Make;FMXComponentEd:Make;FMXComponentsDemo:Make;LoadingIndicatorDemo:Make;TestFMXCallout:Make;TestINativeCanvas:Make;RotateTextDemoProj:Make;TestBezierAnimation:Make;PhotoCorrect:Make;TestLoadingIndicator:Make;CalendarDemo:Make;RatingBarDemo:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

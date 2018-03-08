@@ -1,7 +1,7 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
         <ProjectGuid>{A0BA993B-52C2-4B16-A9C9-3DC4A16A9B6C}</ProjectGuid>
-        <ProjectVersion>18.2</ProjectVersion>
+        <ProjectVersion>18.3</ProjectVersion>
         <FrameworkType>FMX</FrameworkType>
         <MainSource>TestLoadingIndicator.dpr</MainSource>
         <Base>True</Base>
@@ -15,6 +15,21 @@
     </PropertyGroup>
     <PropertyGroup Condition="('$(Platform)'=='Android' and '$(Base)'=='true') or '$(Base_Android)'!=''">
         <Base_Android>true</Base_Android>
+        <CfgParent>Base</CfgParent>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='iOSDevice32' and '$(Base)'=='true') or '$(Base_iOSDevice32)'!=''">
+        <Base_iOSDevice32>true</Base_iOSDevice32>
+        <CfgParent>Base</CfgParent>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='iOSDevice64' and '$(Base)'=='true') or '$(Base_iOSDevice64)'!=''">
+        <Base_iOSDevice64>true</Base_iOSDevice64>
+        <CfgParent>Base</CfgParent>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='iOSSimulator' and '$(Base)'=='true') or '$(Base_iOSSimulator)'!=''">
+        <Base_iOSSimulator>true</Base_iOSSimulator>
         <CfgParent>Base</CfgParent>
         <Base>true</Base>
     </PropertyGroup>
@@ -61,6 +76,18 @@
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Android)'!=''">
         <EnabledSysJars>android-support-v4.dex.jar;cloud-messaging.dex.jar;fmx.dex.jar;google-analytics-v2.dex.jar;google-play-billing.dex.jar;google-play-licensing.dex.jar;google-play-services.dex.jar</EnabledSysJars>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Base_iOSDevice32)'!=''">
+        <iPhone_Launch1125>$(BDS)\bin\Artwork\iOS\iPhone\FM_LaunchImage_1125x2436.png</iPhone_Launch1125>
+        <iPhone_Launch2436>$(BDS)\bin\Artwork\iOS\iPhone\FM_LaunchImage_2436x1125.png</iPhone_Launch2436>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Base_iOSDevice64)'!=''">
+        <iPhone_Launch1125>$(BDS)\bin\Artwork\iOS\iPhone\FM_LaunchImage_1125x2436.png</iPhone_Launch1125>
+        <iPhone_Launch2436>$(BDS)\bin\Artwork\iOS\iPhone\FM_LaunchImage_2436x1125.png</iPhone_Launch2436>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Base_iOSSimulator)'!=''">
+        <iPhone_Launch1125>$(BDS)\bin\Artwork\iOS\iPhone\FM_LaunchImage_1125x2436.png</iPhone_Launch1125>
+        <iPhone_Launch2436>$(BDS)\bin\Artwork\iOS\iPhone\FM_LaunchImage_2436x1125.png</iPhone_Launch2436>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
         <DCC_UsePackage>DBXSqliteDriver;DataSnapServerMidas;DBXDb2Driver;DBXInterBaseDriver;TeeDB925;ZRRockyModel;vclactnband;ZRLithPack;vclFireDAC;FMXComponents;DataSnapFireDAC;svnui;tethering;JvGlobus;FireDACADSDriver;JvPluginSystem;DBXMSSQLDriver;JvMM;tmsexdXE10_2;DatasnapConnectorsFreePascal;FireDACMSSQLDriver;vcltouch;JvBands;vcldb;bindcompfmx;svn;Intraweb;DBXOracleDriver;JvJans;JvNet;inetdb;JvAppFrm;CEF4Delphi;RaizeComponentsVcl;TeeImport925;MIT3DPkg;JvDotNetCtrls;emsedge;RaizeComponentsVclDb;fmx;fmxdae;NativeXmlPkg;vclib;ConTEXTComponentsDR;JvWizards;FireDACDBXDriver;dbexpress;IndyCore;Tee925;GdiPlus;ALGLIB;vclx;JvPageComps;dsnap;DataSnapCommon;JvDB;TeeWorld925;DataSnapConnectors;VCLRESTComponents;mbColorLib;ZRZonationModel;JclDeveloperTools;SmartStorage;vclie;bindengine;DBXMySQLDriver;FireDACOracleDriver;FireDACMySQLDriver;DBXFirebirdDriver;JvCmp;JvHMI;ZRLicense;FireDACCommonODBC;DataSnapClient;ZRCore;FMXComponentEd;bindcompdbx;JvCustom;ZRGraph;GR32_D;vcl;DBXSybaseASEDriver;IndyIPServer;JvXPCtrls;PngComponents;IndySystem;tmsxlsdXE10_2;FireDACDb2Driver;TeeUI925;IndyIPCommon;GLScene_RunTime;dsnapcon;FireDACMSAccDriver;fmxFireDAC;FireDACInfxDriver;vclimg;ZRComponnets;Jcl;JvCore;emshosting;ColorMapComponents;JvCrypt;FireDACPgDriver;ibmonitor;FireDACASADriver;TeePro925;DBXOdbcDriver;FireDACTDataDriver;TeeGL925;DbxCommonDriver;tmswizdXE10_2;JvDlgs;ibxpress;JvManagedThreads;JvRuntimeDesign;DataSnapServer;xmlrtl;DataSnapNativeClient;fmxobj;vclwinx;ibxbindings;rtl;FireDACDSDriver;DbxClientDriver;TsiLang_XE_Tokyo_r;DBXSybaseASADriver;BCEditor.Delphi.Seattle.Runtime;CustomIPTransport;vcldsnap;tmsdXE10_2;JvSystem;JvStdCtrls;JvTimeFramework;SynEditDR;GraphPackage;bindcomp;appanalytics;GR32_R;DBXInformixDriver;LockBox3DR;UnitSystem;IndyIPClient;bindcompvcl;SmartComponents;AlgorithmProvider;JvDocking;dbxcds;VclSmp;JvPascalInterpreter;adortl;FireDACODBCDriver;TeeImage925;JclVcl;DataSnapIndy10ServerTransport;TeeLanguage925;dsnapxml;DataSnapProviderClient;dbrtl;inetdbxpress;FireDACMongoDBDriver;IndyProtocols;JvControls;JvPrintPreview;FMXPlanPkg;JclContainers;fmxase;$(DCC_UsePackage)</DCC_UsePackage>

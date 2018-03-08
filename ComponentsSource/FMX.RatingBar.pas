@@ -48,6 +48,8 @@ type
     FInActiveColor: TAlphaColor;
     FActiveBrush: TBrush;
     FInActiveBrush: TBrush;
+    FMouseDown: Boolean;
+    FOnChanged: TNotifyEvent;
     procedure SetPathData(const Value: TPathData);
     procedure SetCount(const Value: Integer);
     procedure SetMaximum(const Value: Single);
@@ -59,10 +61,19 @@ type
     function GetPath: TPathData;
     procedure CreateBrush;
     procedure FreeBrush;
+    procedure CalcValue(X: Single);
+    procedure SetOnChanged(const Value: TNotifyEvent);
+    procedure DoChanged;
   protected
     procedure Resize; override;
     procedure Paint; override;
     procedure DrawRating(ARect: TRectF; AValue: Single);
+    procedure FillChanged(Sender: TObject);
+    procedure StrokeChanged(Sender: TObject);
+    procedure PathDataChanged(Sender: TObject);
+    procedure MouseDown(Button: TMouseButton; Shift: TShiftState; X, Y: Single); override;
+    procedure MouseMove(Shift: TShiftState; X, Y: Single); override;
+    procedure MouseUp(Button: TMouseButton; Shift: TShiftState; X, Y: Single); override;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -76,7 +87,6 @@ type
     property DragMode default TDragMode.dmManual;
     property EnableDragHighlight default True;
     property Enabled default True;
-    property Fill;
     property Locked default False;
     property Height;
     property HitTest default True;
@@ -89,7 +99,6 @@ type
     property RotationCenter;
     property Scale;
     property Size;
-    property Stroke;
     property Visible default True;
     property Width;
     { Drag and Drop events }
@@ -118,10 +127,12 @@ type
     property Data: TPathData read FData write SetPathData;
     property ActiveColor: TAlphaColor read FActiveColor write SetActiveColor;
     property InActiveColor: TAlphaColor read FInActiveColor write SetInActiveColor;
+    property Stroke;
     property Space: Single read FSpace write SetSpace;
     property Count: Integer read FCount write SetCount default 5;
     property Value: Single read FValue write SetValue;
     property Maximum: Single read FMaximum write SetMaximum;
+    property OnChanged: TNotifyEvent read FOnChanged write SetOnChanged;
   end;
 
 implementation
@@ -131,11 +142,13 @@ implementation
 constructor TFMXRatingBar.Create(AOwner: TComponent);
 begin
   inherited;
+  FMouseDown := False;
+  HitTest := True;
   Width := 180;
   Height := 30;
-  HitTest := False;
   FData := TPathData.Create;
   FData.Data := 'm 4677,2657 -1004,727 385,1179 -1002,-731 -1002,731 386,-1179 -1005,-727 1240,3 381,-1181 381,1181 z';
+  FData.OnChanged := PathDataChanged;
   // 星 (瘦)
   FCount := 5;
   FMaximum := 5;
@@ -143,7 +156,7 @@ begin
   FSpace := 6;
   FActiveColor := claRoyalblue;
   FInActiveColor := $30000000;
-  Stroke.Color := claNull; // 不顯示外框
+  Stroke.Color := claNull;
 end;
 
 destructor TFMXRatingBar.Destroy;
@@ -153,12 +166,24 @@ begin
   inherited;
 end;
 
+procedure TFMXRatingBar.DoChanged;
+begin
+  if Assigned(FOnChanged) then
+    FOnChanged(Self);
+end;
+
 procedure TFMXRatingBar.CreateBrush;
 begin
   if not Assigned(FActiveBrush) then
     FActiveBrush := TBrush.Create(TBrushKind.Solid, FActiveColor);
   if not Assigned(FInActiveBrush) then
     FInActiveBrush := TBrush.Create(TBrushKind.Solid, FInActiveColor);
+end;
+
+procedure TFMXRatingBar.FillChanged(Sender: TObject);
+begin
+  if FUpdating = 0 then
+    Repaint;
 end;
 
 procedure TFMXRatingBar.FreeBrush;
@@ -188,6 +213,36 @@ begin
   end
   else
     inherited;
+end;
+
+procedure TFMXRatingBar.CalcValue(X: Single);
+var
+  w: Single;
+  Idx: Integer;
+  Sum: Single;
+  NewValue: Single;
+begin
+  w := (Width - FSpace * 4) / Count;
+  if X <= 0 then
+    Value := 0
+  else if X >= Width then
+    Value := Maximum
+  else
+  begin
+    Idx := 1;
+    Sum := w;
+    while (X > Sum) and (Idx < Count) do
+    begin
+      Inc(Idx);
+      Sum := Sum + w + FSpace;
+    end;
+    NewValue := Idx * Maximum / Count;
+    if NewValue <> Value then
+    begin
+      Value := NewValue;
+      DoChanged;
+    end;
+  end;
 end;
 
 procedure TFMXRatingBar.DrawRating(ARect: TRectF; AValue: Single);
@@ -249,6 +304,12 @@ begin
   end;
 end;
 
+procedure TFMXRatingBar.PathDataChanged(Sender: TObject);
+begin
+  if FUpdating = 0 then
+    Repaint;
+end;
+
 procedure TFMXRatingBar.Resize;
 begin
   inherited;
@@ -260,9 +321,37 @@ begin
   Result := FData;
 end;
 
+procedure TFMXRatingBar.MouseDown(Button: TMouseButton; Shift: TShiftState; X,
+  Y: Single);
+begin
+  inherited;
+  if Button = TMouseButton.mbLeft then
+  begin
+    FMouseDown := True;
+    CalcValue(X);
+  end;
+end;
+
+procedure TFMXRatingBar.MouseMove(Shift: TShiftState; X, Y: Single);
+begin
+  inherited;
+  if FMouseDown then
+  begin
+    CalcValue(X);
+  end;
+end;
+
+procedure TFMXRatingBar.MouseUp(Button: TMouseButton; Shift: TShiftState; X,
+  Y: Single);
+begin
+  inherited;
+  FMouseDown := False;
+end;
+
 procedure TFMXRatingBar.SetPathData(const Value: TPathData);
 begin
   FData.Assign(Value);
+  Repaint;
 end;
 
 procedure TFMXRatingBar.SetActiveColor(const Value: TAlphaColor);
@@ -303,12 +392,16 @@ begin
   end;
 end;
 
+procedure TFMXRatingBar.SetOnChanged(const Value: TNotifyEvent);
+begin
+  FOnChanged := Value;
+end;
+
 procedure TFMXRatingBar.SetSpace(const Value: Single);
 begin
   if FSpace <> Value then
   begin
     FSpace := Value;
-
     Repaint;
   end;
 end;
@@ -322,4 +415,9 @@ begin
   end;
 end;
 
+procedure TFMXRatingBar.StrokeChanged(Sender: TObject);
+begin
+  if FUpdating = 0 then
+    Repaint;
+end;
 end.
