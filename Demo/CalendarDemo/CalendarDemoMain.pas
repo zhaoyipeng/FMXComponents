@@ -16,10 +16,11 @@ type
     Rectangle2: TRectangle;
     txtCnDate1: TText;
     txtCnDate2: TText;
-    lng1: TLang;
     Layout1: TLayout;
     rbChinese: TRadioButton;
     rbEnglish: TRadioButton;
+    rbSpanish: TRadioButton;
+    lng1: TLang;
     procedure rbChineseChange(Sender: TObject);
     procedure chkShowLunarDateChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -75,11 +76,17 @@ begin
     FMXCalendarControl1.SetMonthNames(TCnMonths);
     FMXCalendarControl1.SetWeekNames(TCnWeeks);
   end
-  else
+  else if rbEnglish.IsChecked then
   begin
     LoadLangFromStrings(lng1.LangStr['en']);
     FMXCalendarControl1.SetMonthNames(TEnMonths);
     FMXCalendarControl1.SetWeekNames(TEnWeeks);
+  end
+  else
+  begin
+    LoadLangFromStrings(lng1.LangStr['es']);
+    FMXCalendarControl1.SetMonthNames(TEsMonths);
+    FMXCalendarControl1.SetWeekNames(TEsWeeks);
   end;
 end;
 

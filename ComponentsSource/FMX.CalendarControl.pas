@@ -59,6 +59,7 @@ type
 const
   TCnWeeks: TWeekNames = ('日', '一', '二', '三', '四', '五', '六');
   TEnWeeks: TWeekNames = ('SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT');
+  TEsWeeks: TWeekNames = ('dom', 'lun', 'mar', 'mié', 'jue', 'vie', 'sáb');
 
   TCnMonths: TMonthNames = ('一月', '二月', '三月', '四月', '五月', '六月',
     '七月', '八月', '九月', '十月', '十一月', '十二月');
@@ -76,6 +77,21 @@ const
     'November',
     'December'
   );
+  TEsMonths: TMonthNames = (
+    'Enero',
+    'Febrero',
+    'Marzo',
+    'Abril',
+    'Mayo',
+    'Junio',
+    'Julio',
+    'Agosto',
+    'Septiembre',
+    'Octubre',
+    'Noviembre',
+    'Ciciembre'
+  );
+
 type
   TWeekLayout = class(TControl)
   private
