@@ -15,7 +15,7 @@ You can also add my skype: zhaoyipeng@hotmail.com<br>
 
 ## Recent update
 	
-![Recent update](SnapShots/recent.gif)<br>
+![Recent update](SnapShots/FMXImageSlider.gif)<br>
 
 v0.3.0.0 : merged with kwon hwang-jung's change<br>
 1. add three Add methods to add bitmap directly<br>
