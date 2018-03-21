@@ -6,7 +6,7 @@ uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.Objects,
   FMX.StdCtrls, FMX.Edit, FMX.Controls.Presentation, FMX.ImageSlider,
-  FMX.Layouts, FMX.ListBox;
+  FMX.Layouts, FMX.ListBox, FMX.ScrollBox, FMX.Memo;
 
 type
   TfrmMain = class(TForm)
@@ -23,6 +23,8 @@ type
     Label1: TLabel;
     cbbInterval: TComboBox;
     IsAuto: TCheckBox;
+    Memo1: TMemo;
+    ImgSlider: TFMXImageSlider;
     procedure btnAddClick(Sender: TObject);
     procedure btnGoPageClick(Sender: TObject);
     procedure IsAutoChange(Sender: TObject);
@@ -31,10 +33,15 @@ type
     procedure btnNextClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure cbbIntervalChange(Sender: TObject);
+    procedure ImgSliderItemClick(Sender: TObject);
+    procedure ImgSliderItemTap(Sender: TObject; const Point: TPointF);
+    procedure ImgSliderCanDragBegin(Sender: TObject; var CanBegin: Boolean);
+    procedure ImgSliderPageAnimationFinish(Sender: TObject; NewPage,
+      OldPage: Integer);
+    procedure ImgSliderPageChange(Sender: TObject; NewPage, OldPage: Integer);
   private
+    procedure AddBitmap(const FileName: string);
     { Private declarations }
-    ImgSlider : TFMXImageSlider;
-    procedure ItemClick(Sender: TObject);
   public
     { Public declarations }
   end;
@@ -47,18 +54,10 @@ implementation
 {$R *.fmx}
 
 procedure TfrmMain.btnAddClick(Sender: TObject);
-var
-  Bmp : TBitmap;
 begin
   if OpenDialog.Execute then
   begin
-    Bmp := TBitmap.Create;
-    try
-      Bmp.LoadFromFile(OpenDialog.FileName);
-      ImgSlider.Add((ImgSlider.PageCount + 1).ToString, Bmp);
-    finally
-      Bmp.Free;
-    end;
+    AddBitmap(OpenDialog.FileName);
   end;
 end;
 
@@ -93,24 +92,63 @@ end;
 
 procedure TfrmMain.FormCreate(Sender: TObject);
 begin
-  ImgSlider := TFMXImageSlider.Create(Self);
-  ImgSlider.Position.X := 0;
-  ImgSlider.Position.Y := 0;
-  ImgSlider.Parent := Self;
-  ImgSlider.Width := ClientWidth;
-  ImgSlider.Align := TAlignLayout.Top;
-  ImgSlider.Height:= ImgSlider.Width * 400 / 640;;
-  ImgSlider.OnItemClick := ItemClick;
+  ImgSlider.Height:= ClientWidth * 400 / 640;
+  {$IFDEF  MSWINDOWS}
+  AddBitmap('..\..\Images\image1.jpg');
+  AddBitmap('..\..\Images\image2.jpg');
+  AddBitmap('..\..\Images\image3.jpg');
+  AddBitmap('..\..\Images\image4.jpg');
+  {$ENDIF}
+end;
+
+procedure TfrmMain.ImgSliderCanDragBegin(Sender: TObject;
+  var CanBegin: Boolean);
+begin
+  Memo1.Lines.Add('On CanDragBegin');
+end;
+
+procedure TfrmMain.ImgSliderItemClick(Sender: TObject);
+begin
+  Memo1.Lines.Add('On Item Click: '+ TControl(Sender).Tag.ToString);
+end;
+
+procedure TfrmMain.ImgSliderItemTap(Sender: TObject; const Point: TPointF);
+begin
+  Memo1.Lines.Add('On Item Tap: '+ TControl(Sender).Tag.ToString);
+end;
+
+procedure TfrmMain.ImgSliderPageAnimationFinish(Sender: TObject; NewPage,
+  OldPage: Integer);
+begin
+  Memo1.Lines.Add(
+    Format('On PageAnimationFinish, NewPage: %d, OldPage: %d',
+    [NewPage, OldPage]));
+end;
+
+procedure TfrmMain.ImgSliderPageChange(Sender: TObject; NewPage,
+  OldPage: Integer);
+begin
+  Memo1.Lines.Add(
+    Format('On PageChange, NewPage: %d, OldPage: %d',
+    [NewPage, OldPage]));
+end;
+
+procedure TfrmMain.AddBitmap(const FileName: string);
+var
+  Bmp: TBitmap;
+begin
+  Bmp := TBitmap.Create;
+  try
+    Bmp.LoadFromFile(FileName);
+    ImgSlider.Add((ImgSlider.PageCount + 1).ToString, Bmp);
+  finally
+    Bmp.Free;
+  end;
 end;
 
 procedure TfrmMain.IsAutoChange(Sender: TObject);
 begin
   ImgSlider.AutoSlider := IsAuto.IsChecked;
-end;
-
-procedure TfrmMain.ItemClick(Sender: TObject);
-begin
-  ShowMessage(TControl(Sender).Index.ToString);
 end;
 
 end.

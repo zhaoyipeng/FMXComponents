@@ -16,3 +16,7 @@ A Simple Image Slider
 5. use ActivePage property move page, ex)ActivePage := 1<br>
 6. add Datas property, can set tagstring on each page<br>
 	
+2018-03-21, v0.4.0.0 : merged with Mikkao's change 2018-03-01<br>
+1. change OnPageChange event to TPageChangeEvent<br>
+2. add OnPageAnimationFinish event<br>
+3. add OnCanDragBegin event<br>

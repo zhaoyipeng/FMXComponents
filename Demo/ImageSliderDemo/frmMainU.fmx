@@ -163,4 +163,32 @@ object frmMain: TfrmMain
     Text = 'Auto Slider'
     OnChange = IsAutoChange
   end
+  object Memo1: TMemo
+    Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+    DataDetectorTypes = []
+    Align = Client
+    Size.Width = 338.000000000000000000
+    Size.Height = 159.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 8
+    Viewport.Width = 334.000000000000000000
+    Viewport.Height = 155.000000000000000000
+  end
+  object ImgSlider: TFMXImageSlider
+    Align = Top
+    HitTest = True
+    Size.Width = 338.000000000000000000
+    Size.Height = 161.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 10
+    ActivePage = 0
+    AutoSlider = False
+    PageCount = 0
+    TimerInterval = 5000
+    OnCanDragBegin = ImgSliderCanDragBegin
+    OnItemClick = ImgSliderItemClick
+    OnItemTap = ImgSliderItemTap
+    OnPageChange = ImgSliderPageChange
+    OnPageAnimationFinish = ImgSliderPageAnimationFinish
+  end
 end
