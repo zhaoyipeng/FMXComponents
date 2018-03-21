@@ -23,6 +23,8 @@
 //         1. change OnPageChange event to TPageChangeEvent
 //         2. add OnPageAnimationFinish event
 //         3. add OnCanDragBegin event
+// 2018-03-21, v0.5.0.0 :
+//         1. rewrite slide method, now can support loop
 
 unit FMX.ImageSlider;
 
