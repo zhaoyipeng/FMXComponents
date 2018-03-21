@@ -1,0 +1,166 @@
+object frmMain: TfrmMain
+  Left = 0
+  Top = 0
+  Caption = 'TFMXImageSlider Demo'
+  ClientHeight = 495
+  ClientWidth = 338
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  DesignerMasterStyle = 0
+  object ToolBar: TLayout
+    Align = Bottom
+    Position.Y = 320.000000000000000000
+    Size.Width = 338.000000000000000000
+    Size.Height = 40.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    object btnAdd: TButton
+      Align = Left
+      Margins.Left = 4.000000000000000000
+      Margins.Top = 4.000000000000000000
+      Margins.Right = 4.000000000000000000
+      Margins.Bottom = 4.000000000000000000
+      Position.X = 4.000000000000000000
+      Position.Y = 4.000000000000000000
+      Size.Width = 105.000000000000000000
+      Size.Height = 32.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      Text = 'Add'
+      OnClick = btnAddClick
+    end
+    object btnGoPage: TButton
+      Align = Left
+      Margins.Left = 4.000000000000000000
+      Margins.Top = 4.000000000000000000
+      Margins.Right = 4.000000000000000000
+      Margins.Bottom = 4.000000000000000000
+      Position.X = 225.000000000000000000
+      Position.Y = 4.000000000000000000
+      Size.Width = 80.000000000000000000
+      Size.Height = 32.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 3
+      Text = 'Move Page'
+      OnClick = btnGoPageClick
+    end
+    object Page: TEdit
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      Align = Left
+      TabOrder = 4
+      Text = '1'
+      Position.X = 117.000000000000000000
+      Position.Y = 4.000000000000000000
+      Margins.Left = 4.000000000000000000
+      Margins.Top = 4.000000000000000000
+      Margins.Right = 4.000000000000000000
+      Margins.Bottom = 4.000000000000000000
+      Size.Width = 100.000000000000000000
+      Size.Height = 32.000000000000000000
+      Size.PlatformDefault = False
+    end
+  end
+  object OpenDialog: TOpenDialog
+    Filter = #51060#48120#51648#54028#51068'|*.jpg;*.png'
+    Left = 64
+    Top = 64
+  end
+  object Layout1: TLayout
+    Align = Bottom
+    Position.Y = 407.000000000000000000
+    Size.Width = 338.000000000000000000
+    Size.Height = 44.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 4
+    object Label1: TLabel
+      Align = Left
+      Margins.Left = 4.000000000000000000
+      Margins.Top = 4.000000000000000000
+      Margins.Right = 4.000000000000000000
+      Margins.Bottom = 4.000000000000000000
+      Position.X = 4.000000000000000000
+      Position.Y = 4.000000000000000000
+      Size.Width = 120.000000000000000000
+      Size.Height = 36.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'Interval:'
+      TabOrder = 6
+    end
+    object cbbInterval: TComboBox
+      Align = VertCenter
+      Items.Strings = (
+        '1s'
+        '2s'
+        '3s'
+        '4s'
+        '5s')
+      ItemIndex = 4
+      Margins.Left = 4.000000000000000000
+      Margins.Top = 4.000000000000000000
+      Margins.Right = 4.000000000000000000
+      Margins.Bottom = 4.000000000000000000
+      Position.X = 132.000000000000000000
+      Position.Y = 4.000000000000000000
+      Size.Width = 202.000000000000000000
+      Size.Height = 36.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 7
+      OnChange = cbbIntervalChange
+    end
+  end
+  object Layout2: TLayout
+    Align = Bottom
+    Position.Y = 451.000000000000000000
+    Size.Width = 338.000000000000000000
+    Size.Height = 44.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 3
+    object Button1: TButton
+      Align = Left
+      Margins.Left = 4.000000000000000000
+      Margins.Top = 4.000000000000000000
+      Margins.Right = 4.000000000000000000
+      Margins.Bottom = 4.000000000000000000
+      Position.X = 4.000000000000000000
+      Position.Y = 4.000000000000000000
+      Size.Width = 80.000000000000000000
+      Size.Height = 36.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 6
+      Text = 'Clear'
+      OnClick = btnInitClick
+    end
+    object SpeedButton1: TSpeedButton
+      Align = Right
+      Position.X = 238.000000000000000000
+      Size.Width = 50.000000000000000000
+      Size.Height = 44.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = 'arrowlefttoolbutton'
+      Text = 'btnPrev'
+      OnClick = btnPrevClick
+    end
+    object SpeedButton2: TSpeedButton
+      Align = Right
+      Position.X = 288.000000000000000000
+      Size.Width = 50.000000000000000000
+      Size.Height = 44.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = 'arrowrighttoolbutton'
+      Text = 'btnNext'
+      OnClick = btnNextClick
+    end
+  end
+  object IsAuto: TCheckBox
+    Align = Bottom
+    Position.Y = 360.000000000000000000
+    Size.Width = 338.000000000000000000
+    Size.Height = 47.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 5
+    Text = 'Auto Slider'
+    OnChange = IsAutoChange
+  end
+end

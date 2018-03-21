@@ -9,10 +9,16 @@
 // https://github.com/zhaoyipeng/FMXComponents
 //
 // ***************************************************************************
-
 // version history
 // 2017-01-20, v0.1.0.0 : first release
 // 2018-01-31, v0.2.0.0 : merged with loko's change
+// 2018-03-02, v0.3.0.0 : merged with kwon hwang-jung's change 2018-03-02
+//         1. add three Add methods to add bitmap directly
+//         2. add Next, Prev methods
+//         3. add AutoSlider property can auto slide
+//         4. add TimerInterval to control AutoSlider interval
+//         5. use ActivePage property move page, ex)ActivePage := 1
+//         6. add Datas property, can set tagstring on each page
 
 unit FMX.ImageSlider;
 
@@ -28,6 +34,7 @@ uses
   FMX.Layouts,
   FMX.Objects,
   FMX.Ani,
+  FMX.Graphics,
   FMX.ComponentsCommon;
 
 type
@@ -35,53 +42,157 @@ type
   [ComponentPlatformsAttribute(TFMXPlatforms)]
   TFMXImageSlider = class(TLayout)
   private
-    FContainer: TLayout;
-    FPages: TList<TLayout>;
-    FActivePage: Integer;
-    FStartDrag: Boolean;
-    FDownPos: TPointF;
-    FDownIndex: Integer;
-    FAnimation: TFloatAnimation;
-    procedure MoveToActivePage; { add }
-    procedure SetActivePage(const Value: Integer); { change }
-    procedure SetPageCount(const Value: Integer);
+    FIsTimer      : Boolean;
+    FAutoSlider   : Boolean;
+    FTimer        : TTimer;
+    FContainer    : TLayout;
+    FPages        : TList<TLayout>;
+    FActivePage   : Integer;
+    FIsMove       : Boolean;
+    FStartDrag    : Boolean;
+    FDownPos      : TPointF;
+    FDownIndex    : Integer;
+    FAnimation    : TFloatAnimation;
+    FOnItemTap    : TTapEvent;
+    FOnItemClick  : TNotifyEvent;
+    FOnPageChanged: TNotifyEvent;
+    procedure MoveToActivePage(IsIn: Boolean = True);
+    procedure OnTimer(Sender: TObject);
+    function GetDatas(Index: Integer): string;
     function GetPageCount: Integer;
+    function GetTimerInterval: Integer;
+
+    procedure SetActivePage(const Value: Integer); { change }
+    procedure SetAutoSlider(const Value: Boolean);
+    procedure SetPageCount(const Value: Integer);
+    procedure SetDatas(Index: Integer; const Value: string);
   protected
+    procedure SetTimerInterval(const Value: Integer);
     procedure Resize; override;
+    procedure DoTab(Sender: TObject; const Point: TPointF);
     procedure MouseDown(Button: TMouseButton; Shift: TShiftState; X, Y: Single); override;
     procedure MouseMove(Shift: TShiftState; X, Y: Single); override;
-    procedure MouseUp(Button: TMouseButton; Shift: TShiftState; X, Y: Single); override; { change }
+    procedure MouseUp(Button: TMouseButton; Shift: TShiftState; X, Y: Single); override;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
     procedure SetPage(Index: Integer; AImage: TImage);
+    procedure Add(Bitmap: TBitmap);overload;                //add bitmap
+    procedure Add(Value:String; Bitmap: TBitmap);overload;  //add bitmap and value
+    procedure Add(Value:String; Bitmap: TStream);overload;  //add bitmap stream and value
+    procedure Clear;  //Page Clear;
+    procedure Prev;   //Previous Page
+    procedure Next;   //Next Page
+    property Datas[Index: Integer]: string read GetDatas write SetDatas; //Page value(ex 0page = Datas[0])
   published
-    property ActivePage: Integer read FActivePage write SetActivePage;
-    property PageCount: Integer read GetPageCount write SetPageCount;
     property Align;
+    property Height;
     property Position;
     property Width;
-    property Height;
+    property ActivePage    : Integer       read FActivePage      write SetActivePage;    //page move
+    property AutoSlider    : Boolean       read FAutoSlider      write SetAutoSlider;    //auto slider property
+    property PageCount     : Integer       read GetPageCount     write SetPageCount;
+    property TimerInterval : Integer       read GetTimerInterval write SetTimerInterval; //auto slider timer
+    property OnPageChanged : TNotifyEvent  read FOnPageChanged   write FOnPageChanged;
+    property OnItemClick   : TNotifyEvent  read FOnItemClick     write FOnItemClick;     //page click event(use Desktop)
+    property OnItemTap     : TTapEvent     read FOnItemTap       write FOnItemTap;       //page tab event(use Mobile, Pad)
   end;
 
 implementation
 
 { TFMXImageSlider }
 
+procedure TFMXImageSlider.Add(Bitmap: TBitmap);
+begin
+  Add('', Bitmap);
+end;
+
+procedure TFMXImageSlider.Add(Value: String; Bitmap: TBitmap);
+var
+  Item: TLayout;
+  Img : TImage;
+begin
+  Item := TLayout.Create(Self);
+  Item.Parent     := Self.FContainer;
+  Item.Width      := Self.Width;
+  Item.Height     := Self.Height;
+  Item.Stored     := False;
+  Item.Position.X := FPages.Count * Width;
+  Item.Index      := FPages.Add(Item);
+  Item.OnTap      := DoTab;
+  Img := TImage.Create(Item);
+  Img.Parent      := Item;
+  Img.HitTest     := False;
+  Img.Align       := TAlignLayout.Client;
+  Img.Bitmap.Assign(Bitmap);
+  Item.TagString  := Value;
+  //ActivePage := 0;
+  FContainer.Width := FPages.Count * Width;
+  FContainer.Position.X := 0;
+  if FActivePage = -1 then
+    FActivePage := 0;
+end;
+
+procedure TFMXImageSlider.Add(Value: String; Bitmap: TStream);
+var
+  Item: TLayout;
+  Img : TImage;
+begin
+  Item := TLayout.Create(Self);
+  Item.Parent     := Self.FContainer;
+  Item.Width      := Self.Width;
+  Item.Height     := Self.Height;
+  Item.Stored     := False;
+  Item.Position.X := FPages.Count * Width;
+  Item.Index      := FPages.Add(Item);
+  Item.OnTap      := DoTab;
+  Img := TImage.Create(Item);
+  Img.Parent      := Item;
+  Img.HitTest     := False;
+  Img.Align       := TAlignLayout.Client;
+  Img.Bitmap.LoadFromStream(Bitmap);
+  Item.TagString := Value;
+  //ActivePage := 0;
+  FContainer.Width := FPages.Count * Width;
+  FContainer.Position.X := 0;
+  if FActivePage = -1 then
+    FActivePage := 0;
+end;
+
+procedure TFMXImageSlider.Clear;
+var
+  I: Integer;
+begin
+  for I := FPages.Count-1 downto 0 do
+  begin
+    FPages[I].DisposeOf;
+  end;
+  FPages.Clear;
+  ActivePage := -1;
+end;
+
 constructor TFMXImageSlider.Create(AOwner: TComponent);
 begin
   inherited;
-  FContainer := TLayout.Create(Self);
+  FTimer          := TTimer.Create(Self);
+  FTimer.Interval := 1000 * 5;
+  FTimer.Enabled  := False;
+  FTimer.OnTimer  := OnTimer;
+  FAutoSlider     := False;
+  FContainer      := TLayout.Create(Self);
   FContainer.Parent := Self;
   FContainer.Stored := False;
+  FContainer.Height := Height;
+  FContainer.Position.Y := 0;
   FAnimation := TFloatAnimation.Create(Self);
+  FAnimation.Interpolation := TInterpolationType.Quintic;
   FAnimation.PropertyName := 'Position.X';
   FAnimation.Parent := FContainer;
   FAnimation.Duration := 0.1;
-  FPages := TList<TLayout>.Create;
-  HitTest := True;
-  ActivePage := -1;
-  FStartDrag := False;
+  FPages      := TList<TLayout>.Create;
+  HitTest     := True;
+  ActivePage  := -1;
+  FStartDrag  := False;
   AutoCapture := True;
 end;
 
@@ -91,14 +202,32 @@ begin
   inherited;
 end;
 
+procedure TFMXImageSlider.DoTab(Sender: TObject; const Point: TPointF);
+begin
+  if Assigned(FOnItemTap) then FOnItemTap(Sender, Point);
+end;
+
+function TFMXImageSlider.GetDatas(Index: Integer): string;
+begin
+  Result := FPages[Index].TagString;
+end;
+
 function TFMXImageSlider.GetPageCount: Integer;
 begin
   Result := FPages.Count;
 end;
 
+function TFMXImageSlider.GetTimerInterval: Integer;
+begin
+  Result := FTimer.Interval;
+end;
+
 procedure TFMXImageSlider.MouseDown(Button: TMouseButton; Shift: TShiftState; X, Y: Single);
 begin
   inherited;
+  FIsTimer  := FTimer.Enabled;
+  if FIsTimer then FTimer.Enabled := False;
+  FIsMove   := False;
   if (PageCount > 0) and (Button = TMouseButton.mbLeft) then
   begin
     FStartDrag := True;
@@ -114,17 +243,26 @@ begin
   inherited;
   if FStartDrag then
   begin
+    if Abs(FDownPos.X - X) > 5 then FIsMove := True;
     DeltaX := X - FDownPos.X;
     NewX := -FDownIndex * Width + DeltaX;
     FContainer.Position.X := NewX;
   end;
 end;
 
-procedure TFMXImageSlider.MouseUp(Button: TMouseButton; Shift: TShiftState; X, Y: Single); { change }
+procedure TFMXImageSlider.MouseUp(Button: TMouseButton; Shift: TShiftState; X, Y: Single);
 var
   DeltaX: Single;
 begin
   inherited;
+  if (not FIsMove) and FStartDrag then
+  begin
+    if FIsTimer then FTimer.Enabled := True;
+    FStartDrag := False;
+    if Assigned(FOnItemClick) then FOnItemClick(FPages[Self.ActivePage]);
+    if Assigned(FOnItemTap)   then FOnItemTap(FPages[Self.ActivePage], PointF(X, Y));
+    Exit;
+  end;
   if FStartDrag then
   begin
     FStartDrag := False;
@@ -139,18 +277,44 @@ begin
       if FActivePage < PageCount - 1 then
         FActivePage := FActivePage + 1;
     end;
-    { Loko } MoveToActivePage; // move to page
+    MoveToActivePage(DeltaX < 0);
+    if FIsTimer then FTimer.Enabled := True;
+    if Assigned(FOnPageChanged) then Self.FOnPageChanged(Self);
   end;
 end;
 
-procedure TFMXImageSlider.MoveToActivePage; { add }
+procedure TFMXImageSlider.MoveToActivePage(IsIn: Boolean);
 begin
-  { a methode to move to your active Page }
-  { Loko } FAnimation.StartValue := FContainer.Position.X;
-  { Loko } FAnimation.StopValue := -FActivePage * Width;
-  { Loko } FAnimation.Interpolation := TInterpolationType.Quintic;
-  { Loko } FAnimation.AnimationType := TAnimationType.Out;
-  { Loko } FAnimation.Start;
+  { a method to move to your active Page }
+  FAnimation.StartValue := FContainer.Position.X;
+  FAnimation.StopValue := -FActivePage * Width;
+  if IsIn then
+    FAnimation.AnimationType := TAnimationType.Out
+  else
+    FAnimation.AnimationType := TAnimationType.&In;
+  FAnimation.Start;
+end;
+
+procedure TFMXImageSlider.Next;
+begin
+  if FActivePage = FPages.Count - 1 then Exit;
+  FActivePage := FActivePage + 1;
+  MoveToActivePage(True);
+  if Assigned(FOnPageChanged) then Self.FOnPageChanged(Self);
+end;
+
+procedure TFMXImageSlider.OnTimer(Sender: TObject);
+begin
+  if Self.FActivePage = Self.FPages.Count - 1 then Self.SetActivePage(0)
+  else Next;
+end;
+
+procedure TFMXImageSlider.Prev;
+begin
+  if FActivePage = 0 then Exit;
+  FActivePage := FActivePage - 1;
+  MoveToActivePage(False);
+  if Assigned(FOnPageChanged) then Self.FOnPageChanged(Self);
 end;
 
 procedure TFMXImageSlider.Resize;
@@ -167,15 +331,35 @@ begin
     FPages[I].Width := Width;
     FPages[I].Height := Height;
     FPages[I].Position.X := I * Width;
+	FPages[i].RecalcSize;					 
   end;
 end;
 
-procedure TFMXImageSlider.SetActivePage(const Value: Integer); { change }
+procedure TFMXImageSlider.SetActivePage(const Value: Integer);
+var
+  IsIn: Boolean;
 begin
-  if (Value < 0) or (Value > FPages.Count - 1) then // check if value valid
-    exit;
-  FActivePage := Value; // set FActivePage
-  MoveToActivePage; // move Page
+  if FActivePage <> Value then
+  begin
+    if FActivePage = -1 then FContainer.Position.X := 0
+    else
+    begin
+      IsIn := FActivePage < Value;
+      FActivePage := Value;
+      MoveToActivePage(IsIn);
+    end;
+  end;
+end;
+
+procedure TFMXImageSlider.SetAutoSlider(const Value: Boolean);
+begin
+  FAutoSlider := Value;
+  FTimer.Enabled := Value;
+end;
+
+procedure TFMXImageSlider.SetDatas(Index: Integer; const Value: string);
+begin
+  FPages[Index].TagString := Value;
 end;
 
 procedure TFMXImageSlider.SetPage(Index: Integer; AImage: TImage);
@@ -230,6 +414,11 @@ begin
       ActivePage := -1;
     end;
   end;
+end;
+
+procedure TFMXImageSlider.SetTimerInterval(const Value: Integer);
+begin
+  FTimer.Interval := Value;
 end;
 
 end.
