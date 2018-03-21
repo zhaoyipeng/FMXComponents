@@ -98,39 +98,40 @@ begin
   AddBitmap('..\..\Images\image2.jpg');
   AddBitmap('..\..\Images\image3.jpg');
   AddBitmap('..\..\Images\image4.jpg');
+  ImgSlider.ActivePage := 0;
   {$ENDIF}
 end;
 
 procedure TfrmMain.ImgSliderCanDragBegin(Sender: TObject;
   var CanBegin: Boolean);
 begin
-  Memo1.Lines.Add('On CanDragBegin');
+//  Memo1.Lines.Add('On CanDragBegin');
 end;
 
 procedure TfrmMain.ImgSliderItemClick(Sender: TObject);
 begin
-  Memo1.Lines.Add('On Item Click: '+ TControl(Sender).Tag.ToString);
+//  Memo1.Lines.Add('On Item Click: '+ TControl(Sender).Tag.ToString);
 end;
 
 procedure TfrmMain.ImgSliderItemTap(Sender: TObject; const Point: TPointF);
 begin
-  Memo1.Lines.Add('On Item Tap: '+ TControl(Sender).Tag.ToString);
+//  Memo1.Lines.Add('On Item Tap: '+ TControl(Sender).Tag.ToString);
 end;
 
 procedure TfrmMain.ImgSliderPageAnimationFinish(Sender: TObject; NewPage,
   OldPage: Integer);
 begin
-  Memo1.Lines.Add(
-    Format('On PageAnimationFinish, NewPage: %d, OldPage: %d',
-    [NewPage, OldPage]));
+//  Memo1.Lines.Add(
+//    Format('On PageAnimationFinish, NewPage: %d, OldPage: %d',
+//    [NewPage, OldPage]));
 end;
 
 procedure TfrmMain.ImgSliderPageChange(Sender: TObject; NewPage,
   OldPage: Integer);
 begin
   Memo1.Lines.Add(
-    Format('On PageChange, NewPage: %d, OldPage: %d',
-    [NewPage, OldPage]));
+    Format('On PageChange, OldPage: %d, NewPage: %d',
+    [OldPage, NewPage]));
 end;
 
 procedure TfrmMain.AddBitmap(const FileName: string);

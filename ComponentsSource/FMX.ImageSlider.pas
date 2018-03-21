@@ -38,6 +38,7 @@ uses
   FMX.Layouts,
   FMX.Objects,
   FMX.Ani,
+  FMX.Utils,
   FMX.Graphics,
   FMX.ComponentsCommon;
 
@@ -52,7 +53,6 @@ type
     FIsTimer: Boolean;
     FAutoSlider: Boolean;
     FTimer: TTimer;
-    FContainer: TLayout;
     FPages: TList<TLayout>;
     FActivePage: Integer;
     FIsMove: Boolean;
@@ -61,16 +61,20 @@ type
     FDownPos: TPointF;
     FDownIndex: Integer;
     FPreviousPage: Integer;
-    FAnimation: TFloatAnimation;
+    FAnimation: TAnimation;
     FOnPageAnimationFinish: TPageAnimationFinishEvent;
     FOnCanDragBegin: TCanBeginDragEvent;
     FOnItemTap: TTapEvent;
     FOnItemClick: TNotifyEvent;
     FOnPageChange: TPageChangeEvent;
     FAnimationInterval: Integer;
+    FTransitionLayouts: array of TLayout;
+    FTranstionIsIn: Boolean;
+    FTranstionStartX: Single;
     procedure MoveToActivePage(IsIn: Boolean = True);
     procedure OnTimer(Sender: TObject);
-    procedure AnimationFinished(Sender:TObject);
+    procedure AnimationProcess(Sender: TObject);
+    procedure AnimationFinished(Sender: TObject);
     function GetAnimateDuration: Single;
     function GetDatas(Index: Integer): string;
     function GetPageCount: Integer;
@@ -90,6 +94,9 @@ type
     procedure MouseDown(Button: TMouseButton; Shift: TShiftState; X, Y: Single); override;
     procedure MouseMove(Shift: TShiftState; X, Y: Single); override;
     procedure MouseUp(Button: TMouseButton; Shift: TShiftState; X, Y: Single); override;
+    procedure AddImage(const Value: string; Image: TImage);
+    procedure PrepareSlide(DeltaX: Single); overload;
+    procedure PrepareSlide(IsIn: Boolean); overload;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -120,6 +127,11 @@ type
 
 implementation
 
+type
+  TMyAnimation = class(TAnimation)
+  protected
+    procedure ProcessAnimation; override;
+  end;
 { TFMXImageSlider }
 
 procedure TFMXImageSlider.Add(Bitmap: TBitmap);
@@ -129,52 +141,41 @@ end;
 
 procedure TFMXImageSlider.Add(Value: String; Bitmap: TBitmap);
 var
-  Item: TLayout;
   Img : TImage;
 begin
-  Item := TLayout.Create(Self);
-  Item.Parent     := Self.FContainer;
-  Item.Width      := Self.Width;
-  Item.Height     := Self.Height;
-  Item.Stored     := False;
-  Item.Position.X := FPages.Count * Width;
-  Item.Tag        := FPages.Add(Item);
-  Item.OnTap      := DoTap;
-  Img := TImage.Create(Item);
-  Img.Parent      := Item;
-  Img.HitTest     := False;
-  Img.Align       := TAlignLayout.Client;
+  Img := TImage.Create(Self);
   Img.Bitmap.Assign(Bitmap);
-  Item.TagString  := Value;
-  FContainer.Width := FPages.Count * Width;
-  FContainer.Position.X := 0;
-  if FActivePage = -1 then
-    FActivePage := 0;
+  AddImage(Value, Img);
 end;
 
 procedure TFMXImageSlider.Add(Value: String; Bitmap: TStream);
 var
-  Item: TLayout;
   Img : TImage;
 begin
+  Img := TImage.Create(Self);
+  Img.Bitmap.LoadFromStream(Bitmap);
+  AddImage(Value, Img);
+end;
+
+procedure TFMXImageSlider.AddImage(const Value: string; Image: TImage);
+var
+  Item: TLayout;
+begin
   Item := TLayout.Create(Self);
-  Item.Parent     := Self.FContainer;
+  Item.Parent     := Self;
   Item.Width      := Self.Width;
   Item.Height     := Self.Height;
   Item.Stored     := False;
-  Item.Position.X := FPages.Count * Width;
+  Item.Position.X := 0;
+  Item.Position.Y := 0;
+  Item.Visible    := False;
+  Item.TagString  := Value;
   Item.Tag        := FPages.Add(Item);
   Item.OnTap      := DoTap;
-  Img := TImage.Create(Item);
-  Img.Parent      := Item;
-  Img.HitTest     := False;
-  Img.Align       := TAlignLayout.Client;
-  Img.Bitmap.LoadFromStream(Bitmap);
-  Item.TagString := Value;
-  FContainer.Width := FPages.Count * Width;
-  FContainer.Position.X := 0;
-  if FActivePage = -1 then
-    FActivePage := 0;
+  Image.Stored    := False;
+  Image.Parent    := Item;
+  Image.HitTest   := False;
+  Image.Align     := TAlignLayout.Client;
 end;
 
 procedure TFMXImageSlider.Clear;
@@ -197,20 +198,16 @@ begin
   FTimer.Enabled  := False;
   FTimer.OnTimer  := OnTimer;
   FAutoSlider     := False;
-  FContainer      := TLayout.Create(Self);
-  FContainer.Parent := Self;
-  FContainer.Stored := False;
-  FContainer.Height := Height;
-  FContainer.Position.Y := 0;
-  FAnimation := TFloatAnimation.Create(Self);
+  FAnimation := TMyAnimation.Create(Self);
+  FAnimation.Stored := False;
   FAnimation.Interpolation := TInterpolationType.Quintic;
-  FAnimation.PropertyName := 'Position.X';
-  FAnimation.Parent := FContainer;
+  FAnimation.Parent := Self;
   FAnimation.Duration := 0.2;
+  FAnimation.OnProcess := AnimationProcess;
   FAnimation.OnFinish := AnimationFinished;
   FPages        := TList<TLayout>.Create;
   HitTest       := True;
-  ActivePage    := -1;
+  FActivePage   := -1;
   FPreviousPage := -1;
   FStartDrag    := False;
   AutoCapture   := True;
@@ -282,7 +279,7 @@ begin
       FIsMove := True;
     DeltaX := X - FDownPos.X;
     NewX := -FDownIndex * Width + DeltaX;
-    FContainer.Position.X := NewX;
+    PrepareSlide(DeltaX);
   end;
 end;
 
@@ -306,65 +303,129 @@ begin
   begin
     FStartDrag := False;
     DeltaX := X - FDownPos.X;
-    if Abs(DeltaX) > Width * 0.4 then
+    if (Abs(DeltaX) > Width * 0.4) and (PageCount > 0) then
     begin
       if (DeltaX > 0) then
       begin
-        if FActivePage > 0 then
-        begin
-          FPreviousPage := FActivePage;
-          FActivePage := FActivePage - 1;
-          DoPageChange(FActivePage, FPreviousPage);
-        end;
+        FPreviousPage := FActivePage;
+        FActivePage := (FActivePage + PageCount - 1) mod PageCount;
       end
       else if (DeltaX < 0) then
       begin
-        if FActivePage < PageCount - 1 then
-        begin
-          FPreviousPage := FActivePage;
-          FActivePage := FActivePage + 1;
-          DoPageChange(FActivePage, FPreviousPage);
-        end;
+        FPreviousPage := FActivePage;
+        FActivePage := (FActivePage + 1) mod PageCount;
       end;
+      DoPageChange(FActivePage, FPreviousPage);
+      MoveToActivePage(DeltaX < 0);
+    end
+    else
+    begin
+      MoveToActivePage(DeltaX > 0);
     end;
-    MoveToActivePage(DeltaX < 0);
     if FIsTimer then
       FTimer.Enabled := True;
   end;
 end;
 
 procedure TFMXImageSlider.MoveToActivePage(IsIn: Boolean);
+var
+  Page: TLayout;
 begin
+  PrepareSlide(IsIn);
   { a method to move to your active Page }
-  FAnimation.StartValue := FContainer.Position.X;
-  FAnimation.StopValue := -FActivePage * Width;
-  if IsIn then
-    FAnimation.AnimationType := TAnimationType.Out
-  else
+  Page := FTransitionLayouts[0];
+//  if IsIn then
+//    FAnimation.AnimationType := TAnimationType.Out
+//  else
     FAnimation.AnimationType := TAnimationType.&In;
   FAnimation.Start;
 end;
 
 procedure TFMXImageSlider.Next;
 begin
-  if FActivePage = FPages.Count - 1 then Exit;
+  if (PageCount < 2) or (FAnimation.Running) then Exit;
   FPreviousPage := FActivePage;
-  FActivePage := FActivePage + 1;
+  FActivePage := (FActivePage + 1) mod PageCount;
   DoPageChange(FActivePage, FPreviousPage);
   MoveToActivePage(True);
 end;
 
 procedure TFMXImageSlider.OnTimer(Sender: TObject);
 begin
-  if Self.FActivePage = Self.FPages.Count - 1 then Self.SetActivePage(0)
-  else Next;
+  Next;
+end;
+
+procedure TFMXImageSlider.PrepareSlide(DeltaX: Single);
+var
+  Layout1, Layout2: TLayout;
+  Index2: Integer;
+begin
+  Layout1 := FPages[FActivePage];
+  Layout1.Position.X := DeltaX;
+  if PageCount > 0 then
+  begin
+    if DeltaX > 0 then
+      // Find the left page
+      Index2 := (FActivePage + PageCount - 1) mod PageCount
+    else
+      Index2 := (FActivePage + 1) mod PageCount;
+    Layout2 := FPages[Index2];
+    Layout2.Visible := True;
+    if DeltaX > 0 then
+      Layout2.Position.X := Layout1.Position.X - Width
+    else
+      Layout2.Position.X := Layout1.BoundsRect.Right;
+  end;
+end;
+
+procedure TFMXImageSlider.PrepareSlide(IsIn: Boolean);
+var
+  Layout1, Layout2: TLayout;
+  Index2: Integer;
+  X: Single;
+begin
+  FTranstionIsIn := IsIn;
+  Layout1 := FPages[FActivePage];
+  if Layout1.Visible then
+    FTranstionStartX := Layout1.Position.X
+  else
+  begin
+    if IsIn then
+      FTranstionStartX := Width
+    else
+      FTranstionStartX := -Width;
+    Layout1.SetBounds(FTranstionStartX, 0, Width, Height);
+    Layout1.Visible := true;
+  end;
+  if PageCount > 1 then
+  begin
+    if IsIn then
+      Index2 := (FActivePage + PageCount - 1) mod PageCount
+    else
+      Index2 := (FActivePage + 1) mod PageCount;
+    Layout2 := FPages[Index2];
+    Layout2.Visible := True;
+    if IsIn then
+      X := Layout1.Position.X - Width
+    else
+      X := Layout1.BoundsRect.Right;
+    Layout2.SetBounds(X, 0, Width, Height);
+    SetLength(FTransitionLayouts, 2);
+    FTransitionLayouts[0] := Layout1;
+    FTransitionLayouts[1] := Layout2;
+  end
+  else
+  begin
+    SetLength(FTransitionLayouts, 1);
+    FTransitionLayouts[0] := Layout1;
+  end;
 end;
 
 procedure TFMXImageSlider.Prev;
 begin
-  if FActivePage = 0 then Exit;
+  if (PageCount < 2) or (FAnimation.Running) then Exit;
   FPreviousPage := FActivePage;
-  FActivePage := FActivePage - 1;
+  FActivePage := (FActivePage - 1 + PageCount) mod PageCount;
   DoPageChange(FActivePage, FPreviousPage);
   MoveToActivePage(False);
 end;
@@ -374,16 +435,12 @@ var
   I: Integer;
 begin
   inherited;
-  if PageCount = -1 then
-    FContainer.Width := Width
-  else
-    FContainer.Width := PageCount * Width;
   for I := 0 to FPages.Count - 1 do
   begin
     FPages[I].Width := Width;
     FPages[I].Height := Height;
     FPages[I].Position.X := I * Width;
-	FPages[I].RecalcSize;
+    FPages[I].RecalcSize;
   end;
 end;
 
@@ -395,11 +452,21 @@ begin
     exit;
   if FActivePage <> Value then
   begin
-    IsIn := FActivePage < Value;
-    FPreviousPage := FActivePage;
-    FActivePage := Value; // set FActivePage
-    DoPageChange(FActivePage, FPreviousPage);
-    MoveToActivePage(IsIn);
+    if FActivePage = -1 then
+    begin
+      FActivePage := Value;
+      FPages[FActivePage].SetBounds(0,0,Width,Height);
+      FPages[FActivePage].Visible := True;
+      DoPageChange(FActivePage, FPreviousPage);
+    end
+    else
+    begin
+      IsIn := FActivePage < Value;
+      FPreviousPage := FActivePage;
+      FActivePage := Value; // set FActivePage
+      DoPageChange(FActivePage, FPreviousPage);
+      MoveToActivePage(IsIn);
+    end;
   end;
 end;
 
@@ -410,9 +477,35 @@ end;
 
 procedure TFMXImageSlider.AnimationFinished(Sender: TObject);
 begin
+  if FTransitionLayouts[0].Tag = FActivePage then
+  begin
+    if Length(FTransitionLayouts) = 2 then
+      FTransitionLayouts[1].Visible := False;
+  end
+  else
+  begin
+    FTransitionLayouts[0].Visible := False;
+  end;
   If Assigned(FOnPageAnimationFinish) then
     FOnPageAnimationFinish(Self, FActivePage, FPreviousPage);
   FBeforeDrag := True;
+end;
+
+procedure TFMXImageSlider.AnimationProcess(Sender: TObject);
+var
+  Start, Stop: Single;
+begin
+  Start := FTranstionStartX;
+  Stop := 0;
+  FTransitionLayouts[0].Position.X :=
+    InterpolateSingle(Start, Stop, FAnimation.NormalizedTime);
+  if Length(FTransitionLayouts) = 2 then
+  begin
+    if FTranstionIsIn then
+      FTransitionLayouts[1].Position.X :=  FTransitionLayouts[0].Position.X - Width
+    else
+      FTransitionLayouts[1].Position.X :=  FTransitionLayouts[0].BoundsRect.Right;
+  end;
 end;
 
 function TFMXImageSlider.SetDragBegin: Boolean;
@@ -463,11 +556,12 @@ begin
       for I := OldCount + 1 to Value do
       begin
         L := TLayout.Create(Self);
-        L.Parent := FContainer;
+        L.Parent := Self;
         L.Width := Self.Width;
         L.Height := Self.Height;
         L.Stored := False;
         L.Position.X := I * Width;
+        L.Visible := False;
         FPages.Add(L);
       end;
     end
@@ -476,8 +570,6 @@ begin
       for I := OldCount - 1 downto Value do
       begin
         L := FPages[I];
-        // if L.ChildrenCount > 0 then
-        // L.Children[0].Parent := Self.Parent;
         L.DisposeOf;
       end;
       FPages.Count := Value;
@@ -496,6 +588,12 @@ end;
 procedure TFMXImageSlider.SetTimerInterval(const Value: Integer);
 begin
   FTimer.Interval := Value;
+end;
+
+{ TMyAnimation }
+
+procedure TMyAnimation.ProcessAnimation;
+begin
 end;
 
 end.

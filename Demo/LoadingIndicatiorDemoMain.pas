@@ -83,7 +83,7 @@ var
   T, T1: Single;
 begin
   T := FloatAnimation1.NormalizedTime;
-  T1 := GetEaseInOut.Solve(T, 1.0E-5);
+  T1 := TBezier.GetEaseInOut.Solve(T, 1.0E-5);
   Rectangle6.Position.X := InterpolateSingle(
     FloatAnimation1.StartValue, FloatAnimation1.StopValue, T1);
 end;

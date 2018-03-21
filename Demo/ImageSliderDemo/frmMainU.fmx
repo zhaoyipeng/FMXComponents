@@ -181,7 +181,8 @@ object frmMain: TfrmMain
     Size.Height = 161.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 10
-    ActivePage = 0
+    ActivePage = -1
+    AnimateDuration = 0.200000002980232200
     AutoSlider = False
     PageCount = 0
     TimerInterval = 5000

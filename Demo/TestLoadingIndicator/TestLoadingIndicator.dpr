@@ -9,6 +9,6 @@ uses
 
 begin
   Application.Initialize;
-  Application.CreateForm(TForm35, Form35);
+  Application.CreateForm(TLoadingIndicatorDemoMainForm, LoadingIndicatorDemoMainForm);
   Application.Run;
 end.
