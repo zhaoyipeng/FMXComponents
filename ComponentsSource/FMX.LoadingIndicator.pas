@@ -396,7 +396,7 @@ begin
   Path := TPathData.Create;
   try
     T := GetNormalizedAnimationTime;
-    Ani := GetEaseInOut;
+    Ani := TBezier.GetEaseInOut;
     for I := 0 to 7 do
     begin
       TI := T + (7 - I) * 0.1;
@@ -555,7 +555,7 @@ var
   Ani: TBezier;
 begin
   P := LocalRect.CenterPoint;
-  Ani := GetEaseInOut;
+  Ani := TBezier.GetEaseInOut;
   T := GetNormalizedAnimationTime;
   CalcAS(Ani, T, A1, S1);
   T := T * 2 - Trunc(T * 2);
@@ -794,7 +794,7 @@ begin
   W := (Width - 20) / 5;
   H := Height;
   Space := 0;
-  Ani := GetEaseInOut;
+  Ani := TBezier.GetEaseInOut;
   for I := 0 to 4 do
   begin
     case I of
@@ -836,7 +836,7 @@ begin
   W := (Width - 20) / 5;
   H := Height;
   Space := 0;
-  Ani := GetEaseInOut;
+  Ani := TBezier.GetEaseInOut;
   for I := 0 to 4 do
   begin
     case I of

@@ -29,6 +29,7 @@ type
     epsilon = 1.0E-5;
   private
     ax, bx, cx, ay, by, cy: Double;
+    x1, y1, x2, y2: Double;
   public
     constructor Create(p1x, p1y, p2x, p2y: Double);
     procedure SetData(p1x, p1y, p2x, p2y: Double);
@@ -37,6 +38,11 @@ type
     function SampleCurveDerivativeX(t: Double): Double;
     function SolveCurveX(x, epsilon: Double): Double;
     function Solve(x, epsilon: Double): Double;
+    class function GetLinear: TBezier;
+    class function GetEase: TBezier;
+    class function GetEaseIn: TBezier;
+    class function GetEaseOut: TBezier;
+    class function GetEaseInOut: TBezier;
   end;
 
   [ComponentPlatformsAttribute(TFMXPlatforms)]
@@ -58,6 +64,7 @@ type
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
     procedure SetData(p1x, p1y, p2x, p2y: Double);
+    procedure SetBezier(bezier: TBezier);
     function BezierTime: Single;
   published
     property P1X: Double read FP1X write SetP1X;
@@ -66,11 +73,13 @@ type
     property P2Y: Double read FP2Y write SetP2Y;
   end;
 
-function GetEaseInOut: TBezier;
-
 implementation
 
 var
+  Linear: TBezier = nil;
+  Ease: TBezier = nil;
+  EaseIn: TBezier = nil;
+  EaseOut: TBezier = nil;
   EaseInOut: TBezier = nil;
 
 type
@@ -79,18 +88,49 @@ type
     function GetDelayTime: Single;
   end;
 
-function GetEaseInOut: TBezier;
+{ TBezier }
+
+constructor TBezier.Create(p1x, p1y, p2x, p2y: Double);
+begin
+  SetData(p1x, p1y, p2x, p2y);
+end;
+
+class function TBezier.GetEase: TBezier;
+begin
+  if not Assigned(Ease) then
+    Ease := TBezier.Create(0.25,0.1,0.25,1);
+  Result := Ease;
+end;
+
+class function TBezier.GetEaseIn: TBezier;
+begin
+  if not Assigned(EaseInOut) then
+    EaseInOut := TBezier.Create(0.42,0,1,1);
+  Result := EaseIn;
+end;
+
+
+class function TBezier.GetEaseInOut: TBezier;
 begin
   if not Assigned(EaseInOut) then
     EaseInOut := TBezier.Create(0.42,0,0.58,1);
   Result := EaseInOut;
 end;
 
-{ TBezier }
 
-constructor TBezier.Create(p1x, p1y, p2x, p2y: Double);
+class function TBezier.GetEaseOut: TBezier;
 begin
-  SetData(p1x, p1y, p2x, p2y);
+  if not Assigned(EaseInOut) then
+    EaseInOut := TBezier.Create(0,0,0.58,1);
+  Result := EaseOut;
+end;
+
+
+class function TBezier.GetLinear: TBezier;
+begin
+  if not Assigned(Linear) then
+    Linear := TBezier.Create(0, 0, 1, 1);
+  Result := Linear;
 end;
 
 function TBezier.SampleCurveDerivativeX(t: Double): Double;
@@ -111,6 +151,10 @@ end;
 
 procedure TBezier.SetData(p1x, p1y, p2x, p2y: Double);
 begin
+  x1 := p1x;
+  y1 := p1y;
+  x2 := p2x;
+  y2 := p2y;
   // Calculate the polynomial coefficients, implicit first and last control points are (0,0) and (1,1).
 	cx := 3.0 * p1x;
 	bx := 3.0 * (p2x - p1x) - cx;
@@ -215,6 +259,15 @@ begin
   end;
 end;
 
+procedure TFMXBezierAnimation.SetBezier(bezier: TBezier);
+begin
+  FP1X := bezier.x1;
+  FP1Y := bezier.y1;
+  FP2X := bezier.x2;
+  FP2Y := bezier.y2;
+  FBezier.SetData(bezier.x1, bezier.y1, bezier.x2, bezier.y2);
+end;
+
 procedure TFMXBezierAnimation.SetData(p1x, p1y, p2x, p2y: Double);
 begin
   FP1X := p1x;
@@ -275,5 +328,9 @@ end;
 
 initialization
 finalization
+  Linear.Free;
+  Ease.Free;
+  EaseIn.Free;
+  EaseOut.Free;
   EaseInOut.Free;
 end.
