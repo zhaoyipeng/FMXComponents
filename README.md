@@ -15,7 +15,7 @@ You can also add my skype: zhaoyipeng@hotmail.com<br>
 
 ## Recent update
 	
-![Recent update](../SnapShots/recent.gif)<br>
+![Recent update](SnapShots/recent.gif)<br>
 
 v0.3.0.0 : merged with kwon hwang-jung's change<br>
 1. add three Add methods to add bitmap directly<br>
@@ -33,7 +33,7 @@ v0.3.0.0 : merged with kwon hwang-jung's change<br>
 ## 3.[TFMXCircleScoreIndicator](Documents/FMXCircleScoreIndicator.md)
 
 ## 4.[TFMXImageSlider](Documents/FMXImageSlider.md)
- 
+
 ## 5.[TFMXSimpleBBCodeText](Documents/FMXSimpleBBCodeText.md)
 
 ## 6.[TFMXGuesturePassword](Documents/FMXGesturePassword.md)
