@@ -8,6 +8,7 @@ object frmMain: TfrmMain
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
   OnCreate = FormCreate
+  OnResize = FormResize
   DesignerMasterStyle = 0
   object ToolBar: TLayout
     Align = Bottom

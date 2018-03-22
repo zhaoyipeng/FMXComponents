@@ -47,6 +47,7 @@ type
     procedure Layout4Resize(Sender: TObject);
     procedure cpActiveColorChange(Sender: TObject);
     procedure cpInactiveColorChange(Sender: TObject);
+    procedure FormResize(Sender: TObject);
   private
     procedure AddBitmap(const FileName: string);
     { Private declarations }
@@ -58,6 +59,9 @@ var
   frmMain: TfrmMain;
 
 implementation
+
+uses
+  System.IOUtils;
 
 {$R *.fmx}
 
@@ -123,8 +127,20 @@ begin
   AddBitmap('..\..\Images\image4.jpg');
   ImgSlider.ActivePage := 0;
   {$ENDIF}
+  {$IFDEF  ANDROID}
+  AddBitmap('images/image1.jpg');
+  AddBitmap('images/image2.jpg');
+  AddBitmap('images/image3.jpg');
+  AddBitmap('images/image4.jpg');
+  ImgSlider.ActivePage := 0;
+  {$ENDIF}
   cpActiveColor.Color := ImgSlider.DotActiveColor;
   cpInActiveColor.Color := ImgSlider.DotInActiveColor;
+end;
+
+procedure TfrmMain.FormResize(Sender: TObject);
+begin
+  ImgSlider.Height:= ClientWidth * 400 / 640;
 end;
 
 procedure TfrmMain.ImgSliderCanDragBegin(Sender: TObject;
@@ -161,10 +177,16 @@ end;
 procedure TfrmMain.AddBitmap(const FileName: string);
 var
   Bmp: TBitmap;
+  p: string;
 begin
   Bmp := TBitmap.Create;
   try
-    Bmp.LoadFromFile(FileName);
+    {$IFDEF ANDROID}
+    p := TPath.Combine(System.IOUtils.TPath.GetDocumentsPath, FileName);
+    {$ELSE}
+    p := FileName;
+    {$ENDIF}
+    Bmp.LoadFromFile(p);
     ImgSlider.Add((ImgSlider.PageCount + 1).ToString, Bmp);
   finally
     Bmp.Free;
