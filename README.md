@@ -17,13 +17,16 @@ You can also add my skype: zhaoyipeng@hotmail.com<br>
 	
 ![Recent update](SnapShots/FMXImageSlider.gif)<br>
 
-v0.3.0.0 : merged with kwon hwang-jung's change<br>
-1. add three Add methods to add bitmap directly<br>
-2. add Next, Prev methods<br>
-3. add AutoSlider property can auto slide<br>
-4. add TimerInterval to control AutoSlider interval<br>
-5. use ActivePage property move page, ex)ActivePage := 1<br>
-6. add Datas property, can set tagstring on each page<br>
+v0.4.0.0 : merged with Mikkao's change 2018-03-01<br>
+1. change OnPageChange event to TPageChangeEvent<br>
+2. add OnPageAnimationFinish event<br>
+3. add OnCanDragBegin event<br>
+
+v0.5.0.0 :<br>
+1. rewrite slide method, now can support loop<br>
+
+v0.6.0.0 :<br>
+1. add dot indicator, support dynamic change dot active/inactive color<br>
 	
 
 ## 1.[TFMXScrollableList](Documents/FMXScrollableList.md)

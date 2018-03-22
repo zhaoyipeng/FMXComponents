@@ -25,6 +25,8 @@
 //         3. add OnCanDragBegin event
 // 2018-03-21, v0.5.0.0 :
 //         1. rewrite slide method, now can support loop
+// 2018-03-22, v0.6.0.0 :
+//         1. add dot indicator, support dynamic change dot active/inactive color
 
 unit FMX.ImageSlider;
 
@@ -46,23 +48,52 @@ uses
 
 type
   TPageChangeEvent = procedure(Sender: TObject; NewPage, OldPage: Integer) of object;
-  TPageAnimationFinishEvent = procedure(Sender: TObject; NewPage, OldPage: Integer) of object;
+  TPageAnimationFinishEvent = procedure(Sender: TObject; NewPage: Integer) of object;
   TCanBeginDragEvent = procedure(Sender: TObject; var CanBegin: Boolean) of object;
+
+  TFMXImageSlider = class;
+
+  TSliderDots = class(TControl)
+  private
+    FDotContainer: TLayout;
+    FDotSize: Single;
+    FActiveColor: TAlphaColor;
+    FInActiveColor: TAlphaColor;
+    FActiveIndex: Integer;
+    procedure SetDotCount(const Value: Integer);
+    function GetDotCount: Integer;
+    procedure CreateDotShape;
+    procedure SetDotSize(const Value: Single);
+    procedure SetActiveColor(const Value: TAlphaColor);
+    procedure SetInActiveColor(const Value: TAlphaColor);
+    procedure SetActiveIndex(const Value: Integer);
+  protected
+    procedure HitTestChanged; override;
+    function GetDot(Index: Integer): TControl;
+    procedure DoResized; override;
+  public
+    constructor Create(AOwner: TComponent); override;
+    property ActiveIndex: Integer read FActiveIndex write SetActiveIndex;
+    property DotCount: Integer read GetDotCount write SetDotCount;
+    property DotSize: Single read FDotSize write SetDotSize;
+    property ActiveColor: TAlphaColor read FActiveColor write SetActiveColor;
+    property InActiveColor: TAlphaColor read FInActiveColor write SetInActiveColor;
+  end;
 
   [ComponentPlatformsAttribute(TFMXPlatforms)]
   TFMXImageSlider = class(TLayout)
   private
+    FContainer: TControl;
     FIsTimer: Boolean;
     FAutoSlider: Boolean;
     FTimer: TTimer;
-    FPages: TList<TLayout>;
+    FPages: TList<TControl>;
     FActivePage: Integer;
     FIsMove: Boolean;
     FStartDrag: Boolean;
     FBeforeDrag: Boolean;
     FDownPos: TPointF;
     FDownIndex: Integer;
-    FPreviousPage: Integer;
     FAnimation: TAnimation;
     FOnPageAnimationFinish: TPageAnimationFinishEvent;
     FOnCanDragBegin: TCanBeginDragEvent;
@@ -70,9 +101,10 @@ type
     FOnItemClick: TNotifyEvent;
     FOnPageChange: TPageChangeEvent;
     FAnimationInterval: Integer;
-    FTransitionLayouts: array of TLayout;
+    FTransitionLayouts: array of TControl;
     FTranstionIsIn: Boolean;
     FTranstionStartX: Single;
+    FDots: TSliderDots;
     procedure MoveToActivePage(IsIn: Boolean = True);
     procedure OnTimer(Sender: TObject);
     procedure AnimationProcess(Sender: TObject);
@@ -88,15 +120,22 @@ type
     procedure SetPageCount(const Value: Integer);
     procedure SetDatas(Index: Integer; const Value: string);
     function SetDragBegin: Boolean;
+    function GetDotsVisible: Boolean;
+    procedure SetDotsVisible(const Value: Boolean);
+    function GetDotActiveColor: TAlphaColor;
+    function GetDotInActiveColor: TAlphaColor;
+    procedure SetDotActiveColor(const Value: TAlphaColor);
+    procedure SetDotInActiveColor(const Value: TAlphaColor);
   protected
     procedure SetTimerInterval(const Value: Integer);
-    procedure Resize; override;
+    procedure DoResized; override;
     procedure DoPageChange(NewPage, OldPage: Integer);
     procedure DoTap(Sender: TObject; const Point: TPointF);
     procedure MouseDown(Button: TMouseButton; Shift: TShiftState; X, Y: Single); override;
     procedure MouseMove(Shift: TShiftState; X, Y: Single); override;
     procedure MouseUp(Button: TMouseButton; Shift: TShiftState; X, Y: Single); override;
     procedure AddImage(const Value: string; Image: TImage);
+    procedure AddPage(const Value: string; Page: TControl);
     procedure PrepareSlide(DeltaX: Single); overload;
     procedure PrepareSlide(IsIn: Boolean); overload;
   public
@@ -118,6 +157,9 @@ type
     property ActivePage: Integer read FActivePage write SetActivePage;    //page move
     property AnimateDuration: Single read GetAnimateDuration write SetAnimateDuration;
     property AutoSlider: Boolean read FAutoSlider write SetAutoSlider;    //auto slider property
+    property DotActiveColor: TAlphaColor read GetDotActiveColor write SetDotActiveColor;
+    property DotInActiveColor: TAlphaColor read GetDotInActiveColor write SetDotInActiveColor;
+    property DotsVisible: Boolean read GetDotsVisible write SetDotsVisible;
     property PageCount: Integer read GetPageCount write SetPageCount;
     property TimerInterval: Integer read GetTimerInterval write SetTimerInterval; //auto slider timer
     property OnCanDragBegin: TCanBeginDragEvent read FOnCanDragBegin write FOnCanDragBegin;
@@ -161,23 +203,26 @@ end;
 
 procedure TFMXImageSlider.AddImage(const Value: string; Image: TImage);
 var
-  Item: TLayout;
+  Page: TLayout;
 begin
-  Item := TLayout.Create(Self);
-  Item.Parent     := Self;
-  Item.Width      := Self.Width;
-  Item.Height     := Self.Height;
-  Item.Stored     := False;
-  Item.Position.X := 0;
-  Item.Position.Y := 0;
-  Item.Visible    := False;
-  Item.TagString  := Value;
-  Item.Tag        := FPages.Add(Item);
-  Item.OnTap      := DoTap;
+  Page := TLayout.Create(Self);
   Image.Stored    := False;
-  Image.Parent    := Item;
+  Image.WrapMode := TImageWrapMode.Stretch;
+  Image.Parent    := Page;
   Image.HitTest   := False;
   Image.Align     := TAlignLayout.Client;
+  AddPage(Value, Page);
+end;
+
+procedure TFMXImageSlider.AddPage(const Value: string; Page: TControl);
+begin
+  Page.Parent := FContainer;
+  Page.SetBounds(0,0, FContainer.Width, FContainer.Height);
+  Page.Stored := False;
+  Page.Visible := False;
+  Page.TagString  := Value;
+  Page.Tag        := FPages.Add(Page);
+  FDots.DotCount := PageCount;
 end;
 
 procedure TFMXImageSlider.Clear;
@@ -190,11 +235,24 @@ begin
   end;
   FPages.Clear;
   ActivePage := -1;
+  FDots.DotCount := PageCount;
 end;
 
 constructor TFMXImageSlider.Create(AOwner: TComponent);
 begin
   inherited;
+  FContainer := TControl.Create(Self);
+  FContainer.Align := TAlignLayout.Client;
+  FContainer.Stored := False;
+  FContainer.HitTest := False;
+  FContainer.ClipChildren := True;
+  FContainer.Parent := Self;
+
+  FDots := TSliderDots.Create(Self);
+  FDots.Stored := False;
+  FDots.SetBounds(0, FContainer.Height - FDots.Height, FContainer.Width, FDots.Height);
+  FDots.Parent := Self;
+
   FTimer          := TTimer.Create(Self);
   FTimer.Interval := 1000 * 5;
   FTimer.Enabled  := False;
@@ -207,10 +265,9 @@ begin
   FAnimation.Duration := 0.2;
   FAnimation.OnProcess := AnimationProcess;
   FAnimation.OnFinish := AnimationFinished;
-  FPages        := TList<TLayout>.Create;
+  FPages        := TList<TControl>.Create;
   HitTest       := True;
   FActivePage   := -1;
-  FPreviousPage := -1;
   FStartDrag    := False;
   AutoCapture   := True;
 end;
@@ -242,6 +299,21 @@ begin
   Result := FPages[Index].TagString;
 end;
 
+function TFMXImageSlider.GetDotActiveColor: TAlphaColor;
+begin
+  Result := FDots.ActiveColor;
+end;
+
+function TFMXImageSlider.GetDotInActiveColor: TAlphaColor;
+begin
+  Result := FDots.InActiveColor;
+end;
+
+function TFMXImageSlider.GetDotsVisible: Boolean;
+begin
+  Result := FDots.Visible;
+end;
+
 function TFMXImageSlider.GetPageCount: Integer;
 begin
   Result := FPages.Count;
@@ -270,7 +342,7 @@ end;
 
 procedure TFMXImageSlider.MouseMove(Shift: TShiftState; X, Y: Single);
 var
-  DeltaX, NewX: Single;
+  DeltaX: Single;
 begin
   inherited;
   if FStartDrag then
@@ -280,7 +352,6 @@ begin
     if Abs(FDownPos.X - X) > 5 then
       FIsMove := True;
     DeltaX := X - FDownPos.X;
-    NewX := -FDownIndex * Width + DeltaX;
     PrepareSlide(DeltaX);
   end;
 end;
@@ -288,6 +359,7 @@ end;
 procedure TFMXImageSlider.MouseUp(Button: TMouseButton; Shift: TShiftState; X, Y: Single);
 var
   DeltaX: Single;
+  PrevPage: Integer;
 begin
   inherited;
   if (not FIsMove) and FStartDrag then
@@ -309,15 +381,15 @@ begin
     begin
       if (DeltaX > 0) then
       begin
-        FPreviousPage := FActivePage;
+        PrevPage := FActivePage;
         FActivePage := (FActivePage + PageCount - 1) mod PageCount;
       end
-      else if (DeltaX < 0) then
+      else
       begin
-        FPreviousPage := FActivePage;
+        PrevPage := FActivePage;
         FActivePage := (FActivePage + 1) mod PageCount;
       end;
-      DoPageChange(FActivePage, FPreviousPage);
+      DoPageChange(FActivePage, PrevPage);
       MoveToActivePage(DeltaX < 0);
     end
     else
@@ -330,25 +402,19 @@ begin
 end;
 
 procedure TFMXImageSlider.MoveToActivePage(IsIn: Boolean);
-var
-  Page: TLayout;
 begin
   PrepareSlide(IsIn);
-  { a method to move to your active Page }
-  Page := FTransitionLayouts[0];
-//  if IsIn then
-//    FAnimation.AnimationType := TAnimationType.Out
-//  else
-    FAnimation.AnimationType := TAnimationType.&In;
   FAnimation.Start;
 end;
 
 procedure TFMXImageSlider.Next;
+var
+  PrevPage: Integer;
 begin
   if (PageCount < 2) or (FAnimation.Running) then Exit;
-  FPreviousPage := FActivePage;
+  PrevPage := FActivePage;
   FActivePage := (FActivePage + 1) mod PageCount;
-  DoPageChange(FActivePage, FPreviousPage);
+  DoPageChange(FActivePage, PrevPage);
   MoveToActivePage(True);
 end;
 
@@ -359,7 +425,7 @@ end;
 
 procedure TFMXImageSlider.PrepareSlide(DeltaX: Single);
 var
-  Layout1, Layout2: TLayout;
+  Layout1, Layout2: TControl;
   Index2: Integer;
 begin
   Layout1 := FPages[FActivePage];
@@ -382,7 +448,7 @@ end;
 
 procedure TFMXImageSlider.PrepareSlide(IsIn: Boolean);
 var
-  Layout1, Layout2: TLayout;
+  Layout1, Layout2: TControl;
   Index2: Integer;
   X: Single;
 begin
@@ -424,49 +490,56 @@ begin
 end;
 
 procedure TFMXImageSlider.Prev;
+var
+  PrevPage: Integer;
 begin
   if (PageCount < 2) or (FAnimation.Running) then Exit;
-  FPreviousPage := FActivePage;
+  PrevPage := FActivePage;
   FActivePage := (FActivePage - 1 + PageCount) mod PageCount;
-  DoPageChange(FActivePage, FPreviousPage);
+  DoPageChange(FActivePage, PrevPage);
   MoveToActivePage(False);
 end;
 
-procedure TFMXImageSlider.Resize;
+procedure TFMXImageSlider.DoResized;
 var
   I: Integer;
 begin
   inherited;
   for I := 0 to FPages.Count - 1 do
   begin
-    FPages[I].Width := Width;
-    FPages[I].Height := Height;
-    FPages[I].Position.X := I * Width;
-    FPages[I].RecalcSize;
+    FPages[I].Width := FContainer.Width;
+    FPages[I].Height := FContainer.Height;
   end;
+  FDots.SetBounds(0, FContainer.Height - FDots.Height, FContainer.Width, FDots.Height);
 end;
 
 procedure TFMXImageSlider.SetActivePage(const Value: Integer);
 var
   IsIn: Boolean;
+  PrevPage, Delta: Integer;
 begin
   if (Value < 0) or (Value > FPages.Count - 1) then // check if value valid
     exit;
   if FActivePage <> Value then
   begin
+    PrevPage := FActivePage;
     if FActivePage = -1 then
     begin
       FActivePage := Value;
       FPages[FActivePage].SetBounds(0,0,Width,Height);
       FPages[FActivePage].Visible := True;
-      DoPageChange(FActivePage, FPreviousPage);
+      DoPageChange(FActivePage, PrevPage);
+      FDots.ActiveIndex := FActivePage;
     end
     else
     begin
+      Delta := Abs(FActivePage - Value);
+      // if current active page not neighbor of new active page, hide current page
+      if (Delta <> 1) and (Delta <> (PageCount-1)) then
+        FPages[FActivePage].Visible := False;
       IsIn := FActivePage < Value;
-      FPreviousPage := FActivePage;
       FActivePage := Value; // set FActivePage
-      DoPageChange(FActivePage, FPreviousPage);
+      DoPageChange(FActivePage, PrevPage);
       MoveToActivePage(IsIn);
     end;
   end;
@@ -489,8 +562,9 @@ begin
     FTransitionLayouts[0].Visible := False;
   end;
   If Assigned(FOnPageAnimationFinish) then
-    FOnPageAnimationFinish(Self, FActivePage, FPreviousPage);
+    FOnPageAnimationFinish(Self, FActivePage);
   FBeforeDrag := True;
+  FDots.ActiveIndex := FActivePage;
 end;
 
 procedure TFMXImageSlider.AnimationProcess(Sender: TObject);
@@ -534,6 +608,21 @@ begin
   FPages[Index].TagString := Value;
 end;
 
+procedure TFMXImageSlider.SetDotActiveColor(const Value: TAlphaColor);
+begin
+  FDots.ActiveColor := Value;
+end;
+
+procedure TFMXImageSlider.SetDotInActiveColor(const Value: TAlphaColor);
+begin
+  FDots.InActiveColor := Value;
+end;
+
+procedure TFMXImageSlider.SetDotsVisible(const Value: Boolean);
+begin
+  FDots.Visible := Value;
+end;
+
 procedure TFMXImageSlider.SetPage(Index: Integer; AImage: TImage);
 begin
   if (Index >= 0) and (Index < PageCount) then
@@ -548,23 +637,16 @@ procedure TFMXImageSlider.SetPageCount(const Value: Integer);
 var
   OldCount: Integer;
   I: Integer;
-  L: TLayout;
+  L: TControl;
 begin
-  if Value >= 0 then
+  if Value <> PageCount then
   begin
     OldCount := PageCount;
     if OldCount < Value then
     begin
       for I := OldCount + 1 to Value do
       begin
-        L := TLayout.Create(Self);
-        L.Parent := Self;
-        L.Width := Self.Width;
-        L.Height := Self.Height;
-        L.Stored := False;
-        L.Position.X := I * Width;
-        L.Visible := False;
-        FPages.Add(L);
+        AddPage('', TLayout.Create(Self));
       end;
     end
     else if OldCount > Value then
@@ -596,6 +678,158 @@ end;
 
 procedure TMyAnimation.ProcessAnimation;
 begin
+end;
+
+{ TSliderDots }
+
+constructor TSliderDots.Create(AOwner: TComponent);
+begin
+  inherited;
+  FDotSize := 12;
+  FActiveIndex := -1;
+  FDotContainer := TLayout.Create(Self);
+  FDotContainer.Stored := False;
+  FDotContainer.Height := FDotSize;
+  FDotContainer.HitTest := False;
+  FDotContainer.Parent := Self;
+  FInActiveColor := $FFDDDDDD;
+  FActiveColor := $FF00B4FF;
+  HitTest := False;
+  Height := FDotSize * 2;
+end;
+
+procedure TSliderDots.CreateDotShape;
+var
+  Dot: TShape;
+  X, W: Single;
+  B: TRectF;
+begin
+  X := DotCount * DotSize * 2;
+  Dot := TCircle.Create(Self);
+  Dot.HitTest := False;
+  Dot.SetBounds(X, 0, DotSize, DotSize);
+  Dot.Stroke.Kind := TBrushKind.None;
+  Dot.Fill.Kind := TBrushKind.Solid;
+  Dot.Fill.Color := FInActiveColor;
+  Dot.Parent := FDotContainer;
+  X := (Self.Width - FDotContainer.Width) / 2;
+  W := (DotCount * 2 - 1) * DotSize;
+  B := TRectF.Create(X, 0, X + W, DotSize);
+  B := B.SnapToPixel(Scene.GetSceneScale, False);
+  FDotContainer.BoundsRect := B;
+end;
+
+procedure TSliderDots.DoResized;
+var
+  X, W: Single;
+  B: TRectF;
+begin
+  inherited;
+  X := (Self.Width - FDotContainer.Width) / 2;
+  W := (DotCount * 2 - 1) * DotSize;
+  B := TRectF.Create(X, 0, X + W, DotSize);
+//  B := B.SnapToPixel(Scene.GetSceneScale, False);
+  FDotContainer.BoundsRect := B;
+end;
+
+function TSliderDots.GetDot(Index: Integer): TControl;
+begin
+  Result := TControl(FDotContainer.Children[Index]);
+end;
+
+function TSliderDots.GetDotCount: Integer;
+begin
+  Result := FDotContainer.ChildrenCount;
+end;
+
+procedure TSliderDots.HitTestChanged;
+begin
+  inherited;
+
+end;
+
+procedure TSliderDots.SetActiveColor(const Value: TAlphaColor);
+begin
+  if FActiveColor <> Value then
+  begin
+    FActiveColor := Value;
+    if (FActiveIndex >= 0) and (FActiveIndex < GetDotCount) then
+    begin
+      (GetDot(FActiveIndex) as TShape).Fill.Color := FActiveColor;
+    end;
+  end;
+end;
+
+procedure TSliderDots.SetActiveIndex(const Value: Integer);
+begin
+  if FActiveIndex <> Value then
+  begin
+    if (FActiveIndex >= 0) and (FActiveIndex < DotCount) then
+    begin
+      (GetDot(FActiveIndex) as TShape).Fill.Color := FInActiveColor;
+    end;
+    FActiveIndex := Value;
+    if (FActiveIndex >= 0) and (FActiveIndex < DotCount) then
+    begin
+      (GetDot(FActiveIndex) as TShape).Fill.Color := FActiveColor;
+    end;
+  end;
+end;
+
+procedure TSliderDots.SetDotCount(const Value: Integer);
+var
+  OldCount: Integer;
+  I: Integer;
+  Dot: TFMXObject;
+begin
+  if Value <> DotCount then
+  begin
+    OldCount := DotCount;
+    if OldCount < Value then
+    begin
+      for I := OldCount + 1 to Value do
+      begin
+        CreateDotShape;
+      end;
+    end
+    else
+    begin
+      for I := OldCount - 1 downto Value do
+      begin
+        Dot := FDotContainer.Children[I];
+        Dot.DisposeOf;
+      end;
+    end;
+  end;
+end;
+
+procedure TSliderDots.SetDotSize(const Value: Single);
+begin
+  if FDotSize <> Value then
+  begin
+    FDotSize := Value;
+    FDotContainer.Height := FDotSize;
+    Height := FDotSize * 3;
+  end;
+end;
+
+procedure TSliderDots.SetInActiveColor(const Value: TAlphaColor);
+var
+  I: Integer;
+  Dot: TShape;
+begin
+  if FInActiveColor <> Value then
+  begin
+    FInActiveColor := Value;
+    for I := 0 to DotCount-1 do
+    begin
+      if I <> FActiveIndex then
+      begin
+        Dot := GetDot(I) as TShape;
+        Dot.Fill.Color := FInActiveColor;
+      end;
+    end;
+  end;
 end;
 
 end.

@@ -20,3 +20,9 @@ A Simple Image Slider
 1. change OnPageChange event to TPageChangeEvent<br>
 2. add OnPageAnimationFinish event<br>
 3. add OnCanDragBegin event<br>
+
+2018-03-21, v0.5.0.0 :<br>
+1. rewrite slide method, now can support loop<br>
+
+2018-03-22, v0.6.0.0 :<br>
+1. add dot indicator, support dynamic change dot active/inactive color<br>

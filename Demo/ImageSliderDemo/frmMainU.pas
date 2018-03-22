@@ -6,7 +6,7 @@ uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.Objects,
   FMX.StdCtrls, FMX.Edit, FMX.Controls.Presentation, FMX.ImageSlider,
-  FMX.Layouts, FMX.ListBox, FMX.ScrollBox, FMX.Memo;
+  FMX.Layouts, FMX.ListBox, FMX.ScrollBox, FMX.Memo, FMX.Colors;
 
 type
   TfrmMain = class(TForm)
@@ -20,11 +20,16 @@ type
     Button1: TButton;
     SpeedButton1: TSpeedButton;
     SpeedButton2: TSpeedButton;
-    Label1: TLabel;
-    cbbInterval: TComboBox;
-    IsAuto: TCheckBox;
     Memo1: TMemo;
     ImgSlider: TFMXImageSlider;
+    Layout3: TLayout;
+    Label2: TLabel;
+    cbbInterval: TComboBox;
+    IsAuto: TCheckBox;
+    chkShowDots: TCheckBox;
+    Layout4: TLayout;
+    cpActiveColor: TColorPanel;
+    cpInactiveColor: TColorPanel;
     procedure btnAddClick(Sender: TObject);
     procedure btnGoPageClick(Sender: TObject);
     procedure IsAutoChange(Sender: TObject);
@@ -36,9 +41,12 @@ type
     procedure ImgSliderItemClick(Sender: TObject);
     procedure ImgSliderItemTap(Sender: TObject; const Point: TPointF);
     procedure ImgSliderCanDragBegin(Sender: TObject; var CanBegin: Boolean);
-    procedure ImgSliderPageAnimationFinish(Sender: TObject; NewPage,
-      OldPage: Integer);
+    procedure ImgSliderPageAnimationFinish(Sender: TObject; NewPage: Integer);
     procedure ImgSliderPageChange(Sender: TObject; NewPage, OldPage: Integer);
+    procedure chkShowDotsChange(Sender: TObject);
+    procedure Layout4Resize(Sender: TObject);
+    procedure cpActiveColorChange(Sender: TObject);
+    procedure cpInactiveColorChange(Sender: TObject);
   private
     procedure AddBitmap(const FileName: string);
     { Private declarations }
@@ -90,6 +98,21 @@ begin
   ImgSlider.TimerInterval := INTERVALS[cbbInterval.ItemIndex];
 end;
 
+procedure TfrmMain.chkShowDotsChange(Sender: TObject);
+begin
+  ImgSlider.DotsVisible := chkShowDots.IsChecked;
+end;
+
+procedure TfrmMain.cpActiveColorChange(Sender: TObject);
+begin
+  ImgSlider.DotActiveColor := cpActiveColor.Color;
+end;
+
+procedure TfrmMain.cpInactiveColorChange(Sender: TObject);
+begin
+  ImgSlider.DotInActiveColor := cpInactiveColor.Color;
+end;
+
 procedure TfrmMain.FormCreate(Sender: TObject);
 begin
   ImgSlider.Height:= ClientWidth * 400 / 640;
@@ -100,6 +123,8 @@ begin
   AddBitmap('..\..\Images\image4.jpg');
   ImgSlider.ActivePage := 0;
   {$ENDIF}
+  cpActiveColor.Color := ImgSlider.DotActiveColor;
+  cpInActiveColor.Color := ImgSlider.DotInActiveColor;
 end;
 
 procedure TfrmMain.ImgSliderCanDragBegin(Sender: TObject;
@@ -118,8 +143,7 @@ begin
 //  Memo1.Lines.Add('On Item Tap: '+ TControl(Sender).Tag.ToString);
 end;
 
-procedure TfrmMain.ImgSliderPageAnimationFinish(Sender: TObject; NewPage,
-  OldPage: Integer);
+procedure TfrmMain.ImgSliderPageAnimationFinish(Sender: TObject; NewPage: Integer);
 begin
 //  Memo1.Lines.Add(
 //    Format('On PageAnimationFinish, NewPage: %d, OldPage: %d',
@@ -150,6 +174,12 @@ end;
 procedure TfrmMain.IsAutoChange(Sender: TObject);
 begin
   ImgSlider.AutoSlider := IsAuto.IsChecked;
+end;
+
+procedure TfrmMain.Layout4Resize(Sender: TObject);
+begin
+  cpActiveColor.Width := Layout4.Width / 2;
+  cpInactiveColor.Width := Layout4.Width / 2;
 end;
 
 end.

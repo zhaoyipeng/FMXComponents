@@ -2,7 +2,7 @@ object frmMain: TfrmMain
   Left = 0
   Top = 0
   Caption = 'TFMXImageSlider Demo'
-  ClientHeight = 495
+  ClientHeight = 629
   ClientWidth = 338
   FormFactor.Width = 320
   FormFactor.Height = 480
@@ -11,7 +11,7 @@ object frmMain: TfrmMain
   DesignerMasterStyle = 0
   object ToolBar: TLayout
     Align = Bottom
-    Position.Y = 320.000000000000000000
+    Position.Y = 457.000000000000000000
     Size.Width = 338.000000000000000000
     Size.Height = 40.000000000000000000
     Size.PlatformDefault = False
@@ -69,50 +69,35 @@ object frmMain: TfrmMain
   end
   object Layout1: TLayout
     Align = Bottom
-    Position.Y = 407.000000000000000000
+    Position.Y = 497.000000000000000000
     Size.Width = 338.000000000000000000
     Size.Height = 44.000000000000000000
     Size.PlatformDefault = False
-    TabOrder = 4
-    object Label1: TLabel
+    TabOrder = 5
+    object IsAuto: TCheckBox
       Align = Left
-      Margins.Left = 4.000000000000000000
-      Margins.Top = 4.000000000000000000
-      Margins.Right = 4.000000000000000000
-      Margins.Bottom = 4.000000000000000000
-      Position.X = 4.000000000000000000
-      Position.Y = 4.000000000000000000
-      Size.Width = 120.000000000000000000
-      Size.Height = 36.000000000000000000
-      Size.PlatformDefault = False
-      Text = 'Interval:'
-      TabOrder = 6
-    end
-    object cbbInterval: TComboBox
-      Align = VertCenter
-      Items.Strings = (
-        '1s'
-        '2s'
-        '3s'
-        '4s'
-        '5s')
-      ItemIndex = 4
-      Margins.Left = 4.000000000000000000
-      Margins.Top = 4.000000000000000000
-      Margins.Right = 4.000000000000000000
-      Margins.Bottom = 4.000000000000000000
-      Position.X = 132.000000000000000000
-      Position.Y = 4.000000000000000000
-      Size.Width = 202.000000000000000000
-      Size.Height = 36.000000000000000000
+      Size.Width = 121.000000000000000000
+      Size.Height = 44.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 7
-      OnChange = cbbIntervalChange
+      Text = 'Auto Slider'
+      OnChange = IsAutoChange
+    end
+    object chkShowDots: TCheckBox
+      Align = Left
+      IsChecked = True
+      Position.X = 121.000000000000000000
+      Size.Width = 121.000000000000000000
+      Size.Height = 44.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 6
+      Text = 'Show Dots'
+      OnChange = chkShowDotsChange
     end
   end
   object Layout2: TLayout
     Align = Bottom
-    Position.Y = 451.000000000000000000
+    Position.Y = 585.000000000000000000
     Size.Width = 338.000000000000000000
     Size.Height = 44.000000000000000000
     Size.PlatformDefault = False
@@ -153,26 +138,16 @@ object frmMain: TfrmMain
       OnClick = btnNextClick
     end
   end
-  object IsAuto: TCheckBox
-    Align = Bottom
-    Position.Y = 360.000000000000000000
-    Size.Width = 338.000000000000000000
-    Size.Height = 47.000000000000000000
-    Size.PlatformDefault = False
-    TabOrder = 5
-    Text = 'Auto Slider'
-    OnChange = IsAutoChange
-  end
   object Memo1: TMemo
     Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
     DataDetectorTypes = []
     Align = Client
     Size.Width = 338.000000000000000000
-    Size.Height = 159.000000000000000000
+    Size.Height = 164.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 8
     Viewport.Width = 334.000000000000000000
-    Viewport.Height = 155.000000000000000000
+    Viewport.Height = 160.000000000000000000
   end
   object ImgSlider: TFMXImageSlider
     Align = Top
@@ -191,5 +166,76 @@ object frmMain: TfrmMain
     OnItemTap = ImgSliderItemTap
     OnPageChange = ImgSliderPageChange
     OnPageAnimationFinish = ImgSliderPageAnimationFinish
+  end
+  object Layout3: TLayout
+    Align = Bottom
+    Position.Y = 541.000000000000000000
+    Size.Width = 338.000000000000000000
+    Size.Height = 44.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 4
+    object Label2: TLabel
+      Align = Left
+      Margins.Left = 4.000000000000000000
+      Margins.Top = 4.000000000000000000
+      Margins.Right = 4.000000000000000000
+      Margins.Bottom = 4.000000000000000000
+      Position.X = 4.000000000000000000
+      Position.Y = 4.000000000000000000
+      Size.Width = 120.000000000000000000
+      Size.Height = 36.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'Interval:'
+      TabOrder = 6
+    end
+    object cbbInterval: TComboBox
+      Align = VertCenter
+      Items.Strings = (
+        '1s'
+        '2s'
+        '3s'
+        '4s'
+        '5s')
+      ItemIndex = 4
+      Margins.Left = 4.000000000000000000
+      Margins.Top = 4.000000000000000000
+      Margins.Right = 4.000000000000000000
+      Margins.Bottom = 4.000000000000000000
+      Position.X = 132.000000000000000000
+      Position.Y = 4.000000000000000000
+      Size.Width = 202.000000000000000000
+      Size.Height = 36.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 7
+      OnChange = cbbIntervalChange
+    end
+  end
+  object Layout4: TLayout
+    Align = Bottom
+    Position.Y = 325.000000000000000000
+    Size.Width = 338.000000000000000000
+    Size.Height = 132.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 12
+    OnResize = Layout4Resize
+    object cpActiveColor: TColorPanel
+      Align = Left
+      Color = claWhite
+      Size.Width = 150.000000000000000000
+      Size.Height = 132.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      OnChange = cpActiveColorChange
+    end
+    object cpInactiveColor: TColorPanel
+      Align = Left
+      Color = claWhite
+      Position.X = 150.000000000000000000
+      Size.Width = 150.000000000000000000
+      Size.Height = 132.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      OnChange = cpInactiveColorChange
+    end
   end
 end
