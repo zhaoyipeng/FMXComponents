@@ -101,6 +101,7 @@ type
     property RotationAngle;
     property RotationCenter;
     property Scale;
+    property Size;
     property Visible;
     property Width;
     property OnApplyStyleLookup;
