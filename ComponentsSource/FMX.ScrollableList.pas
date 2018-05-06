@@ -61,6 +61,7 @@ type
       X, Y: Single); override;
   public
     constructor Create(AOwner: TComponent); override;
+    procedure Loaded; override;
     destructor Destroy; override;
     procedure SetData(const AList: TArray<string>); reintroduce;
     function GetSelected: string;
@@ -125,7 +126,6 @@ begin
   FAnimation.PropertyName := 'Position.Y';
   FAnimation.Parent := FContainer;
   FAnimation.Duration := 0.1;
-  CreateTexts;
 end;
 
 procedure TFMXScrollableList.CreateTexts;
@@ -173,6 +173,12 @@ end;
 function TFMXScrollableList.GetSelected: string;
 begin
   Result := FItems[ItemIndex];
+end;
+
+procedure TFMXScrollableList.Loaded;
+begin
+  inherited;
+  CreateTexts;
 end;
 
 procedure TFMXScrollableList.MouseDown(Button: TMouseButton; Shift: TShiftState; X,
