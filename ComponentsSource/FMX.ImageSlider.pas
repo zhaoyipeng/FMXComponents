@@ -32,6 +32,8 @@ unit FMX.ImageSlider;
 
 interface
 
+{$I FMXComponents.inc}
+
 uses
   System.Classes,
   System.Generics.Collections,
@@ -70,7 +72,11 @@ type
   protected
     procedure HitTestChanged; override;
     function GetDot(Index: Integer): TControl;
+    {$IFDEF VER320_up}
     procedure DoResized; override;
+    {$ELSE}
+    procedure Resize; override;
+    {$ENDIF}
   public
     constructor Create(AOwner: TComponent); override;
     property ActiveIndex: Integer read FActiveIndex write SetActiveIndex;
@@ -128,7 +134,11 @@ type
     procedure SetDotInActiveColor(const Value: TAlphaColor);
   protected
     procedure SetTimerInterval(const Value: Integer);
+    {$IFDEF VER320_up}
     procedure DoResized; override;
+    {$ELSE}
+    procedure Resize; override;
+    {$ENDIF}
     procedure DoPageChange(NewPage, OldPage: Integer);
     procedure DoTap(Sender: TObject; const Point: TPointF);
     procedure MouseDown(Button: TMouseButton; Shift: TShiftState; X, Y: Single); override;
@@ -500,7 +510,11 @@ begin
   MoveToActivePage(False);
 end;
 
+{$IFDEF VER320_up}
 procedure TFMXImageSlider.DoResized;
+{$ELSE}
+procedure TFMXImageSlider.Resize;
+{$ENDIF}
 var
   I: Integer;
 begin
@@ -719,7 +733,11 @@ begin
   FDotContainer.BoundsRect := B;
 end;
 
+{$IFDEF VER320_up}
 procedure TSliderDots.DoResized;
+{$ELSE}
+procedure TSliderDots.Resize;
+{$ENDIF}
 var
   X, W: Single;
   B: TRectF;
@@ -731,6 +749,7 @@ begin
 //  B := B.SnapToPixel(Scene.GetSceneScale, False);
   FDotContainer.BoundsRect := B;
 end;
+
 
 function TSliderDots.GetDot(Index: Integer): TControl;
 begin
