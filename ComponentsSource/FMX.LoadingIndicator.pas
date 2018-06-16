@@ -147,7 +147,7 @@ type
     property Enabled default True;
     property Locked default False;
     property Height;
-    property HitTest default True;
+    property HitTest default False;
     property Padding;
     property Opacity;
     property Margins;
@@ -230,6 +230,7 @@ end;
 constructor TFMXLoadingIndicator.Create(AOwner: TComponent);
 begin
   inherited;
+  AutoCapture := True;
   FLastStopTime := 0;
   FBezier := TBezier.Create(0.09,0.57,0.49,0.9);
   FBrush := TBrush.Create(TBrushKind.Solid, $FF1282B2);

@@ -9,7 +9,6 @@ object LoadingIndicatorDemoMainForm: TLoadingIndicatorDemoMainForm
   FormFactor.Devices = [Desktop]
   DesignerMasterStyle = 0
   object FMXLoadingIndicator1: TFMXLoadingIndicator
-    HitTest = False
     Position.X = 80.000000000000000000
     Position.Y = 184.000000000000000000
     Size.Width = 81.000000000000000000
@@ -28,14 +27,27 @@ object LoadingIndicatorDemoMainForm: TLoadingIndicatorDemoMainForm
     OnClick = Button1Click
   end
   object FMXLoadingIndicator2: TFMXLoadingIndicator
-    HitTest = False
+    HitTest = True
     Position.X = 176.000000000000000000
     Position.Y = 184.000000000000000000
     Size.Width = 81.000000000000000000
     Size.Height = 57.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 0
+    OnClick = FMXLoadingIndicator2Click
     Color = xFF1282B2
     Kind = ArcsRing
+  end
+  object Memo1: TMemo
+    Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+    DataDetectorTypes = []
+    Position.X = 16.000000000000000000
+    Position.Y = 288.000000000000000000
+    Size.Width = 313.000000000000000000
+    Size.Height = 177.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 3
+    Viewport.Width = 309.000000000000000000
+    Viewport.Height = 173.000000000000000000
   end
 end
