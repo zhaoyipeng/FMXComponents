@@ -3,7 +3,7 @@
 Main site: https://github.com/zhaoyipeng/FMXComponents <br>
 Mirror site: https://gitee.com/zhaoyipeng/FMXComponents <br>
 
-If you're using this project and you like it, please give us a star! Thanks!
+Please "star" (like) this project in GitHub! It's cost nothing but help to reference the code
 
 This project includes the components that donors and I have actually used in applications.<br> 
 If you have some components want to add into this project, you can send it to zhaoyipeng@hotmail.com
