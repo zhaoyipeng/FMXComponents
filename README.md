@@ -71,3 +71,9 @@ v0.6.0.0 :<br>
 
 The FMXComponents is open-sourced software licensed under the [MIT License](LICENSE).
 
+
+# Site Links
+	
+## [learndelphi](//learndelphi.org)
+
+## [embarcadero](//embarcadero.com)
